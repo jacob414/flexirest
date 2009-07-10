@@ -1,22 +1,18 @@
 import os
 import sys
+import optparse
 
-GLOBAL_USAGE = 'flexirest <options> <rst file>'
+from flexirest import meta
+from flexirest.util import StdoutConsole
 
-class StdioConsole(object):
-
-    def __init__(self):
-        self.out = sys.stdout
-
-    def write(self, msg):
-        self.out.write(msg + os.linesep)
+GLOBAL_USAGE = 'flexirest <options>'
 
 def commandline(args=None, console=None):
     """
     The flexirest commandline entry point.
     """
     if console is None:
-        console = StdioConsole()
+        console = StdoutConsole()
     if args is None:
         args = sys.argv[1:]
     parser = optparse.OptionParser(usage = GLOBAL_USAGE,
@@ -30,7 +26,7 @@ def commandline(args=None, console=None):
                       help='print version and exit')
     options, args = parser.parse_args(args)
     if options.version:
-        console.write("playlist version '%s'" % meta.VERSION)
+        console.write("flexirest version '%s'" % meta.VERSION)
         return 0
 
     return 0

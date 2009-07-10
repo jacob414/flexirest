@@ -14,7 +14,7 @@ setup(name=meta.SHORT_NAME,
       description=meta.SHORT_DESC,
       entry_points = {
           'console_scripts': (
-              'frest = flexirest.main:commandline',
+              'flexirest = flexirest.main:commandline',
               )
           },
       classifiers = [
