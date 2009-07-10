@@ -18,7 +18,7 @@ def test_help():
         sys.stdout = old_stdout
         _help = outp.lines[0].split(os.linesep)
         assert_equals(_help[0], 'Usage: flexirest <options>')
-        assert_true(_help[-2].endswith('-v, --version  print version and exit'))
+        assert_true(_help[5].endswith('show this help message and exit'))
 
 def test_version():
     outp = Capturer()

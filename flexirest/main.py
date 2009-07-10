@@ -40,12 +40,12 @@ def commandline(args=None, console=None):
                       help='print version and exit')
     parser.add_option('-t',
                       '--template',
-                      dest='template'
+                      dest='template',
                       default=None,
                       help='apply source into this template')
     parser.add_option('-r',
                       '--roles',
-                      dest='template'
+                      dest='template',
                       default=None,
                       help='apply source into this template')
 
