@@ -1,6 +1,9 @@
+from __future__ import with_statement
+
 import os
 import sys
 import optparse
+import imp
 
 from flexirest import meta
 from flexirest.util import StdoutConsole
@@ -21,6 +24,9 @@ DEFAULT_TEMPLATE = u"""%(html_prolog)s
 </html>
 """
 
+def _import(modname):
+    return __import__(modname)
+
 def commandline(args=None, console=None):
     """
     The flexirest commandline entry point.
@@ -40,29 +46,32 @@ def commandline(args=None, console=None):
                       help='print version and exit')
     parser.add_option('-t',
                       '--template',
+                      action='store_true',
                       dest='template',
-                      default=None,
+                      default=False,
                       help='apply source into this template')
     parser.add_option('-r',
                       '--roles',
-                      dest='template',
-                      default=None,
+                      dest='roles',
+                      default=False,
                       help='apply source into this template')
 
     options, args = parser.parse_args(args)
     if options.version:
         console.write("flexirest version '%s'" % meta.VERSION)
         return 0
-    if options.template is None:
+    if options.template:
+        with file(options.template, 'r') as fp:
+            template = fp.read()
+    else:
         template = DEFAULT_TEMPLATE
-    if options.roles is not None:
-        try:
-            roles_mod = __import__(option.roles)
-        except ImportError:
-                pass
 
-        role_names = (role[5:] for role in
-                      dir(__import__(options.roles)) if role.startswith('role_'))
+    if options.roles:
+        roles_mod = _import(options.roles)
+    else:
+        roles_mod = _import('roles')
 
+    for rolename in (role for role in dir(roles_mod) if role.startswith('role_')):
+        roles.register_canonical_role(rolename, getattr(roles_mod, rolename))
 
     return 0
