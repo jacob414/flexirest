@@ -71,7 +71,9 @@ def commandline(args=None, console=None):
     else:
         roles_mod = _import('roles')
 
-    for rolename in (role for role in dir(roles_mod) if role.startswith('role_')):
-        roles.register_canonical_role(rolename, getattr(roles_mod, rolename))
+    for rolecand, rolename in ((getattr(roles_mod, role), role) for role in
+                               dir(roles_mod) if role.startswith('role_')):
+        if callable(rolecand):
+            roles.register_canonical_role(rolename, rolecand)
 
     return 0

@@ -39,14 +39,16 @@ def role_one():
 def role_two():
     pass
 
-def role_three():
-    pass
-
 def fake_import(name):
     mod = imp.new_module(name)
     mod.role_one = role_one
     mod.role_two = role_two
-    mod.role_three = role_three
+    class empty_callable(object):
+        def __call__(self):
+            pass
+    i_am_callable = empty_callable()
+    mod.role_three = i_am_callable
+    mod.role_four = "but I'm not callable!"
     return mod
 
 def register_canonical_role(name, func):
@@ -69,3 +71,5 @@ def test_main_default_roles_raises():
 @with_setup(monkeypatch_main, unpatch_main)
 def test_roles():
     main.commandline(['--roles', 'the-rolename'])
+    assert_equals(set(['role_one', 'role_two', 'role_three']) - set(reg_canonical_roles),
+                  set())
