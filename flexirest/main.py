@@ -27,14 +27,21 @@ DEFAULT_TEMPLATE = u"""%(html_prolog)s
 def _import(modname):
     return __import__(modname)
 
-def commandline(args=None, console=None):
+def commandline(args=None, console=None, infile=None):
     """
     The flexirest commandline entry point.
+    - args: Arguments to the commandline (defaults to sys.argv[1:]
+    - console: An object that knows how to write output (somewhat file-like,
+                                                         defaults to util.StdoutConsole)
+    - infile: the file-like object that contains the ReST source (defaults to stdin),
+              mostly intended for testing.
     """
     if console is None:
         console = StdoutConsole()
     if args is None:
         args = sys.argv[1:]
+    if infile is None:
+        infile = sys.stdin
     parser = optparse.OptionParser(usage = GLOBAL_USAGE,
                                    description = meta.CMDLINE_DESC)
 
