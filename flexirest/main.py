@@ -62,11 +62,6 @@ def commandline(args=None, console=None, infile=None):
                       dest='roles',
                       default=False,
                       help='apply source into this template')
-    parser.add_option('-t',
-                      '--template',
-                      dest='template',
-                      default=False,
-                      help='apply source into this template')
 
     options, args = parser.parse_args(args)
     if options.version:

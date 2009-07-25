@@ -71,5 +71,6 @@ def test_main_default_roles_raises():
 @with_setup(monkeypatch_main, unpatch_main)
 def test_roles():
     main.commandline(['--roles', 'the-rolename'])
-    assert_equals(set(['role_one', 'role_two', 'role_three']) - set(reg_canonical_roles),
+    assert_equals(( set(['role_one', 'role_two', 'role_three']) -
+                   set(reg_canonical_roles)),
                   set())
