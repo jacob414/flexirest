@@ -2,10 +2,19 @@ import os
 import sys
 import imp
 
+from StringIO import StringIO
+
 from flexirest import main, meta
 from nose.tools import assert_equals, assert_true, with_setup, raises
 
 from flexirest.tests.support import Capturer
+
+MINIMAL_FIXTURE = StringIO("""
+=====
+Title
+=====
+Text
+""")
 
 def test_help():
     outp = Capturer()
@@ -70,7 +79,7 @@ def test_main_default_roles_raises():
 
 @with_setup(monkeypatch_main, unpatch_main)
 def test_roles():
-    main.commandline(['--roles', 'the-rolename'])
+    main.commandline(['--roles', 'the-rolename'], source=MINIMAL_FIXTURE)
     assert_equals(( set(['role_one', 'role_two', 'role_three']) -
                    set(reg_canonical_roles)),
                   set())
