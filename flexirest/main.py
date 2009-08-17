@@ -69,20 +69,6 @@ def commandline(args=None, console=None, source=None, destination=None):
     if options.template:
         with file(options.template, 'r') as fp:
             template = fp.read()
-
-    writer = options.writer or 'html'
-    if options.writer:
-        writer=options.writer
-    else:
-        template = DEFAULT_TEMPLATE
-
-    options, args = parser.parse_args(args)
-    if options.version:
-        console.write("flexirest version '%s'" % meta.VERSION)
-        return 0
-    if options.template:
-        with file(options.template, 'r') as fp:
-            template = fp.read()
     else:
         template = DEFAULT_TEMPLATE
 
@@ -96,13 +82,22 @@ def commandline(args=None, console=None, source=None, destination=None):
         if callable(rolecand):
             roles.register_canonical_role(rolename, rolecand)
 
+    writer_name = options.writer or 'html'
+
     # The .read().decode(..) chain below is a little inefficient, but
     # this is supposed to be a quite modest tool, so I'll just leave
     # it be for now..
     parts = publish_parts(
         source=source.read().decode('utf8'),
-        writer_name=options.writer or 'html',
+        writer_name=writer_name,
         settings_overrides=dict(), # Invent something nice for this..
     )
+
+    if writer_name == 'html':
+        parts['html_head'] = parts['html_head'] % ('utf-8',)
+        parts['html_prolog'] = parts['html_prolog'] % ('utf-8',)
+
+    destination.write( (template % parts).encode("utf-8") )
+    destination.flush()
 
     return 0
