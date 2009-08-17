@@ -37,7 +37,7 @@ def test_version():
     assert_equals(outp.lines, ["flexirest version '%s'" % meta.VERSION])
 
 old_main_import = None
-old_main_regroles = None
+old_main_regroles = main.roles.register_canonical_role
 fake_main_import = None
 
 reg_canonical_roles = {}
@@ -65,7 +65,6 @@ def register_canonical_role(name, func):
 
 def monkeypatch_main():
     old_main_import = main._import
-    old_main_regroles = main.roles.register_canonical_role
     main.roles.register_canonical_role = register_canonical_role
     main._import = fake_import
 
@@ -80,6 +79,5 @@ def test_main_default_roles_raises():
 @with_setup(monkeypatch_main, unpatch_main)
 def test_roles():
     main.commandline(['--roles=the-rolename'], source=MINIMAL_FIXTURE)
-    assert_equals(( set(['role_one', 'role_two', 'role_three']) -
-                   set(reg_canonical_roles)),
-                  set())
+    assert_equals((set(['one', 'two', 'three']) - set(reg_canonical_roles)),
+                   set())

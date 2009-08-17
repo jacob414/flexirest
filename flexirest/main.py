@@ -75,12 +75,12 @@ def commandline(args=None, console=None, source=None, destination=None):
     if options.roles:
         roles_mod = _import(options.roles)
     else:
-        roles_mod = _import('roles')
+        roles_mod = _import('customroles')
 
     for rolecand, rolename in ((getattr(roles_mod, role), role) for role in
                    dir(roles_mod) if role.startswith('role_')):
         if callable(rolecand):
-            roles.register_canonical_role(rolename, rolecand)
+            roles.register_canonical_role(rolename[5:], rolecand)
 
     writer_name = options.writer or 'html'
 

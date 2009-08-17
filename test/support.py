@@ -10,4 +10,5 @@ def create_testfile(path, contents):
 def clean_testfiles():
     for path in testfiles:
         os.unlink(path)
+        testfiles.remove(path)
 
