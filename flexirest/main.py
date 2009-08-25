@@ -25,7 +25,10 @@ DEFAULT_TEMPLATE = u"""%(html_prolog)s
 """
 
 def _import(modname):
-    return __import__(modname)
+    try:
+        return __import__(modname)
+    except ImportError:
+        return imp.new_module(modname)
 
 def commandline(args=None, console=None, source=None, destination=None):
     if console is None:
@@ -66,12 +69,14 @@ def commandline(args=None, console=None, source=None, destination=None):
     if options.version:
         console.write("flexirest version '%s'" % meta.VERSION)
         return 0
+
     if options.template:
         with file(options.template, 'r') as fp:
             template = fp.read()
     else:
         template = DEFAULT_TEMPLATE
 
+    sys.path.append(os.getcwd())
     if options.roles:
         roles_mod = _import(options.roles)
     else:
