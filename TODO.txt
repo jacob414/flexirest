@@ -1,0 +1,8 @@
+Add CWD to sys.path for import of
+  'customroles' (for stdin input) [DONE]
+Rename 'customroles' to 'custom_roles'
+Otherwise: Add input path to sys.path for 'customroles'
+See if roles can have returns in them
+Don't traceback when no 'customroles' module is found [SOLVED BUT NEED TEST]
+Document how to create roles
+  http://docutils.sourceforge.net/docs/howto/rst-roles.html
