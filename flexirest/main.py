@@ -24,10 +24,12 @@ DEFAULT_TEMPLATE = u"""%(html_prolog)s
 </html>
 """
 
-def _import(modname):
+def _import(modname, onFailRaise=True):
     try:
         return __import__(modname)
     except ImportError:
+        if onFailRaise:
+            raise
         return imp.new_module(modname)
 
 def commandline(args=None, console=None, source=None, destination=None):
@@ -80,7 +82,7 @@ def commandline(args=None, console=None, source=None, destination=None):
     if options.roles:
         roles_mod = _import(options.roles)
     else:
-        roles_mod = _import('customroles')
+        roles_mod = _import('flexi')
 
     for rolecand, rolename in ((getattr(roles_mod, role), role) for role in
                    dir(roles_mod) if role.startswith('role_')):
