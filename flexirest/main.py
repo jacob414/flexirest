@@ -82,7 +82,7 @@ def commandline(args=None, console=None, source=None, destination=None):
     if options.roles:
         roles_mod = _import(options.roles)
     else:
-        roles_mod = _import('flexi')
+        roles_mod = _import('flexiconf', False)
 
     for rolecand, rolename in ((getattr(roles_mod, role), role) for role in
                    dir(roles_mod) if role.startswith('role_')):

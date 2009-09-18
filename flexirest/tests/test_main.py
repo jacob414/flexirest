@@ -73,8 +73,11 @@ def unpatch_main():
     main.roles.register_canonical_role = old_main_regroles
 
 @raises(ImportError)
-def test_main_default_roles_raises():
+def test_explicit_module_not_found_raises():
     main.commandline(['--roles=notamodule'])
+
+def test_no_default_module_noraise():
+    main.commandline([], source=MINIMAL_FIXTURE)
 
 @with_setup(monkeypatch_main, unpatch_main)
 def test_roles():
