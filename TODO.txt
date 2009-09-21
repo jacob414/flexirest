@@ -3,4 +3,7 @@ See if roles can have returns in them [DONE]
 Don't traceback when no 'flexiconf' module is found [DONE]
 Document how to create roles
   http://docutils.sourceforge.net/docs/howto/rst-roles.html
-Test with Python 2.5
+Test with Python 2.5 [DONE]
+Release 0.8
+  Write introduction text [DONE]
+  Prepare web 'site' [DONE]
