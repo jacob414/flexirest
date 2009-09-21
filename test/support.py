@@ -1,9 +1,11 @@
+from __future__ import with_statement
+
 import os
 
 testfiles = []
 
 def create_testfile(path, contents):
-    with file(path, 'w') as fp:
+    with open(path, 'w') as fp:
         fp.write(contents)
     testfiles.append(path)
 
