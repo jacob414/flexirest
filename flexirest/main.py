@@ -56,6 +56,12 @@ def commandline(args=None, console=None, source=None, destination=None):
                       dest='template',
                       default=False,
                       help='apply source into this template')
+    parser.add_option('-l',
+                      '--lang',
+                      action='store',
+                      dest='lang',
+                      default='en',
+                      help='apply source into this template')
     parser.add_option('-r',
                       '--roles',
                       dest='roles',
@@ -73,7 +79,7 @@ def commandline(args=None, console=None, source=None, destination=None):
         return 0
 
     if options.template:
-        with file(options.template, 'r') as fp:
+        with open(options.template, 'r') as fp:
             template = fp.read()
     else:
         template = DEFAULT_TEMPLATE
@@ -103,6 +109,7 @@ def commandline(args=None, console=None, source=None, destination=None):
     if writer_name == 'html':
         parts['html_head'] = parts['html_head'] % ('utf-8',)
         parts['html_prolog'] = parts['html_prolog'] % ('utf-8',)
+        parts['lang'] = options.lang
 
     destination.write( (template % parts).encode("utf-8") )
     destination.flush()
