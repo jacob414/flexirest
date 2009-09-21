@@ -1,9 +1,7 @@
 SHORT_NAME='flexirest'
-CMDLINE_DESC = """
-Flexible reStructuredText commandline
-"""
-VERSION = '0.1'
-URL = 'http://aspektratio.net'
+CMDLINE_DESC = 'The medium-featured, flexible reStructuredText utility'
+VERSION = '0.8'
+URL = 'http://www.aspektratio.net/flexirest'
 AUTHOR = 'Jacob Oscarson'
 EMAIL = 'jacob@aspektratio.net'
-SHORT_DESC = 'Flexible reStructuredText toolset'
+SHORT_DESC = CMDLINE_DESC
