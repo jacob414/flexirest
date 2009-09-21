@@ -12,6 +12,8 @@ setup(name=meta.SHORT_NAME,
       author_email=meta.EMAIL,
       url=meta.URL,
       description=meta.SHORT_DESC,
+      long_description=open('docs/introduction.txt', 'r').read(),
+      install_requires=['docutils'],
       entry_points = {
           'console_scripts': (
               'flexirest = flexirest.main:commandline',
@@ -27,3 +29,4 @@ setup(name=meta.SHORT_NAME,
           ],
       license='GNU LGPL',
       test_suite='nose.collector')
+
