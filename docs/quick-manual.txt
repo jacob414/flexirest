@@ -1,0 +1,105 @@
+.. -*- Coding: utf-8 -*-
+.. -*- mode: rst -*-
+
+========================
+Flexirest - quick manual
+========================
+
+.. contents:: Table of Contents
+
+Download and Installation
++++++++++++++++++++++++++
+
+Installation using `easy_install`
+---------------------------------
+
+You can download and install a Python `egg` from PyPI using
+setuptools_::
+
+    $ sudo easy_install flexirest
+
+.. _setuptools: http://pypi.python.org/pypi/setuptools
+
+Development build
+-----------------
+
+`Flexirest` development is hosted on Bitbucket_ (thanks!), using
+Mercurial_. You can get a clone of the repository from there::
+
+    $ hg clone http://bitbucket.org/esmljaos/flexirest/
+
+Flexirest is built using buildout_. To build using your Python (>=
+2.5.2), just run the `bootstrap.py`
+
+.. _Bitbucket: http://bitbucket.org/
+.. _Mercurial: http://www.selenic.com/mercurial/wiki/
+.. _buildout: http://www.buildout.org/
+
+Output formats
+++++++++++++++
+
+As of now, that's strictly the same formats that `docutils` itself
+provides.
+
+However, I have some ideas of integrating for example Odtwriter_ and
+maybe do some post processing tricks in later versions. But we'll see:
+I don't want `flexirest` to grow to much.
+
+.. _Odtwriter: http://www.rexx.com/~dkuhlman/odtwriter.html
+
+What would be useful is a way to output an MS Word `.doc`
+file. Although if you - like me - dislike this practice, there's still a
+practical reality out there full of people who won't accept anything else
+than a `.doc` file.
+
+Styling your HTML output
+------------------------
+
+Create a CSS style sheet and link it in your HTML template.
+
+Latest stable version - 0.8
++++++++++++++++++++++++++++
+
+This is the first release of flexirest. It also marks the first time
+when flexirest is usable in practice (this document is produced using
+flexires, for example). It's still a little rough around the edges,
+and I have a few ideas of refinements that I think should be added,
+but this is the point where I'm going to start using it myself. So
+I'll pick a version number quite close to 1.0 (0.8) and call it that.
+
+Howto
++++++
+
+The basic operation of flexirest as of now is piping the input
+directly into the program, Unix style. Output then comes out,
+unsuprisingly, on the standard output.
+
+Something like this should therefore be the quickest possible syntax::
+
+    $ flexirest < yourtext.txt > youroutput.html
+
+Default output format is HTML. To choose another writer, use the
+--writer/-w option. The writers are named the same as their
+corresponding docutils modules.
+
+Then you can also specify a template that your content will be applied
+against. This template is just a file with Python markers
+corresponding to how you would format a string with a dict ("..." %
+{}). For HTML you have 4 attributes that will be changed in your
+template:
+
+:html_prolog: XML declaration and DOCTYPE.For HTML, just put it at
+	      the top of the template.
+:html_head: tags that Docutils wants to put inside your HEAD tag.
+:html_body: the generated body HTML.
+:lang: language code of your document. Defaults to 'en'.
+
+Which would give us a marginally more elaborate command line syntax::
+
+    $ flexirest < yourtext.txt > youroutput.html --template=yourtemplate.html
+
+Unfortunately, since this inital development has been quite centered
+on getting the HTML writer started, documentation ends here. But,
+fortunately I want to start typesetting my invoices with flexirest, so
+Real Soon Now (tm) I'll start to look into LaTeX writing, and probably
+release next version!
