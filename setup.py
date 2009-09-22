@@ -20,12 +20,14 @@ setup(name=meta.SHORT_NAME,
               )
           },
       classifiers = [
-          'Development Status :: 3 - Alpha',
+          'Development Status :: 4 - Beta',
           'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
           'Operating System :: OS Independent',
           'Programming Language :: Python',
-          'Topic :: Multimedia :: Sound/Audio',
-          'Framework :: Buildout'
+          'Environment :: Console',
+          'Topic :: Documentation',
+          'Topic :: Software Development :: Documentation',
+          'Topic :: Text Processing :: Markup',
           ],
       license='GNU LGPL',
       test_suite='nose.collector')
