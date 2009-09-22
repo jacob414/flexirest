@@ -1,9 +1,12 @@
-Otherwise: Add input path to sys.path for 'flexiconf' [DONE]
-See if roles can have returns in them [DONE]
-Don't traceback when no 'flexiconf' module is found [DONE]
-Document how to create roles
-  http://docutils.sourceforge.net/docs/howto/rst-roles.html
-Test with Python 2.5 [DONE]
-Release 0.8
-  Write introduction text [DONE]
-  Prepare web 'site' [DONE]
+Documentation
+  Create roles				[PROVIDED LINK]
+  Better documentation on templates
+  Make the introduction better..
+    (no installation section.. etc)
+Release 0.8 				[DONE]
+  Write introduction text		[DONE]
+  Prepare web 'site' 			[DONE]
+Post-release
+  Fix setup.python			[DONE]
+  Add licence file (LGPL)		[DONE]
+Register on www.ohloh.net
