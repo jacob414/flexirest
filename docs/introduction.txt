@@ -43,13 +43,4 @@ For more information on how to operate `flexirest`, see the
 `quick manual`_.
 
 .. _quick manual: quick-manual.html
-
-Installation using `easy_install`
-+++++++++++++++++++++++++++++++++
-
-You can download and install a Python `egg` from PyPI using
-setuptools_::
-
-    $ sudo easy_install flexirest
-
 .. _setuptools: http://pypi.python.org/pypi/setuptools
