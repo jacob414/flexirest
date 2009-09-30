@@ -4,21 +4,18 @@ import sys
 from docutils.parsers.rst import roles
 from docutils.core import publish_parts
 
-def render(source,
-           destination,
-           conf,
-           lang,
-           template,
-           writer_name):
+def render(source, destination, conf, lang, template, writer_name):
 
     """API entry point.
 
-    A call expected to succed must provide
+    A call expected to succed must provide all parameters. See
+    flexirest.main.commandline() to find sensible defaults.
 
-    The `render()` function renders output given a set of parameters:
+    source - file-like object to read input from.
     destination - file-like object (needs at least `.write()` and `.flush()`
                   methods.
     conf - configuration module.
+    lang - language code of output.
     template - the template to enter the results of `publish_parts()` into.
                (needs to support formatting with the '..' % {} technique.)
     writer_name - name of the `docutils` writer to use.
