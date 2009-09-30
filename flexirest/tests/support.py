@@ -1,4 +1,12 @@
 import sys
+from StringIO import StringIO
+
+MINIMAL_FIXTURE = StringIO("""
+=====
+Title
+=====
+Text
+""")
 
 def getraise(callable, *args, **kwargs):
     """
