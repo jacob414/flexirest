@@ -1,6 +1,6 @@
 # A simple Makefile to generate the documentation
 
-DOCSBUILD=../build/docs
+DOCSBUILD=../build/docs/site
 FLEXIREST=../bin/flexirest
 
 all: docsdir statics generate
