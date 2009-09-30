@@ -12,7 +12,7 @@ statics: flexirest.css
 	cp flexirest.css $(DOCSBUILD)/
 
 generate: docsdir statics introduction.txt quick-manual.txt
-	$(FLEXIREST) < introduction.txt > $(DOCSBUILD)/index.html --template=template.html
+	$(FLEXIREST) < index.txt > $(DOCSBUILD)/index.html --template=template.html
 	$(FLEXIREST) < quick-manual.txt > $(DOCSBUILD)/quick-manual.html --template=template.html
 
 deploy: generate

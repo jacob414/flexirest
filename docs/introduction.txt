@@ -1,15 +1,6 @@
 .. -*- Coding: utf-8 -*-
 .. -*- mode: rst -*-
 
-===========
-Flexirest
-===========
-
-*The medium-featured, flexible reStructuredText utility.*
-
-Introduction
-++++++++++++
-
 `Flexirest` is a project that was born out of the authors long-running
 interest for reStructuredText_, and the idea of writing everyday
 documents like letters, invoices and other simple documents in this

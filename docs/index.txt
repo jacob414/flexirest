@@ -1,0 +1,13 @@
+.. -*- Coding: utf-8 -*-
+.. -*- mode: rst -*-
+
+===========
+Flexirest
+===========
+
+*The medium-featured, flexible reStructuredText utility.*
+
+Introduction
+++++++++++++
+
+.. include:: introduction.txt
