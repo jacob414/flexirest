@@ -3,8 +3,8 @@ Post-processing trickery
   Build .doc in one go
 Integrate with OdtWriter if present
   Build .odt in one go
-Some "built-in" custom roles
-  An 'include' construct
+Some "built-in" custom roles?
+  Optional Pygments-based syntax highlighting
 A logo
 Deploy with one command..
   To a web site
@@ -12,3 +12,6 @@ Deploy with one command..
     Investigate Google API's for Python
 Python 3 support
 Split into flexirest and flexirest-deluxe, deluxe having all dependencies
+Get into the official docutils link list
+  http://docutils.sourceforge.net/docs/user/links.html
+
