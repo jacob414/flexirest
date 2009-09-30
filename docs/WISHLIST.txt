@@ -9,3 +9,6 @@ A logo
 Deploy with one command..
   To a web site
   To Google Docs
+    Investigate Google API's for Python
+Python 3 support
+Split into flexirest and flexirest-deluxe, deluxe having all dependencies
