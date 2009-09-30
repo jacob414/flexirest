@@ -5,3 +5,4 @@ URL = 'http://www.aspektratio.net/flexirest'
 AUTHOR = 'Jacob Oscarson'
 EMAIL = 'jacob@aspektratio.net'
 SHORT_DESC = CMDLINE_DESC
+CMDLINE_USAGE = 'flexirest <options>'

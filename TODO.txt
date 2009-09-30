@@ -10,3 +10,5 @@ Post-release
   Fix setup.python			[DONE]
   Add licence file (LGPL)		[DONE]
 Register on www.ohloh.net
+Refactoring post-08
+  API'ify instead of main.commandline()

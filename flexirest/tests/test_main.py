@@ -4,7 +4,7 @@ import imp
 
 from StringIO import StringIO
 
-from flexirest import main, meta
+from flexirest import main, meta, rendering
 from nose.tools import assert_equals, assert_true, with_setup, raises
 
 from flexirest.tests.support import Capturer
@@ -37,7 +37,7 @@ def test_version():
     assert_equals(outp.lines, ["flexirest version '%s'" % meta.VERSION])
 
 old_main_import = None
-old_main_regroles = main.roles.register_canonical_role
+old_regroles = main.rendering.roles.register_canonical_role
 fake_main_import = None
 
 reg_canonical_roles = {}
@@ -63,21 +63,21 @@ def fake_import(name):
 def register_canonical_role(name, func):
     reg_canonical_roles[name] = func
 
-def monkeypatch_main():
-    old_main_import = main._import
-    main.roles.register_canonical_role = register_canonical_role
-    main._import = fake_import
-
-def unpatch_main():
-    main._import = old_main_import
-    main.roles.register_canonical_role = old_main_regroles
-
 @raises(ImportError)
 def test_explicit_module_not_found_raises():
     main.commandline(['--roles=notamodule'])
 
 def test_no_default_module_noraise():
     main.commandline([], source=MINIMAL_FIXTURE)
+
+def monkeypatch_main():
+    old_main_import = main._import
+    main.rendering.roles.register_canonical_role = register_canonical_role
+    main._import = fake_import
+
+def unpatch_main():
+    main._import = old_main_import
+    main.rendering.roles.register_canonical_role = old_regroles
 
 @with_setup(monkeypatch_main, unpatch_main)
 def test_roles():
