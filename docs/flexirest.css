@@ -1,64 +1,100 @@
+* {
+    margin: 0;
+    padding 0;
+}
+
+html {
+    font: normal 76%/2 "Lucida Grande", "Trebuchet MS", Verdana, Sans-Serif;
+    height: 100%;
+}
+
 body {
-    font-family: Verdana, Geneva, Arial, sans-serif;
-    font-size: 0.75em;
-    width: 50em;
+    margin: 0 auto;
+    width: 800px;
+    height: 100%;
 }
 
-h1 {
-    font-size: 1.1em;
-    border-bottom: 1px solid darkgray;
-}
-
-h2 {
-    font-size: 0.9em;
-}
-
-.title {
-    font-size: 2em;
-}
-
-p {
-    margin: 1em 1em 2em 2em;
-    text-align: justify;
+#nav-bar {
+    background-color:#f0f0f0;
+    border-bottom: 1px dotted #cfcfcf;
+    border-top: 5px solid #6d8d35;
+    height: 3em;
+    font-size: 1.3em;
+    width: 100%;
     margin-bottom: 1em;
 }
 
-.literal-block {
-    font-size: 1.1em;
-    margin: 1em 1em 2em 5em;
-}
-
-.contents {
-    background-color: #F9F9F9;
-    margin: 1em 1em 4em 2em;
-    border: 1px dotted #CCCCCC;
-    width: 25em;
-}
-
-.contents p {
-    text-transform: uppercase;
-}
-
-.contents ul {
+#nav-bar ul {
     list-style-type: none;
+    padding-top: 0.5em;
 }
 
-.section {
-    margin-bottom: 1.5em;
+#nav-bar ul > li {
+    float: left;
+    margin-right: 2em;
 }
 
-a.toc-backref {
+#nav-bar ul > li > a {
+    border-bottom:1px dotted #aaaaaa;
     text-decoration: none;
 }
 
-table.field-list {
-    width: 45em;
+.topic-title {
+    font-variant: small-caps;
 }
 
-.field-name {
-    font-size: 0.9em;
+h1.title {
+    font-weight: bold;
+    font-size: 3em;
 }
 
-.field-body {
-    font-size: 0.9em;
+cite {
+    font-family:'Consolas','Deja Vu Sans Mono','Bitstream Vera Sans Mono',monospace;
+    font-size:0.95em;
+    letter-spacing:0.01em;
+}
+
+pre {
+    font-family:'Consolas','Deja Vu Sans Mono','Bitstream Vera Sans Mono',monospace;
+    font-size:0.95em;
+    letter-spacing:0.01em;
+    background-color:#f0f0f0;
+    border-bottom: 1px solid #cfcfcf;
+}
+
+cite {
+}
+
+div.section p {
+    margin-bottom: 0.8em;
+    text-indent: 0.4em;
+    text-align: justify;
+    letter-spacing: 0.2px;
+}
+
+.toc-backref {
+    text-decoration: none;
+    color: black;
+}
+
+/*
+ * Sticky footer techique by Ryan Fait
+ * http://ryanfait.com/resources/footer-stick-to-bottom-of-page/
+ */
+
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -2.2em;
+}
+
+.footer, .push {
+    height: 2.2em;
+}
+
+.footer p {
+    background-color:#f0f0f0;
+    width: 800px;
+    border-top: 1px dotted #cfcfcf;
 }

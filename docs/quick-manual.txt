@@ -1,9 +1,9 @@
 .. -*- Coding: utf-8 -*-
 .. -*- mode: rst -*-
 
-========================
-Flexirest - quick manual
-========================
+============
+Quick manual
+============
 
 .. contents:: Table of Contents
 

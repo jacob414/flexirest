@@ -1,0 +1,17 @@
+.. -*- Coding: utf-8 -*-
+.. -*- mode: rst -*-
+
+========
+Download
+========
+
+You can download python `egg`'s from PyPI_.
+
+.. _PyPI: http://pypi.python.org/pypi/flexirest/
+
+For full sources, clone the Mercurial_ repository::
+
+    $ hg clone http://bitbucket.org/esmljaos/flexirest/
+
+.. _Mercurial: http://www.selenic.com/mercurial/wiki/
+
