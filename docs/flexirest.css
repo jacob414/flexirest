@@ -19,7 +19,7 @@ body {
     border-bottom: 1px dotted #cfcfcf;
     border-top: 5px solid #6d8d35;
     height: 3em;
-    font-size: 1.3em;
+    font-size: 1.1em;
     width: 100%;
     margin-bottom: 1em;
 }
@@ -31,7 +31,7 @@ body {
 
 #nav-bar ul > li {
     float: left;
-    margin-right: 2em;
+    margin-right: 1.5em;
 }
 
 #nav-bar ul > li > a {
