@@ -7,4 +7,9 @@ Register on www.ohloh.net               [DONE]
 Better download page                    [DONE (ish)]
 Refactoring post-08
   API'ify instead of main.commandline()	[DONE]
-
+0.8.1 development
+  Add -i --input for file input
+  Add -o --output for file output
+  Read about latex writers
+  Experiment with latex
+  Experiment with rst2pdf/Reportlab
