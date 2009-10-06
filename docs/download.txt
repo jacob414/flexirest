@@ -5,11 +5,27 @@
 Download
 ========
 
-You can download python `egg`'s from PyPI_.
+Python `.egg`'s
+---------------
 
-.. _PyPI: http://pypi.python.org/pypi/flexirest/
+The easiest way is to use `easy install`_, but here are some download
+links if you need them:
 
-For full sources, clone the Mercurial_ repository::
+* For `python 2.6`_
+* For `python 2.5`_
+
+.. _easy install: http://pypi.python.org/pypi/setuptools
+.. _python 2.6: http://pypi.python.org/packages/2.6/f/flexirest/flexirest-0.8-py2.6.egg
+.. _python 2.5: http://pypi.python.org/packages/2.5/f/flexirest/flexirest-0.8-py2.5.egg
+
+Sources
+-------
+
+* Latest development `tarball`_
+
+.. _tarball: http://bitbucket.org/esmljaos/flexirest/get/1540fdd42019.gz
+
+* For full sources, clone the Mercurial_ repository::
 
     $ hg clone http://bitbucket.org/esmljaos/flexirest/
 
