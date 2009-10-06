@@ -4,7 +4,7 @@ Documentation
   Make the introduction better..
     (no installation section.. etc)
 Register on www.ohloh.net               [DONE]
-Better download page
+Better download page                    [DONE (ish)]
 Refactoring post-08
   API'ify instead of main.commandline()	[DONE]
 
