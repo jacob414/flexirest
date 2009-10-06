@@ -4,6 +4,12 @@ import sys
 from docutils.parsers.rst import roles
 from docutils.core import publish_parts
 
+def _register_roles(conf):
+    for rolecand, rolename in ((getattr(conf, role), role) for role in
+                   dir(conf) if role.startswith('role_')):
+        if callable(rolecand):
+            roles.register_canonical_role(rolename[5:], rolecand)
+
 def render(source, destination, conf, lang, template, writer_name):
 
     """API entry point.
@@ -21,10 +27,7 @@ def render(source, destination, conf, lang, template, writer_name):
     writer_name - name of the `docutils` writer to use.
     """
 
-    for rolecand, rolename in ((getattr(conf, role), role) for role in
-                   dir(conf) if role.startswith('role_')):
-        if callable(rolecand):
-            roles.register_canonical_role(rolename[5:], rolecand)
+    _register_roles(conf)
 
     # The .read().decode(..) chain below is a little inefficient, but
     # this is supposed to be a quite modest tool, so I'll just leave
