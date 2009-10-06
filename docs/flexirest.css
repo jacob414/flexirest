@@ -10,7 +10,7 @@ html {
 
 body {
     margin: 0 auto;
-    width: 800px;
+    width: 600px;
     height: 100%;
 }
 
@@ -95,6 +95,6 @@ div.section p {
 
 .footer p {
     background-color:#f0f0f0;
-    width: 800px;
+    width: 600px;
     border-top: 1px dotted #cfcfcf;
 }
