@@ -1,5 +1,18 @@
 """Modules indentation intentionally bad."""
 
+# XXX Very rough for now
+latex_template = u"""
+%(head_prefix)s
+
+%(head)s
+
+%(body_prefix)s
+
+%(body)s
+
+%(body_suffix)s
+"""
+
 templates = {
 
 'html': u"""%(html_prolog)s
@@ -12,5 +25,10 @@ templates = {
 </body>
 </html_body>
 """,
+
+'latex': latex_template,
+'latex2e': latex_template,
+'newlatex2e': latex_template,
+
 
 }

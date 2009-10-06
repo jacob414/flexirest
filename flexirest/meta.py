@@ -1,6 +1,6 @@
 SHORT_NAME='flexirest'
 CMDLINE_DESC = 'The medium-featured, flexible reStructuredText utility'
-VERSION = '0.8'
+VERSION = '0.8.1dev'
 URL = 'http://www.aspektratio.net/flexirest'
 AUTHOR = 'Jacob Oscarson'
 EMAIL = 'jacob@aspektratio.net'
