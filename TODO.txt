@@ -3,12 +3,8 @@ Documentation
   Better documentation on templates
   Make the introduction better..
     (no installation section.. etc)
-Release 0.8 				[DONE]
-  Write introduction text		[DONE]
-  Prepare web 'site' 			[DONE]
-Post-release
-  Fix setup.python			[DONE]
-  Add licence file (LGPL)		[DONE]
-Register on www.ohloh.net
+Register on www.ohloh.net               [DONE]
+Better download page
 Refactoring post-08
-  API'ify instead of main.commandline()
+  API'ify instead of main.commandline()	[DONE]
+
