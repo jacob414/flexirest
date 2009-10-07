@@ -17,6 +17,6 @@ generate: docsdir statics introduction.txt quick-manual.txt download.txt
 	$(FLEXIREST) < download.txt > $(DOCSBUILD)/download.html --template=template.html
 
 deploy: generate
-	scp -r $(DOCSBUILD)/* flexisite:public_html/flexirest
+	rsync -rv $(DOCSBUILD)/* flexisite:public_html/flexirest
 
 .PHONY: all
