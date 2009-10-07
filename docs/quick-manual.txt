@@ -1,5 +1,5 @@
-.. -*- Coding: utf-8 -*-
 .. -*- mode: rst -*-
+.. -*- Coding: utf-8 -*-
 
 ============
 Quick manual
@@ -29,7 +29,12 @@ Mercurial_. You can get a clone of the repository from there::
     $ hg clone http://bitbucket.org/esmljaos/flexirest/
 
 Flexirest is built using buildout_. To build using your Python (>=
-2.5.2), just run the `bootstrap.py`
+2.5.2), just run the `bootstrap.py` script with your Python
+interpreter, then run the `bin/buildout` script::
+
+    $ python bootstrap
+    [...]
+    $ ./bin/buildout
 
 .. _Bitbucket: http://bitbucket.org/
 .. _Mercurial: http://www.selenic.com/mercurial/wiki/

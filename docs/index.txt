@@ -1,5 +1,5 @@
-.. -*- Coding: utf-8 -*-
 .. -*- mode: rst -*-
+.. -*- Coding: utf-8 -*-
 
 =========
 Flexirest

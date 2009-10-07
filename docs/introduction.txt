@@ -1,5 +1,5 @@
-.. -*- Coding: utf-8 -*-
 .. -*- mode: rst -*-
+.. -*- Coding: utf-8 -*-
 
 `Flexirest` is a project that was born out of the authors long-running
 interest for reStructuredText_, and the idea of writing everyday
