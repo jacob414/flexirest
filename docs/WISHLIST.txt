@@ -17,7 +17,7 @@ Wishlist
   * To a web site
   * To Google Docs
     * Investigate Google API's for Python
-* Migrate to Distribute                         [WAITING FOR BUILDOUT SUPPORT]
+* Migrate to Distribute *[WAITING FOR BUILDOUT SUPPORT]*
 * Python 3 support
 * Split into flexirest and flexirest-deluxe, deluxe having all dependencies
 * Get into the official docutils link list
