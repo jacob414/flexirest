@@ -12,7 +12,9 @@ TODO
     (no installation section.. etc)
   * Write a 'recipies' page with generous examples
   * Add 'extras' (our own css + preferably more stuff) to downloads
-    * A 'nineties.css' style (blue background.. yellow text?)
+    * IDEA: A 'sober.css' extra formal(ish) stylesheet.
+    * IDEA: A 'nineties.css' style (blue background.. yellow text?)
+    * More?
 * Administration
   * Consider migrating this file to bitbuckets ticketing system
 * Post 0.8 release tasks
