@@ -1,15 +1,39 @@
-Documentation
-  Create roles				[PROVIDED LINK]
-  Better documentation on templates
-  Make the introduction better..
+.. -*- mode: rst -*-
+.. -*- Coding: utf-8 -*-
+
+====
+TODO
+====
+
+* Documentation
+  * Create roles  *[DONE FOR NOW: PROVIDED LINK]*
+  * Better documentation on templates
+  * Make the introduction better..   *[DONE FOR NOW]*
     (no installation section.. etc)
-Register on www.ohloh.net               [DONE]
-Better download page                    [DONE (ish)]
-Refactoring post-08
-  API'ify instead of main.commandline()	[DONE]
-0.8.1 development
-  Add -i --input for file input
-  Add -o --output for file output
-  Read about latex writers
-  Experiment with latex
-  Experiment with rst2pdf/Reportlab
+  * Write a 'recipies' page with generous examples
+  * Add 'extras' (our own css + preferably more stuff) to downloads
+    * A 'nineties.css' style (blue background.. yellow text?)
+* Administration
+  * Consider migrating this file to bitbuckets ticketing system
+* Post 0.8 release tasks
+  * Register on www.ohloh.net    *[DONE]*
+  * Better download page *[DONE FOR NOW]*
+* 0.8.1 development
+  * Refactor optparse business as data-driven loop *[DONE]*
+  * Make '-r' and '--roles' into '-c' and '--config' *[DONE]*
+    * Rename 'roles' option to 'config' in code *[DONE]*
+  * tests.support doctests are not run by any test runner *[DONE]*
+  * Think about concept of customized writers
+  * Listing writers?
+  * Add -i --input for file input
+  * Add -o --output for file output
+    * In this case, look for <infile>_flexi.py as config module
+  * Read about latex writers
+    * Investigate Python `tex` package
+      * http://pypi.python.org/pypi/tex)
+      * --use-tex flag to use it
+      * directly to pdf with --writer = 'pytexpdf'
+  * Experiment with latex
+  * Experiment with rst2pdf/Reportlab
+  * A --dump-parts flag for investigation/debugging
+  * --validate flag, only checks syntax (via null-writer..?)
