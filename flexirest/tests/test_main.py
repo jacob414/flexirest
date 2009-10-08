@@ -30,8 +30,8 @@ def test_version():
     assert_equals(outp.lines, ["flexirest version '%s'" % meta.VERSION])
 
 @raises(ImportError)
-def test_explicit_module_not_found_raises():
-    main.commandline(['--roles=notamodule'])
+def test_explicit_confmodule_not_found_raises():
+    main.commandline(['--config=notamodule'])
 
-def test_no_default_module_noraise():
+def test_no_default_confmodule_noraise():
     main.commandline([], source=MINIMAL_FIXTURE)
