@@ -29,6 +29,14 @@ def test_version():
     assert_equals(retc, 0)
     assert_equals(outp.lines, ["flexirest version '%s'" % meta.VERSION])
 
+def test_list_writers():
+    outp = Capturer()
+    retc = main.commandline(args=['--list-writers',], console=outp)
+    assert_equals(retc, 0)
+    # XXX Sanity check only for now
+    for expected in ('html', 'latex', 'latex2e'):
+        yield assert_true, lambda: expected in outp.lines
+
 @raises(ImportError)
 def test_explicit_confmodule_not_found_raises():
     main.commandline(['--config=notamodule'])

@@ -26,7 +26,7 @@ TODO
     * Rename 'roles' option to 'config' in code *[DONE]*
   * tests.support doctests are not run by any test runner *[DONE]*
   * Think about concept of customized writers
-  * Listing writers?
+  * Listing writers, --list-writers option *[DONE]*
   * Add -i --input for file input
   * Add -o --output for file output
     * In this case, look for <infile>_flexi.py as config module

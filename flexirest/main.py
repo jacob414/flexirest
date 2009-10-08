@@ -8,7 +8,7 @@ import imp
 from flexirest import rendering, defaults, meta
 from flexirest.util import StdoutConsole
 
-cmdline_options = (
+_cmdline_options = (
     ('-v', '--version', dict(action='store_true',
                              dest= 'version',
                              default=False,
@@ -27,7 +27,13 @@ cmdline_options = (
     ('-w', '--writer', dict(dest='writer',
                             default=False,
                             help='use docutils writer named "writer"')),
+    ('-r', '--list-writers', dict(action='store_true',
+                                  dest='list_writers',
+                                  default=False,
+                                  help='print a list of all writers and quit')),
 )
+
+_print_and_quit_options = set(('version', 'list_writers'))
 
 def _import(modname, onFailRaise=True):
     try:
@@ -41,11 +47,10 @@ def parse_commandline(args):
     parser = optparse.OptionParser(usage = meta.CMDLINE_USAGE,
                                    description = meta.CMDLINE_DESC)
 
-    for opt in cmdline_options:
+    for opt in _cmdline_options:
         parser.add_option(opt[0], opt[1], **opt[2])
 
     return parser.parse_args(args)
-
 
 def commandline(args=None, console=None, source=None, destination=None):
     if console is None:
@@ -59,8 +64,16 @@ def commandline(args=None, console=None, source=None, destination=None):
 
     options, args = parse_commandline(args)
 
-    if options.version:
-        console.write("flexirest version '%s'" % meta.VERSION)
+    # XXX or maybe we shouldn't quit, just continue after we answered
+    # out simple question?
+    opts_w_vals = set( (opt for opt, val in options.__dict__.iteritems() if val) )
+    if opts_w_vals & _print_and_quit_options:
+        if options.version:
+            console.write("flexirest version %s" % meta.VERSION)
+        if options.list_writers:
+            for available_writer in rendering.all_writers():
+                console.write(available_writer)
+
         return 0
 
     writer_name = options.writer or 'html'

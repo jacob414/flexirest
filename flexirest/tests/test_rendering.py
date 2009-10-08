@@ -50,3 +50,7 @@ def test_roles():
 
 
     assert_true(set(('one', 'two', 'three')).issubset(roles_registered))
+
+def test_all_writers():
+    # Sanity test with a few known writer names
+    assert_true(set(('html', 'latex', 'html4css1',)).issubset(rendering.all_writers()))
