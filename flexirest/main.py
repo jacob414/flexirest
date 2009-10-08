@@ -21,7 +21,7 @@ cmdline_options = (
                           dest='lang',
                           default='en',
                           help='specify language (both input and output)')),
-    ('-c', '--config', dict(dest='roles',
+    ('-c', '--config', dict(dest='config',
                             default=False,
                             help='apply source into this template')),
     ('-w', '--writer', dict(dest='writer',
@@ -72,8 +72,8 @@ def commandline(args=None, console=None, source=None, destination=None):
         template = defaults.templates[writer_name]
 
     sys.path.append(os.getcwd())
-    if options.roles:
-        confmod = _import(options.roles)
+    if options.config:
+        confmod = _import(options.config)
     else:
         confmod = _import('flexiconf', False)
 
