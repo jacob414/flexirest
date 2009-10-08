@@ -8,6 +8,27 @@ import imp
 from flexirest import rendering, defaults, meta
 from flexirest.util import StdoutConsole
 
+cmdline_options = (
+    ('-v', '--version', dict(action='store_true',
+                             dest= 'version',
+                             default=False,
+                             help='print version and exit')),
+    ('-t', '--template', dict(action='store',
+                              dest='template',
+                              default=False,
+                              help='apply source into this template')),
+    ('-l', '--lang', dict(action='store',
+                          dest='lang',
+                          default='en',
+                          help='specify language (both input and output)')),
+    ('-r', '--roles', dict(dest='roles',
+                           default=False,
+                           help='apply source into this template')),
+    ('-w', '--writer', dict(dest='writer',
+                            default=False,
+                            help='use docutils writer named "writer"')),
+)
+
 def _import(modname, onFailRaise=True):
     try:
         return __import__(modname)
@@ -15,6 +36,16 @@ def _import(modname, onFailRaise=True):
         if onFailRaise:
             raise
         return imp.new_module(modname)
+
+def parse_commandline(args):
+    parser = optparse.OptionParser(usage = meta.CMDLINE_USAGE,
+                                   description = meta.CMDLINE_DESC)
+
+    for opt in cmdline_options:
+        parser.add_option(opt[0], opt[1], **opt[2])
+
+    return parser.parse_args(args)
+
 
 def commandline(args=None, console=None, source=None, destination=None):
     if console is None:
@@ -25,39 +56,9 @@ def commandline(args=None, console=None, source=None, destination=None):
         source = sys.stdin
     if destination is None:
         destination = sys.stdout
-    parser = optparse.OptionParser(usage = meta.CMDLINE_USAGE,
-                                   description = meta.CMDLINE_DESC)
 
-    parser.add_option('-v',
-                      '--version',
-                      action='store_true',
-                      dest='version',
-                      default=False,
-                      help='print version and exit')
-    parser.add_option('-t',
-                      '--template',
-                      action='store',
-                      dest='template',
-                      default=False,
-                      help='apply source into this template')
-    parser.add_option('-l',
-                      '--lang',
-                      action='store',
-                      dest='lang',
-                      default='en',
-                      help='apply source into this template')
-    parser.add_option('-r',
-                      '--roles',
-                      dest='roles',
-                      default=False,
-                      help='apply source into this template')
-    parser.add_option('-w',
-                      '--writer',
-                      dest='writer',
-                      default=False,
-                      help='use docutils writer named "writer"')
+    options, args = parse_commandline(args)
 
-    options, args = parser.parse_args(args)
     if options.version:
         console.write("flexirest version '%s'" % meta.VERSION)
         return 0
