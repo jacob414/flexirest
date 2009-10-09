@@ -32,7 +32,30 @@ def _register_roles(conf):
         if callable(rolecand):
             roles.register_canonical_role(rolename[5:], rolecand)
 
-def render(source, destination, conf, lang, template, writer_name):
+def _dump_parts(writer_name, parts, out):
+
+    """
+    Writes a mini-report on what parts where created by the specified
+    `docutils` writer (intended for human consumption).
+
+    `parts` - parts `dict` created by `docutils.core.publish_parts()`
+    `out` - output stream to write to.
+    """
+
+    title = "Parts created by the docutils writer '%s'" % writer_name
+    out.write(title + os.linesep)
+    out.write(len(title) * '-')
+    out.write(2 * os.linesep)
+    out.write('Part keys: ' + 2 * os.linesep)
+    out.write(os.linesep.join(parts.keys()))
+    out.write(2 * os.linesep)
+    for part in parts:
+        out.write("Value of part '%s':%s" % (part, os.linesep))
+        out.write(parts[part] + os.linesep)
+        out.write(80*'-'+os.linesep)
+        out.write(os.linesep)
+
+def render(source, destination, conf, options, template, writer_name):
 
     """API entry point.
 
@@ -43,7 +66,7 @@ def render(source, destination, conf, lang, template, writer_name):
     `destination` - file-like object (needs at least `.write()` and `.flush()`
                   methods.
     `conf` - configuration module.
-    `lang` - language code of output.
+    `options` - commandline options
     `template` - the template to enter the results of `publish_parts()` into.
                (needs to support formatting with the '..' % {} technique.)
     `writer_name` - name of the `docutils` writer to use.
@@ -60,10 +83,14 @@ def render(source, destination, conf, lang, template, writer_name):
         settings_overrides=dict(), # Invent something nice for this..
     )
 
+    parts['lang'] = options.lang
+
     if writer_name == 'html':
         parts['html_head'] = parts['html_head'] % ('utf-8',)
         parts['html_prolog'] = parts['html_prolog'] % ('utf-8',)
-        parts['lang'] = lang
 
-    destination.write( (template % parts).encode("utf-8") )
-    destination.flush()
+    if options.dump_parts:
+        _dump_parts(writer_name, parts, destination)
+    else:
+        destination.write( (template % parts).encode("utf-8") )
+        destination.flush()

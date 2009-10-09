@@ -31,6 +31,10 @@ _cmdline_options = (
                                   dest='list_writers',
                                   default=False,
                                   help='print a list of all writers and quit')),
+    ('-d', '--dump-parts', dict(action='store_true',
+                                dest='dump_parts',
+                                default=False,
+                                help='Dump docutils parts produced by specified writer')),
 )
 
 _print_and_quit_options = set(('version', 'list_writers'))
@@ -90,9 +94,10 @@ def commandline(args=None, console=None, source=None, destination=None):
     else:
         confmod = _import('flexiconf', False)
 
-    return rendering.render(source,
-                            destination,
-                            confmod,
-                            options.lang,
-                            template,
-                            writer_name)
+    rendering.render(source,
+                     destination,
+                     confmod,
+                     options,
+                     template,
+                     writer_name,)
+    return 0

@@ -1,7 +1,7 @@
 import imp
 from StringIO import StringIO
 
-from flexirest import rendering, defaults
+from flexirest import rendering, defaults, util
 from flexirest.tests.support import MINIMAL_FIXTURE
 
 from nose.tools import assert_equals, assert_true, with_setup, raises
@@ -45,7 +45,7 @@ def test_roles():
     rendering.render(MINIMAL_FIXTURE,
                      out,
                      confmod,
-                     'en',
+                     util.Duck(lang='en', dump_parts=False),
                      defaults.templates['html'], 'html')
 
 
