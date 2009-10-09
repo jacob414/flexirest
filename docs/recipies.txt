@@ -1,0 +1,15 @@
+.. -*- mode: rst -*-
+.. -*- Coding: utf-8 -*-
+
+========
+Recipies
+========
+
+Using the `--dump-parts` flag to investigate writer output
+----------------------------------------------------------
+
+To investigate witch kind of output a certain writer will give you,
+you can use the `--dump-parts` option::
+
+    $ flexirest --writer=html --dump-parts < myinput.txt
+
