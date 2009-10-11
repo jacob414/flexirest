@@ -1,17 +1,6 @@
 """Modules indentation intentionally bad."""
 
-# XXX Very rough for now
-latex_template = u"""
-%(head_prefix)s
-
-%(head)s
-
-%(body_prefix)s
-
-%(body)s
-
-%(body_suffix)s
-"""
+from flexirest.rendering import all_writers
 
 templates = {
 
@@ -25,10 +14,7 @@ templates = {
 </body>
 </html_body>
 """,
-
-'latex': latex_template,
-'latex2e': latex_template,
-'newlatex2e': latex_template,
-
-
 }
+
+for writer_name in all_writers():
+    templates[writer_name] = u's(whole)s'
