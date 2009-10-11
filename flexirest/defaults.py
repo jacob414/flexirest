@@ -17,4 +17,4 @@ templates = {
 }
 
 for writer_name in all_writers():
-    templates[writer_name] = u's(whole)s'
+    templates[writer_name] = u's%(whole)s'
