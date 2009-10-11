@@ -75,7 +75,7 @@ def commandline(args=None, console=None, source=None, destination=None):
         if options.version:
             console.write("flexirest version %s" % meta.VERSION)
         if options.list_writers:
-            for available_writer in sorted(rendering.all_writers()):
+            for available_writer in rendering.all_writers():
                 console.write(available_writer)
 
         return 0
