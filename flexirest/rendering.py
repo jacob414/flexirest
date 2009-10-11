@@ -16,8 +16,8 @@ Beware: the _writer_aliases dict is undocumented and marked as
 private! We should find out a better way to produce this list.
 """
 # XXX Add planned 'pseudo-writers' here
-all_writers = lambda: itertools.chain(writers._writer_aliases.keys(),
-                              writers._writer_aliases.values())
+all_writers = lambda: sorted(set(itertools.chain(writers._writer_aliases.keys(),
+                              writers._writer_aliases.values())))
 
 def _register_roles(conf):
 
