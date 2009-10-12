@@ -8,19 +8,23 @@ TODO
 * Documentation
   * Create roles  *[DONE FOR NOW: PROVIDED LINK]*
   * Better documentation on templates
-  * Make the introduction better..   *[DONE FOR NOW]*
-    (no installation section.. etc)
+  * Make the introduction better..
+    * Scope discussion (not competing with Sphinx, rst2pdf ect). For
+      stand-alone documents: this site an exception for dogfood
+      reasons
   * Write a 'recipies' page with generous examples
+    * Suggested HTML workflow
   * Add 'extras' (our own css + preferably more stuff) to downloads
     * IDEA: A 'sober.css' extra formal(ish) stylesheet.
     * IDEA: A 'nineties.css' style (blue background.. yellow text?)
     * More?
+  * A 'milestones' / future plans kind of page
 * Administration
   * Consider migrating this file to bitbuckets ticketing system
 * Post 0.8 release tasks
   * Register on www.ohloh.net    *[DONE]*
   * Better download page *[DONE FOR NOW]*
-* 0.8.1 development
+* 0.8.2 development
   * Refactor optparse business as data-driven loop *[DONE]*
   * Make '-r' and '--roles' into '-c' and '--config' *[DONE]*
     * Rename 'roles' option to 'config' in code *[DONE]*
@@ -37,5 +41,9 @@ TODO
       * directly to pdf with --writer = 'pytexpdf'
   * Experiment with latex
   * Experiment with rst2pdf/Reportlab
-  * A --dump-parts flag for investigation/debugging
+  * A --dump-parts flag for investigation/debugging *[DONE]*
   * --validate flag, only checks syntax (via null-writer..?)
+* 0.8.4 Ideas
+  * An 'externals' module that pulls 'upstream' renderers/roles from
+    e.g the docutils sandbox, rst2pdf, other places and makes them
+    available to flexirest.
