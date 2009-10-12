@@ -21,11 +21,11 @@ RST Text
 
 BASIC_TMPL = '/tmp/tmpl_basic.txt'
 
-test_tmpl_basic_creator = functools.partial(support.create_testfile, BASIC_TMPL, textwrap.dedent("""
+tmpl_basic_creator = functools.partial(support.create_testfile, BASIC_TMPL, textwrap.dedent("""
 the_template %(whole)s
 """))
 
-@with_setup(test_tmpl_basic_creator, support.clean_testfiles)
+@with_setup(tmpl_basic_creator, support.clean_testfiles)
 def test_template_basic():
     capture = StringIO()
     main._import = lambda m, r: imp.new_module(m)
@@ -43,13 +43,13 @@ def role_foo(role, rawtext, text, lineno, inliner, options=None, content=[]):
 
 ROLE_TMPL = '/tmp/tmpl_full_role.txt'
 
-test_tmpl_full_role_creator = functools.partial(support.create_testfile,
+tmpl_full_role_creator = functools.partial(support.create_testfile,
                                                 ROLE_TMPL,
                                                 textwrap.dedent("""
 the_template %(whole)s
 """))
 
-@with_setup(test_tmpl_full_role_creator, support.clean_testfiles)
+@with_setup(tmpl_full_role_creator, support.clean_testfiles)
 def test_full_role():
     fullrole_src = StringIO(textwrap.dedent("""
     Some text :foo:`Some test text` after
@@ -63,3 +63,4 @@ def test_full_role():
                           source=fullrole_src, destination=capture)
     out = capture.getvalue()
     assert_true('ROLESTART_Some test text_ROLESTOP' in out)
+
