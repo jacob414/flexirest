@@ -17,4 +17,5 @@ templates = {
 }
 
 for writer_name in all_writers():
-    templates[writer_name] = u's%(whole)s'
+    if writer_name not in templates:
+        templates[writer_name] = u'%(whole)s'
