@@ -21,6 +21,7 @@ TODO
   * A 'milestones' / future plans kind of page
 * Administration
   * Consider migrating this file to bitbuckets ticketing system
+  * The top-level tests directory should be named 'tests/' for consistency
 * Post 0.8 release tasks
   * Register on www.ohloh.net    *[DONE]*
   * Better download page *[DONE FOR NOW]*
@@ -31,8 +32,8 @@ TODO
   * tests.support doctests are not run by any test runner *[DONE]*
   * Think about concept of customized writers
   * Listing writers, --list-writers option *[DONE]*
-  * Add -i --input for file input
-  * Add -o --output for file output
+  * Add -i --input for file input *[DONE]*
+  * Add -o --output for file output *[DONE]*
     * In this case, look for <infile>_flexi.py as config module
   * Read about latex writers
     * Investigate Python `tex` package
@@ -47,3 +48,6 @@ TODO
   * An 'externals' module that pulls 'upstream' renderers/roles from
     e.g the docutils sandbox, rst2pdf, other places and makes them
     available to flexirest.
+  * Find use cases with normal tracebacks (not found files etc) and
+    state a nice error message instead of just dumping a traceback to
+    the console.

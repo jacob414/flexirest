@@ -1,3 +1,4 @@
+import os
 import textwrap
 import functools
 import imp
@@ -12,12 +13,13 @@ from flexirest import main
 
 from StringIO import StringIO
 
-MINIMAL_FIXTURE = StringIO("""
-======
-654321
-======
-RST Text
-""")
+def get_minimal_fixture():
+    return StringIO(textwrap.dedent("""
+                                    ======
+                                    654321
+                                    ======
+                                    RST Text
+                                    """))
 
 BASIC_TMPL = '/tmp/tmpl_basic.txt'
 
@@ -30,7 +32,7 @@ def test_template_basic():
     capture = StringIO()
     main._import = lambda m, r: imp.new_module(m)
     rc = main.commandline(['--template=%s' % BASIC_TMPL, '--writer=pseudoxml'],
-                          source=MINIMAL_FIXTURE, destination=capture)
+                          source=get_minimal_fixture(), destination=capture)
     out = capture.getvalue()
     assert_true('the_template' in out)
     assert_true('title="654321"' in out)
@@ -64,3 +66,25 @@ def test_full_role():
     out = capture.getvalue()
     assert_true('ROLESTART_Some test text_ROLESTOP' in out)
 
+SIMPLE_INFILE_PATH = '/tmp/simple_infile.rst'
+
+simple_infile_creator = functools.partial(support.create_testfile,
+                                          SIMPLE_INFILE_PATH,
+                                          get_minimal_fixture().getvalue())
+
+@with_setup(simple_infile_creator, support.clean_testfiles)
+def test_w_infile():
+    capture = StringIO()
+    rc = main.commandline(['--infile=%s' % SIMPLE_INFILE_PATH, '--writer=html'],
+                          destination=capture)
+    assert_equals(rc, 0)
+    assert_true('<title>654321</title>' in capture.getvalue())
+
+SIMPLE_OUTFILE = '/tmp/simple_outfile.html'
+
+@with_setup(lambda: None, functools.partial(os.unlink, SIMPLE_OUTFILE))
+def test_w_outfile():
+    rc = main.commandline(['--outfile=%s' % SIMPLE_OUTFILE, '--writer=html'],
+                          source=get_minimal_fixture())
+    assert_equals(rc, 0)
+    assert_true('<title>654321</title>' in open(SIMPLE_OUTFILE, 'r').read())

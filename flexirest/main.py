@@ -35,6 +35,14 @@ _cmdline_options = (
                                 dest='dump_parts',
                                 default=False,
                                 help='Dump docutils parts produced by specified writer')),
+    ('-i', '--infile', dict(action='store',
+                            dest='infile',
+                            default=False,
+                            help='read input from this file')),
+    ('-o', '--outfile', dict(action='store',
+                             dest='outfile',
+                             default=False,
+                             help='write output to this file')),
 )
 
 _print_and_quit_options = set(('version', 'list_writers'))
@@ -61,10 +69,6 @@ def commandline(args=None, console=None, source=None, destination=None):
         console = StdoutConsole()
     if args is None:
         args = sys.argv[1:]
-    if source is None:
-        source = sys.stdin
-    if destination is None:
-        destination = sys.stdout
 
     options, args = parse_commandline(args)
 
@@ -79,6 +83,22 @@ def commandline(args=None, console=None, source=None, destination=None):
                 console.write(available_writer)
 
         return 0
+
+    # source parameter of `commandline()` always wins
+    if source is None:
+        if options.infile:
+            # XXX File not found will just dump traceback to stderr
+            source = open(options.infile, 'r')
+        else:
+            source = sys.stdin
+
+    # destination parameter of `commandline()` always wins
+    if destination is None:
+        if options.outfile:
+            # XXX Create error will just dump traceback to stderr
+            destination = open(options.outfile, 'w')
+        else:
+            destination = sys.stdout
 
     writer_name = options.writer or 'html'
 
