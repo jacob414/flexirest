@@ -5,6 +5,8 @@
 Wishlist
 ========
 
+And possibly, generally crazy but maybe nifty ideas
+
 * Post-processing trickery
   * Build .pdf in one go
   * Build .doc in one go
@@ -22,4 +24,6 @@ Wishlist
 * Split into flexirest and flexirest-deluxe, deluxe having all dependencies
 * Get into the official docutils link list
   http://docutils.sourceforge.net/docs/user/links.html
-
+* New Writer: RSS writer
+* New Writer: 'Annotated' writer (for testing)
+    writes like: "'Title: The title.. Section: bla bla.."
