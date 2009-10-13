@@ -27,3 +27,5 @@ And possibly, generally crazy but maybe nifty ideas
 * New Writer: RSS writer
 * New Writer: 'Annotated' writer (for testing)
     writes like: "'Title: The title.. Section: bla bla.."
+* Real manpage
+    * Investigate the ManWriter in docutils sandbox
