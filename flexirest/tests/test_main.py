@@ -37,6 +37,14 @@ def test_list_writers():
     for expected in ('html', 'latex', 'latex2e'):
         yield assert_true, lambda: expected in outp.lines
 
+def test_dump_parts():
+    capture = Capturer()
+    rc = main.commandline(['--dump-parts', '--writer=latex'],
+                          source=StringIO(MINIMAL_FIXTURE),
+                          destination=capture)
+    # XXX Sanity check only
+    assert_true(capture.lines[0].startswith("Parts created by the docutils"))
+
 @raises(ImportError)
 def test_explicit_confmodule_not_found_raises():
     main.commandline(['--config=notamodule'])

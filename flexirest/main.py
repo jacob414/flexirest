@@ -114,10 +114,20 @@ def commandline(args=None, console=None, source=None, destination=None):
     else:
         confmod = _import('flexiconf', False)
 
-    rendering.render(source,
-                     destination,
-                     confmod,
-                     options,
-                     template,
-                     writer_name,)
+    if options.dump_parts:
+        rendering.dump_parts(source,
+                             destination,
+                             confmod,
+                             options,
+                             template,
+                             writer_name,)
+    else:
+        rendering.render(source,
+                         destination,
+                         confmod,
+                         options,
+                         template,
+                         writer_name,)
+
+    # XXX Way to simple way to treat return codes
     return 0

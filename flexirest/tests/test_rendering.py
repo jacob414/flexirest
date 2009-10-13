@@ -2,7 +2,7 @@ import imp
 from StringIO import StringIO
 
 from flexirest import rendering, defaults, util
-from flexirest.tests.support import MINIMAL_FIXTURE
+from flexirest.tests import support
 
 from nose.tools import assert_equals, assert_true, with_setup, raises
 
@@ -42,7 +42,7 @@ def test_roles():
     confmod.role_four = "but I'm not callable!"
 
     out = StringIO()
-    rendering.render(MINIMAL_FIXTURE,
+    rendering.render(support.MINIMAL_FIXTURE,
                      out,
                      confmod,
                      util.Duck(lang='en', dump_parts=False),
@@ -54,3 +54,11 @@ def test_roles():
 def test_all_writers():
     # Sanity test with a few known writer names
     assert_true(set(('html', 'latex', 'html4css1',)).issubset(rendering.all_writers()))
+
+def test_dump_parts():
+    out = support.Capturer()
+    rendering.dump_parts(support.MINIMAL_FIXTURE,
+                         out,
+                         imp.new_module('flexiconf'),
+                         util.Duck(lang='en', dump_parts=True),
+                         defaults.templates['html'], 'html')
