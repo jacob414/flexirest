@@ -22,27 +22,13 @@ TODO
 * Administration
   * Consider migrating this file to bitbuckets ticketing system
   * The top-level tests directory should be named 'tests/' for consistency
-* Post 0.8 release tasks
-  * Register on www.ohloh.net    *[DONE]*
-  * Better download page *[DONE FOR NOW]*
 * 0.8.2 development
-  * Refactor optparse business as data-driven loop *[DONE]*
-  * Make '-r' and '--roles' into '-c' and '--config' *[DONE]*
-    * Rename 'roles' option to 'config' in code *[DONE]*
-  * tests.support doctests are not run by any test runner *[DONE]*
-  * Think about concept of customized writers
-  * Listing writers, --list-writers option *[DONE]*
-  * Add -i --input for file input *[DONE]*
-  * Add -o --output for file output *[DONE]*
     * In this case, look for <infile>_flexi.py as config module
   * Read about latex writers
     * Investigate Python `tex` package
       * http://pypi.python.org/pypi/tex)
       * --use-tex flag to use it
       * directly to pdf with --writer = 'pytexpdf'
-  * Experiment with latex
-  * Experiment with rst2pdf/Reportlab
-  * A --dump-parts flag for investigation/debugging *[DONE]*
   * --validate flag, only checks syntax (via null-writer..?)
 * 0.8.4 Ideas
   * An 'externals' module that pulls 'upstream' renderers/roles from
