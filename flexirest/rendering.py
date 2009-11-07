@@ -6,7 +6,11 @@ from docutils import writers
 from docutils.parsers.rst import roles
 from docutils.core import publish_parts
 
+from flexirest import tex
+
 __docformat__ = 'reStructuredText'
+
+pseudo_writers = {'latex2pdf': 'latex2e'}
 
 # XXX
 """
@@ -17,7 +21,7 @@ private! We should find out a better way to produce this list.
 """
 # XXX Add planned 'pseudo-writers' here
 all_writers = lambda: sorted(set(itertools.chain(writers._writer_aliases.keys(),
-                              writers._writer_aliases.values())))
+                              writers._writer_aliases.values(), pseudo_writers)))
 
 def _register_roles(conf):
 
@@ -38,14 +42,11 @@ class Render(object):
         self.conf = conf
         self.options = options
         self.template = template
-        self.writer = writer_name
+        self._writer = writer_name
 
     def _build_settings(self):
         _register_roles(self.conf)
-        builderfn = getattr(self, '_build_%s_settings' % self.writer, False)
-        if builderfn:
-            return builderfn()
-        return {}
+        return getattr(self, '_build_%s_settings' % self.writer, lambda: {})()
 
     def dump_parts(self, source, destination):
         """
@@ -71,6 +72,12 @@ class Render(object):
             destination.write(80*'-'+os.linesep)
             destination.write(os.linesep)
 
+    @property
+    def writer(self):
+        if self._writer in pseudo_writers:
+            return pseudo_writers[self._writer]
+        return self._writer
+
     def publish_parts(self, source):
         # The .read().decode(..) chain below is a little inefficient, but
         # this is supposed to be a quite modest tool, so I'll just leave
@@ -83,13 +90,24 @@ class Render(object):
         parts['lang'] = self.options.lang
         return parts
 
+    def default_writer(self, stage_one, destination):
+        """
+        The default writer just writes out the template applied output
+        from publich_parts().
+        """
+        destination.write( stage_one.encode("utf-8") )
+
     def render(self, source, destination):
         parts = self.publish_parts(source)
-        destination.write( (self.template % parts).encode("utf-8") )
+        getattr(self, '_write_%s' % self._writer,
+                self.default_writer)(self.template % parts, destination)
         destination.flush()
 
     def _build_html_settings(self):
         return {}
+
+    def _write_latex2pdf(self, stage_one, destination):
+        destination.write(tex.latex2pdf(stage_one))
 
 def render(source, destination, conf, options, template, writer_name):
 
