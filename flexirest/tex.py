@@ -3,12 +3,13 @@ import tempfile
 import subprocess
 import shutil
 
-def latex2pdf(source):
+def latex2pdf(source, styles=()):
     tmpdir = tempfile.mkdtemp(prefix='flexirest-')
     tmpfile = lambda name: os.path.join(tmpdir, name)
 
     try:
-        # XXX Put appropriate .sty files in the temp dir
+        for sty in styles:
+            shutil.copy(sty, tmpdir)
 
         srcpath = tmpfile('texsource.tex')
         with open(srcpath, 'w') as fp:

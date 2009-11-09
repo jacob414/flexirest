@@ -107,7 +107,9 @@ class Render(object):
         return {}
 
     def _write_latex2pdf(self, stage_one, destination):
-        destination.write(tex.latex2pdf(stage_one))
+        pdf = tex.latex2pdf(stage_one)
+        import ipdb; ipdb.set_trace()
+        destination.write(pdf)
 
 def render(source, destination, conf, options, template, writer_name):
 
