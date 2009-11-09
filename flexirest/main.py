@@ -96,6 +96,7 @@ def commandline(args=None, console=None, source=None, destination=None):
     if destination is None:
         if options.outfile:
             # XXX Create error will just dump traceback to stderr
+            # XXX Causes issue #4
             destination = open(options.outfile, 'w')
         else:
             destination = sys.stdout
