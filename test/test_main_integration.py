@@ -2,14 +2,17 @@ import os
 import textwrap
 import functools
 import imp
+import shutil
+import tempfile
 
 from docutils import nodes
 
 from nose.tools import assert_equals, assert_true, with_setup, raises
 
-import support
+from flexirest.tests import support
 
 from flexirest import main
+from flexirest.tests import test_tex
 
 from StringIO import StringIO
 
@@ -88,3 +91,15 @@ def test_w_outfile():
                           source=get_minimal_fixture())
     assert_equals(rc, 0)
     assert_true('<title>654321</title>' in open(SIMPLE_OUTFILE, 'r').read())
+
+# full_latex_dir = None
+
+# def setup_latex_dir():
+#     full_latex_dir = tempfile.mkdtemp() # XXX
+
+# def teardown_latex_dir():
+#     pass
+
+# @with_setup(setup_latex_dir, teardown_latex_dir)
+# def test_smoketest_latex2pdf_writing():
+#     pass

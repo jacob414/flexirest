@@ -6,9 +6,19 @@ import tempfile
 
 from StringIO import StringIO
 
-from nose.tools import assert_equals, assert_true
+from nose.tools import assert_equals, assert_true, with_setup
 
 from flexirest.tex import *
+
+import support
+
+def write_fake_style(path):
+    with open(path, 'w') as fp:
+        fp.write(textwrap.dedent(r"""
+        \NeedsTeXFormat{LaTeX2e}
+        \ProvidesPackage{flexifake}[2009/09/11 1.0 a test fixture used by flexirest]
+        \endinput
+        """))
 
 def test_simplest():
     pdf = latex2pdf(textwrap.dedent(ur"""
@@ -33,23 +43,28 @@ def test_utf8_encoded():
     assert_equals(pdf[:8], '%PDF-1.4')
     assert_equals(pdf[-6:], '%%EOF\n')
 
-def test_w_style():
-    stylesdir = tempfile.mkdtemp(prefix='fr-test-w-style-')
-    stylepath = os.path.join(stylesdir, 'flexifake.sty')
-    open(stylepath, 'w').write(textwrap.dedent(r"""
-    \NeedsTeXFormat{LaTeX2e}
-    \ProvidesPackage{flexifake}[2009/09/11 1.0 a test fixture used by flexirest]
-    \endinput
-    """))
+_styles_dir = None
 
-    try:
-        pdf = latex2pdf(textwrap.dedent("""
-        \\documentclass{article}
-        \\usepackage{flexifake}
-        \\begin{document}
-        Uses package cmap
-        \\end{document}"""), (stylepath,))
-        assert_equals(pdf[:8], '%PDF-1.4')
-        assert_equals(pdf[-6:], '%%EOF\n')
-    finally:
-        shutil.rmtree(stylesdir)
+def setup_styles_dir():
+    global _styles_dir
+    _styles_dir = tempfile.mkdtemp(prefix='fr-test-w-style-')
+
+def teardown_styles_dir():
+    global _styles_dir
+    shutil.rmtree(_styles_dir)
+
+@with_setup(setup_styles_dir, teardown_styles_dir)
+def test_w_style():
+    global _styles_dir
+    stylepath = os.path.join(_styles_dir, 'flexifake.sty')
+    write_fake_style(stylepath)
+
+    pdf = latex2pdf(textwrap.dedent("""
+    \\documentclass{article}
+    \\usepackage{flexifake}
+    \\begin{document}
+    Uses package flexifake.
+    \\end{document}"""), (stylepath,))
+    assert_equals(pdf[:8], '%PDF-1.4')
+    assert_equals(pdf[-6:], '%%EOF\n')
+

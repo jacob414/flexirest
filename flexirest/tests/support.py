@@ -1,3 +1,6 @@
+from __future__ import with_statement
+
+import os
 import sys
 from StringIO import StringIO
 
@@ -43,6 +46,18 @@ class Capturer(object):
 
     def flush(self):
         pass
+
+testfiles = []
+
+def create_testfile(path, contents):
+    with open(path, 'w') as fp:
+        fp.write(contents)
+    testfiles.append(path)
+
+def clean_testfiles():
+    for path in testfiles:
+        os.unlink(path)
+        testfiles.remove(path)
 
 if __name__ == '__main__':
     import doctest
