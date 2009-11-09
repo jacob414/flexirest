@@ -4,12 +4,15 @@ import os
 import sys
 from StringIO import StringIO
 
-MINIMAL_FIXTURE = StringIO("""
+MINIMAL_FIXTURE = """
 =====
 Title
 =====
 Text
-""")
+"""
+
+def get_minimal_fixture():
+    return StringIO(MINIMAL_FIXTURE)
 
 def getraise(callable, *args, **kwargs):
     """

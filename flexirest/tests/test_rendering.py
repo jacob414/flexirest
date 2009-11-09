@@ -42,7 +42,7 @@ def test_roles():
     confmod.role_four = "but I'm not callable!"
 
     out = StringIO()
-    rendering.render(support.MINIMAL_FIXTURE,
+    rendering.render(support.get_minimal_fixture(),
                      out,
                      confmod,
                      util.Duck(lang='en', dump_parts=False),
@@ -57,7 +57,7 @@ def test_all_writers():
 
 def test_dump_parts():
     out = support.Capturer()
-    rendering.dump_parts(support.MINIMAL_FIXTURE,
+    rendering.dump_parts(support.get_minimal_fixture(),
                          out,
                          imp.new_module('flexiconf'),
                          util.Duck(lang='en', dump_parts=True),

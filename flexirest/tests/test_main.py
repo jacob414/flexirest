@@ -7,7 +7,7 @@ from StringIO import StringIO
 from flexirest import main, meta, rendering
 from nose.tools import assert_equals, assert_true, with_setup, raises
 
-from flexirest.tests.support import Capturer, MINIMAL_FIXTURE
+from flexirest.tests.support import Capturer, get_minimal_fixture
 
 def test_help():
     outp = Capturer()
@@ -40,7 +40,7 @@ def test_list_writers():
 def test_dump_parts():
     capture = Capturer()
     rc = main.commandline(['--dump-parts', '--writer=latex'],
-                          source=StringIO(MINIMAL_FIXTURE),
+                          source=get_minimal_fixture(),
                           destination=capture)
     # XXX Sanity check only
     assert_true(capture.lines[0].startswith("Parts created by the docutils"))
@@ -50,4 +50,4 @@ def test_explicit_confmodule_not_found_raises():
     main.commandline(['--config=notamodule'])
 
 def test_no_default_confmodule_noraise():
-    main.commandline([], source=MINIMAL_FIXTURE)
+    main.commandline([], source=get_minimal_fixture())

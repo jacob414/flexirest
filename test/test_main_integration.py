@@ -105,4 +105,4 @@ def latex_tmp(name):
 
 @with_setup(setup_latex_dir, teardown_latex_dir)
 def test_smoketest_latex2pdf_writing():
-    pass
+
