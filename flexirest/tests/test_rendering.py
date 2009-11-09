@@ -62,3 +62,5 @@ def test_dump_parts():
                          imp.new_module('flexiconf'),
                          util.Duck(lang='en', dump_parts=True),
                          defaults.templates['html'], 'html')
+    assert_true(out.lines[0].startswith("Parts created by the docutils writer 'html'"))
+    assert_true(out.lines[4].startswith('body'))
