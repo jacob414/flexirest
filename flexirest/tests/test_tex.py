@@ -13,8 +13,7 @@ from flexirest.tex import *
 import support
 
 def write_fake_style(path):
-    with open(path, 'w') as fp:
-        fp.write(textwrap.dedent(r"""
+    support.write_test_file(path, textwrap.dedent(r"""
         \NeedsTeXFormat{LaTeX2e}
         \ProvidesPackage{flexifake}[2009/09/11 1.0 a test fixture used by flexirest]
         \endinput

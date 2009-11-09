@@ -26,11 +26,11 @@ def get_minimal_fixture():
 
 BASIC_TMPL = '/tmp/tmpl_basic.txt'
 
-tmpl_basic_creator = functools.partial(support.create_testfile, BASIC_TMPL, textwrap.dedent("""
+tmpl_basic_creator = functools.partial(support.create_gc_testfile, BASIC_TMPL, textwrap.dedent("""
 the_template %(whole)s
 """))
 
-@with_setup(tmpl_basic_creator, support.clean_testfiles)
+@with_setup(tmpl_basic_creator, support.clean_gc_testfiles)
 def test_template_basic():
     capture = StringIO()
     main._import = lambda m, r: imp.new_module(m)
@@ -48,13 +48,13 @@ def role_foo(role, rawtext, text, lineno, inliner, options=None, content=[]):
 
 ROLE_TMPL = '/tmp/tmpl_full_role.txt'
 
-tmpl_full_role_creator = functools.partial(support.create_testfile,
+tmpl_full_role_creator = functools.partial(support.create_gc_testfile,
                                                 ROLE_TMPL,
                                                 textwrap.dedent("""
 the_template %(whole)s
 """))
 
-@with_setup(tmpl_full_role_creator, support.clean_testfiles)
+@with_setup(tmpl_full_role_creator, support.clean_gc_testfiles)
 def test_full_role():
     fullrole_src = StringIO(textwrap.dedent("""
     Some text :foo:`Some test text` after
@@ -71,11 +71,11 @@ def test_full_role():
 
 SIMPLE_INFILE_PATH = '/tmp/simple_infile.rst'
 
-simple_infile_creator = functools.partial(support.create_testfile,
+simple_infile_creator = functools.partial(support.create_gc_testfile,
                                           SIMPLE_INFILE_PATH,
                                           get_minimal_fixture().getvalue())
 
-@with_setup(simple_infile_creator, support.clean_testfiles)
+@with_setup(simple_infile_creator, support.clean_gc_testfiles)
 def test_w_infile():
     capture = StringIO()
     rc = main.commandline(['--infile=%s' % SIMPLE_INFILE_PATH, '--writer=html'],
@@ -92,14 +92,17 @@ def test_w_outfile():
     assert_equals(rc, 0)
     assert_true('<title>654321</title>' in open(SIMPLE_OUTFILE, 'r').read())
 
-# full_latex_dir = None
+full_latex_dir = []
 
-# def setup_latex_dir():
-#     full_latex_dir = tempfile.mkdtemp() # XXX
+def setup_latex_dir():
+    full_latex_dir.append(tempfile.mkdtemp(prefix='fr-latex2pdf-smoketest-'))
 
-# def teardown_latex_dir():
-#     pass
+def teardown_latex_dir():
+    shutil.rmtree(full_latex_dir[0])
 
-# @with_setup(setup_latex_dir, teardown_latex_dir)
-# def test_smoketest_latex2pdf_writing():
-#     pass
+def latex_tmp(name):
+    return os.path.join(full_latex_dir[0], name)
+
+@with_setup(setup_latex_dir, teardown_latex_dir)
+def test_smoketest_latex2pdf_writing():
+    pass

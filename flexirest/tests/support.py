@@ -49,12 +49,15 @@ class Capturer(object):
 
 testfiles = []
 
-def create_testfile(path, contents):
+def write_test_file(path, contents):
     with open(path, 'w') as fp:
         fp.write(contents)
+
+def create_gc_testfile(path, contents):
+    write_test_file(path, contents)
     testfiles.append(path)
 
-def clean_testfiles():
+def clean_gc_testfiles():
     for path in testfiles:
         os.unlink(path)
         testfiles.remove(path)
