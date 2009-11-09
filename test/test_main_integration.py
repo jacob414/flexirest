@@ -16,6 +16,7 @@ from flexirest.tests import test_tex
 
 from StringIO import StringIO
 
+# XXX Use support.get_minimal_fixture instead!
 def get_minimal_fixture():
     return StringIO(textwrap.dedent("""
                                     ======
@@ -105,4 +106,15 @@ def latex_tmp(name):
 
 @with_setup(setup_latex_dir, teardown_latex_dir)
 def test_smoketest_latex2pdf_writing():
+    rst_path = latex_tmp('rst-source.rst')
+    support.write_test_file(rst_path, support.MINIMAL_FIXTURE)
+    test_tex.write_fake_style(latex_tmp('flexifake.sty'))
+    # XXX: Todo, create a template that demands the style file.
 
+    capture = StringIO()
+    rc = main.commandline(['--infile=%s' % rst_path, '--writer=latex2pdf'],
+                          destination=capture)
+    assert_equals(rc, 0)
+    pdf = capture.getvalue()
+    assert_equals(pdf[:8], '%PDF-1.4')
+    assert_equals(pdf[-6:], '%%EOF\n')
