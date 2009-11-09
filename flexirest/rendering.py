@@ -64,7 +64,7 @@ class Render(object):
         destination.write('Part keys: ' + 2 * os.linesep)
 
         parts = self.publish_parts(source)
-        destination.write(os.linesep.join(parts.keys()))
+        destination.write(os.linesep.join(sorted(parts.keys())))
         destination.write(2 * os.linesep)
         for part in parts:
             destination.write("Value of part '%s':%s" % (part, os.linesep))
@@ -106,9 +106,11 @@ class Render(object):
     def _build_html_settings(self):
         return {}
 
-    def _write_latex2pdf(self, stage_one, destination):
-        pdf = tex.latex2pdf(stage_one)
-        import ipdb; ipdb.set_trace()
+    def _write_latex2pdf(self, latex, destination):
+        # 1. Gather all .sty files from CWD
+        # 2. If --infile option is used, gather all .sty files from --infile 's
+        #    directory too.
+        pdf = tex.latex2pdf(latex)
         destination.write(pdf)
 
 def render(source, destination, conf, options, template, writer_name):
