@@ -1,16 +1,17 @@
 import os
 import sys
 import imp
+import errno
 
 from StringIO import StringIO
 
 from flexirest import main, meta, rendering
 from nose.tools import assert_equals, assert_true, with_setup, raises
 
-from flexirest.test.support import Capturer, get_minimal_fixture
+from flexirest.test import support
 
 def test_help():
-    outp = Capturer()
+    outp = support.Capturer()
     old_stdout = sys.stdout
     try:
         sys.stdout = outp
@@ -24,13 +25,13 @@ def test_help():
         assert_true(_help[5].endswith('show this help message and exit'))
 
 def test_version():
-    outp = Capturer()
+    outp = support.Capturer()
     retc = main.commandline(args=['--version',], console=outp)
     assert_equals(retc, 0)
     assert_equals(outp.lines, ["flexirest version %s" % meta.VERSION])
 
 def test_list_writers():
-    outp = Capturer()
+    outp = support.Capturer()
     retc = main.commandline(args=['--list-writers',], console=outp)
     assert_equals(retc, 0)
     # XXX Sanity check only for now
@@ -38,9 +39,9 @@ def test_list_writers():
         yield assert_true, lambda: expected in outp.lines
 
 def test_dump_parts():
-    capture = Capturer()
+    capture = support.Capturer()
     rc = main.commandline(['--dump-parts', '--writer=latex'],
-                          source=get_minimal_fixture(),
+                          source=support.get_minimal_fixture(),
                           destination=capture)
     # XXX Sanity check only
     assert_true(capture.lines[0].startswith("Parts created by the docutils"))
@@ -50,4 +51,11 @@ def test_explicit_confmodule_not_found_raises():
     main.commandline(['--config=notamodule'])
 
 def test_no_default_confmodule_noraise():
-    main.commandline([], source=get_minimal_fixture())
+    main.commandline([], source=support.get_minimal_fixture())
+
+def test_bad_writer_nice_error():
+    rval, stderr = support.capture_stderr(main.commandline,
+                                          ['--writer=bad_writer'])
+    assert_equals(rval, errno.EINVAL)
+    assert_equals(stderr, "flexirest: 'bad_writer' is not a valid writer%s" % os.linesep)
+

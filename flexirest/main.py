@@ -4,6 +4,7 @@ import os
 import sys
 import optparse
 import imp
+import errno
 
 from flexirest import rendering, defaults, meta
 from flexirest.util import StdoutConsole
@@ -102,6 +103,10 @@ def commandline(args=None, console=None, source=None, destination=None):
             destination = sys.stdout
 
     writer_name = options.writer or 'html'
+    if writer_name not in rendering.all_writers():
+        sys.stderr.write("flexirest: '%s' is not a valid writer%s" %
+                              (writer_name, os.linesep))
+        return errno.EINVAL
 
     if options.template:
         with open(options.template, 'r') as fp:
