@@ -5,6 +5,8 @@ import os
 import sys
 from StringIO import StringIO
 
+__docformat__ = 'reStructuredText'
+
 MINIMAL_FIXTURE = """
 =================
 A minimal fixture
@@ -26,8 +28,8 @@ get_utf8_fixture = lambda: StringIO(UTF8_FIXTURE)
 def getraise(callable, *args, **kwargs):
     """
     Calls `callable`, expecting an exception inheriting from
-    StandardError (your exceptions *are* inheriting from
-    StandardError, right?), with `*args` and `**kwargs` as parameters.
+    `StandardError` (your exceptions *are* inheriting from
+    `StandardError`, right?), with `*args` and `**kwargs` as parameters.
 
     Returns the results of `sys.exc_info()` as a result.
 
@@ -46,9 +48,9 @@ def getraise(callable, *args, **kwargs):
 
 class Capturer(object):
     """
-    User by test_main to capture output from main.commandline(). The
-    capturer is any object that supports a .write() method (`sys.stdout`
-    would be used in production code).
+    Used to capture output in tests. The capturer is any object that
+    supports a `.write()` method (`sys.stdout` would be used in
+    production code).
     """
     def __init__(self):
         self.lines = []
@@ -58,6 +60,21 @@ class Capturer(object):
 
     def flush(self):
         pass
+
+def capture_stderr(callable, *args, **kwargs):
+    """
+    Calls `callable` with `*args` and `**kwargs` while capturing stderr.
+
+    Returns `<captured stderr>, <return value of fn>`
+    """
+    stderr = sys.stderr
+    capture = StringIO()
+    try:
+        sys.stderr = capture
+        res = callable(*args, **kwargs)
+    finally:
+        sys.stderr = stderr
+    return res, capture.getvalue()
 
 testfiles = []
 
