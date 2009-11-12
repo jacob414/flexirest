@@ -94,7 +94,7 @@ def pdf_from_file(pdf_f):
     return pdf_o
 
 def pdf_from_data(pdf):
-    pdf_from_file(StringIO(pdf))
+    return pdf_from_file(StringIO(pdf))
 
 if __name__ == '__main__':
     import doctest
