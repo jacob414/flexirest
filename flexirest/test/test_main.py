@@ -7,7 +7,7 @@ from StringIO import StringIO
 from flexirest import main, meta, rendering
 from nose.tools import assert_equals, assert_true, with_setup, raises
 
-from flexirest.tests.support import Capturer, get_minimal_fixture
+from flexirest.test.support import Capturer, get_minimal_fixture
 
 def test_help():
     outp = Capturer()

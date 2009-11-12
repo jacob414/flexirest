@@ -2,7 +2,7 @@ import imp
 from StringIO import StringIO
 
 from flexirest import rendering, defaults, util
-from flexirest.tests import support
+from flexirest.test import support
 
 from nose.tools import assert_equals, assert_true, with_setup, raises
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import with_statement
 
 import os
@@ -5,14 +6,22 @@ import sys
 from StringIO import StringIO
 
 MINIMAL_FIXTURE = """
-=====
-Title
-=====
+=================
+A minimal fixture
+=================
 Text
 """
 
-def get_minimal_fixture():
-    return StringIO(MINIMAL_FIXTURE)
+UTF8_FIXTURE = """
+=====
+Titel
+=====
+
+Svensk text här.
+"""
+
+get_minimal_fixture = lambda: StringIO(MINIMAL_FIXTURE)
+get_utf8_fixture = lambda: StringIO(UTF8_FIXTURE)
 
 def getraise(callable, *args, **kwargs):
     """

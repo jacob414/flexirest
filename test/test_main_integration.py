@@ -9,20 +9,10 @@ from docutils import nodes
 
 from nose.tools import assert_equals, assert_true, with_setup, raises
 
-from flexirest.tests import support
-
 from flexirest import main
-from flexirest.tests import test_tex
+from flexirest.test import support, test_tex
 
 from StringIO import StringIO
-
-def get_minimal_fixture():
-    return StringIO(textwrap.dedent("""
-                                    ======
-                                    654321
-                                    ======
-                                    RST Text
-                                    """))
 
 BASIC_TMPL = '/tmp/tmpl_basic.txt'
 
@@ -35,10 +25,11 @@ def test_template_basic():
     capture = StringIO()
     main._import = lambda m, r: imp.new_module(m)
     rc = main.commandline(['--template=%s' % BASIC_TMPL, '--writer=pseudoxml'],
-                          source=get_minimal_fixture(), destination=capture)
+                          source=support.get_minimal_fixture(),
+                          destination=capture)
     out = capture.getvalue()
     assert_true('the_template' in out)
-    assert_true('title="654321"' in out)
+    assert_true('title="A minimal fixture"' in out)
 
 def role_foo(role, rawtext, text, lineno, inliner, options=None, content=[]):
     if options is None:
@@ -73,7 +64,7 @@ SIMPLE_INFILE_PATH = '/tmp/simple_infile.rst'
 
 simple_infile_creator = functools.partial(support.create_gc_testfile,
                                           SIMPLE_INFILE_PATH,
-                                          get_minimal_fixture().getvalue())
+                                          support.MINIMAL_FIXTURE)
 
 @with_setup(simple_infile_creator, support.clean_gc_testfiles)
 def test_w_infile():
@@ -81,16 +72,16 @@ def test_w_infile():
     rc = main.commandline(['--infile=%s' % SIMPLE_INFILE_PATH, '--writer=html'],
                           destination=capture)
     assert_equals(rc, 0)
-    assert_true('<title>654321</title>' in capture.getvalue())
+    assert_true('<title>A minimal fixture</title>' in capture.getvalue())
 
 SIMPLE_OUTFILE = '/tmp/simple_outfile.html'
 
 @with_setup(lambda: None, functools.partial(os.unlink, SIMPLE_OUTFILE))
 def test_w_outfile():
     rc = main.commandline(['--outfile=%s' % SIMPLE_OUTFILE, '--writer=html'],
-                          source=get_minimal_fixture())
+                          source=support.get_minimal_fixture())
     assert_equals(rc, 0)
-    assert_true('<title>654321</title>' in open(SIMPLE_OUTFILE, 'r').read())
+    assert_true('<title>A minimal fixture</title>' in open(SIMPLE_OUTFILE, 'r').read())
 
 full_latex_dir = []
 
@@ -105,4 +96,5 @@ def latex_tmp(name):
 
 @with_setup(setup_latex_dir, teardown_latex_dir)
 def test_smoketest_latex2pdf_writing():
-    pass
+    capture = StringIO()
+    # rc.commandline(['--writer=latex2pdf'], source=
