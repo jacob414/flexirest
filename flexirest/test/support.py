@@ -74,6 +74,28 @@ def clean_gc_testfiles():
         os.unlink(path)
         testfiles.remove(path)
 
+def pdf_from_file(pdf_f):
+    """
+    Given PDF data, returns a `pyPdf.PdfFileReader` for the
+    data. Right now, `PdfFileReader` gives `DeprecationWarning`
+    -messages on stderr, this functions takes care that the warnings
+    are not shown (I really don't have time for a patching round right
+    now).
+    """
+
+    import pyPdf
+    stderr = sys.stderr
+    try:
+        sys.stderr = open(os.devnull, 'w')
+        pdf_o = pyPdf.PdfFileReader(pdf_f)
+    finally:
+        sys.stderr = stderr
+
+    return pdf_o
+
+def pdf_from_data(pdf):
+    pdf_from_file(StringIO(pdf))
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
