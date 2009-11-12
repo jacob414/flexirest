@@ -106,6 +106,13 @@ class Render(object):
     def _build_html_settings(self):
         return {}
 
+    def _build_latex_settings(self):
+        return {'output_encoding': 'utf-8', # XXX should probably support more..
+                'language_code': self.options.lang}
+
+    _build_latex2e_settings = _build_latex_settings
+    _build_latex2pdf_settings = _build_latex_settings
+
     def _write_latex2pdf(self, latex, destination):
         # 1. Gather all .sty files from CWD
         # 2. If --infile option is used, gather all .sty files from --infile 's

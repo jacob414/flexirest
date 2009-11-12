@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import textwrap
 import functools
@@ -85,16 +86,26 @@ def test_w_outfile():
 
 full_latex_dir = []
 
+def latex_tmp(name):
+    return os.path.join(full_latex_dir[0], name)
+
 def setup_latex_dir():
     full_latex_dir.append(tempfile.mkdtemp(prefix='fr-latex2pdf-smoketest-'))
+    test_tex.write_fake_style(latex_tmp('flexistyle.sty'))
+    support.write_test_file(latex_tmp('template.tex'), '%(whole)s')
 
 def teardown_latex_dir():
     shutil.rmtree(full_latex_dir[0])
 
-def latex_tmp(name):
-    return os.path.join(full_latex_dir[0], name)
-
 @with_setup(setup_latex_dir, teardown_latex_dir)
 def test_smoketest_latex2pdf_writing():
     capture = StringIO()
-    # rc.commandline(['--writer=latex2pdf'], source=
+    rc = main.commandline(['--writer=latex2pdf',
+                           '--template=%s' % latex_tmp('template.tex')],
+                          source=support.get_utf8_fixture(),
+                          destination=capture)
+    assert_equals(rc, 0)
+    pdf = support.pdf_from_file(capture)
+    assert_equals(pdf.documentInfo.title, 'Titel')
+    assert_true(pdf.getPage(0).extractText().startswith(u'TitelSvensktexthär.'))
+
