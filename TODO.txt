@@ -22,14 +22,7 @@ TODO
 * Administration
   * Consider migrating this file to bitbuckets ticketing system
   * The top-level tests directory should be named 'tests/' for consistency
-* 0.8.2 development
-    * In this case, look for <infile>_flexi.py as config module
-  * Read about latex writers
-    * Investigate Python `tex` package
-      * http://pypi.python.org/pypi/tex)
-      * --use-tex flag to use it
-      * directly to pdf with --writer = 'pytexpdf'
-  * --validate flag, only checks syntax (via null-writer..?)
+* Release 0.8.2
 * 0.8.4 Ideas
   * An 'externals' module that pulls 'upstream' renderers/roles from
     e.g the docutils sandbox, rst2pdf, other places and makes them
@@ -37,3 +30,5 @@ TODO
   * Find use cases with normal tracebacks (not found files etc) and
     state a nice error message instead of just dumping a traceback to
     the console.
+  * --validate flag, only checks syntax (via null-writer..?)
+  * Look for <inflie>_flexi.py as config module if infile is specified
