@@ -8,7 +8,8 @@ import tempfile
 
 from docutils import nodes
 
-from nose.tools import assert_equals, assert_true, with_setup, raises
+from nose.tools import (assert_equals, assert_true, assert_false,
+                        with_setup, raises)
 
 from flexirest import main
 from flexirest.test import support, test_tex
@@ -84,6 +85,13 @@ def test_w_outfile():
     assert_equals(rc, 0)
     assert_true('<title>A minimal fixture</title>' in open(SIMPLE_OUTFILE, 'r').read())
 
+def test_no_empty_outfile():
+    try:
+        support.capture_stderr(main.commandline, ['--writer=bad', '--outfile=out.file'])
+        assert_true(False)
+    except:
+        assert_false(os.path.exists('out.file'))
+
 full_latex_dir = []
 
 def latex_tmp(name):
@@ -108,4 +116,3 @@ def test_smoketest_latex2pdf_writing():
     pdf = support.pdf_from_file(capture)
     assert_equals(pdf.documentInfo.title, 'Titel')
     assert_true(pdf.getPage(0).extractText().startswith(u'TitelSvensktexthär.'))
-

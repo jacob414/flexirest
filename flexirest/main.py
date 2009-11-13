@@ -7,7 +7,7 @@ import imp
 import errno
 
 from flexirest import rendering, defaults, meta
-from flexirest.util import StdoutConsole
+from flexirest.util import StdoutConsole, BufferedFile
 
 _cmdline_options = (
     ('-v', '--version', dict(action='store_true',
@@ -97,8 +97,7 @@ def commandline(args=None, console=None, source=None, destination=None):
     if destination is None:
         if options.outfile:
             # XXX Create error will just dump traceback to stderr
-            # XXX Causes issue #4
-            destination = open(options.outfile, 'w')
+            destination = BufferedFile(options.outfile)
         else:
             destination = sys.stdout
 
