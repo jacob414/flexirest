@@ -12,14 +12,13 @@ __docformat__ = 'reStructuredText'
 
 pseudo_writers = {'latex2pdf': 'latex2e'}
 
-# XXX
 """
 An iterator of all legal writer names.
 
-Beware: the _writer_aliases dict is undocumented and marked as
-private! We should find out a better way to produce this list.
+XXX Beware: the _writer_aliases dict is undocumented and marked as
+private! In theory we should find out a better way to produce this
+list, but right now I don't see any way of doing that.
 """
-# XXX Add planned 'pseudo-writers' here
 all_writers = lambda: sorted(set(itertools.chain(writers._writer_aliases.keys(),
                               writers._writer_aliases.values(), pseudo_writers)))
 
