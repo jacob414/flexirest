@@ -20,6 +20,14 @@ setuptools_::
 
 .. _setuptools: http://pypi.python.org/pypi/setuptools
 
+To use the new `latex2pdf` writer, you need to have the `pdflatex`
+executable on your `$PATH`, since the rendering is done by controlling
+this program in a sub process (this program is part of most modern
+`texlive`_ distributions.
+
+.. _texlive: http://www.tug.org/texlive/
+
+
 Development build
 -----------------
 
@@ -39,6 +47,7 @@ interpreter, then run the `bin/buildout` script::
 .. _Bitbucket: http://bitbucket.org/
 .. _Mercurial: http://www.selenic.com/mercurial/wiki/
 .. _buildout: http://www.buildout.org/
+
 
 Output formats
 ++++++++++++++
@@ -62,30 +71,88 @@ Styling your HTML output
 
 Create a CSS style sheet and link it in your HTML template.
 
-Latest stable version - 0.8
-+++++++++++++++++++++++++++
+Styling your `latex2pdf` output
+-------------------------------
 
-This is the first release of flexirest. It also marks the first time
+Styling `latex2pdf` output requires using the new `--infile` option to
+specify your input. All `.sty` files that resides in the same
+directory as your `LaTeX` input file will be
+
+Like the `html` writer, the most control over your output will be had
+using a template
+
+
+Latest stable version - 0.8.2
++++++++++++++++++++++++++++++
+
+Version 0.8.2 marks the release of functioning LaTeX writing,
+complemented by a post-writing mechanism that allows to output in
+several steps. This makes it possible to output directly to PDF using
+the `latex2pdf` writer.
+
+The other main change from 0.8 is the `--infile` and `--outfile`
+ options that provides an alternative to piping your input directly to
+ the program.
+
+It also contain a lot of bugfixes and stability increases.
+
+Version 0.8
++++++++++++
+
+**Deprecated with the new 0.8.2 version.**
+
+*This is the first release of flexirest. It also marks the first time
 when flexirest is usable in practice (this document is produced using
 flexires, for example). It's still a little rough around the edges,
 and I have a few ideas of refinements that I think should be added,
 but this is the point where I'm going to start using it myself. So
-I'll pick a version number quite close to 1.0 (0.8) and call it that.
+I'll pick a version number quite close to 1.0 (0.8) and call it that.*
+
 
 Howto
 +++++
 
-The basic operation of flexirest as of now is piping the input
-directly into the program, Unix style. Output then comes out,
-unsuprisingly, on the standard output.
+There are two basic modes of operation of `flexirest`. First, you can
+pipe the input directly into the program, Unix style. Output then
+comes out, unsuprisingly, on the standard output.
 
 Something like this should therefore be the quickest possible syntax::
 
     $ flexirest < yourtext.txt > youroutput.html
 
+Alternatively, you can specify an input path::
+
+   $ flexirest --infile=yourtext.txt
+
+and/or an output path to write the output to::
+
+   $ flexirest --infile=yourtext.txt --outfile=youroutput.html
+
 Default output format is HTML. To choose another writer, use the
---writer/-w option. The writers are named the same as their
+`--writer` / `-w` option. The writers are named the same as their
 corresponding docutils modules.
+
+To find out witch writers is available on your system, use the
+`--list-writers` option::
+
+    $ flexirest --list-writers
+    docutils_xml
+    html
+    html4css1
+    latex
+    [.. and most probably several more ]
+
+If you have a LaTeX installation with the `pdflatex` executable
+available on your system, you will also be able to write directly to
+PDF using the `latex2pdf` writer::
+
+    $ flexirest --infile=yourtext.txt --outfile=youroutput.pdf --writer=latex2pdf
+
+LaTeX `.sty` files from the same directory as `yourtext.txt` will be
+copied into the temporary directory that `pdflatex` runs in.
+
+Templates
+---------
 
 Then you can also specify a template that your content will be applied
 against. This template is just a file with Python markers
@@ -103,8 +170,3 @@ Which would give us a marginally more elaborate command line syntax::
 
     $ flexirest < yourtext.txt > youroutput.html --template=yourtemplate.html
 
-Unfortunately, since this inital development has been quite centered
-on getting the HTML writer started, documentation ends here. But,
-fortunately I want to start typesetting my invoices with flexirest, so
-Real Soon Now (tm) I'll start to look into LaTeX writing, and probably
-release next version!

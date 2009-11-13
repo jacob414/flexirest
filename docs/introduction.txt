@@ -35,3 +35,23 @@ For more information on how to operate `flexirest`, see the
 
 .. _quick manual: quick-manual.html
 .. _setuptools: http://pypi.python.org/pypi/setuptools
+
+Changes
+-------
+
+0.8.2
++++++
+
+* A mechanism of two-stage writing used to support a new writer,
+  `latex2pdf` that renders directly to PDF via LaTeX if a suitable
+  executable is available on the host system.
+* `--infile` option to specify input from a file
+* `--outfile` option to specify output to a file
+* `--dump-parts` option to inspect output from different `docutils`
+  parts.
+* `--list-writer` option to list available writers on the host system.
+* No traceback when specifying a non-existant writer
+* All writers have at least the minimal template (`%(whole)s`)
+* Switch to `Distribute` instead of `setuptools` for development and
+  packaging.
+* Many small bugfixes and stability improvements
