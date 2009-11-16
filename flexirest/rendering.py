@@ -23,7 +23,6 @@ all_writers = lambda: sorted(set(itertools.chain(writers._writer_aliases.keys(),
                               writers._writer_aliases.values(), pseudo_writers)))
 
 def _register_roles(conf):
-
     """
     Registers roles to be used in this run.
 
@@ -36,16 +35,21 @@ def _register_roles(conf):
             roles.register_canonical_role(rolename[5:], rolecand)
 
 class Render(object):
+    """
+    The `Render` object is a (somewhat) stateful representation of the
+    rendering process. It's main purpose is to run the rendering
+    stepwise, therefore enabling the two-step writing mechanism.
+    """
 
     def __init__(self, conf, options, template, writer_name):
         self.conf = conf
         self.options = options
         self.template = template
-        self._writer = writer_name
+        self.writer = writer_name
 
     def _build_settings(self):
         _register_roles(self.conf)
-        return getattr(self, '_build_%s_settings' % self.writer, lambda: {})()
+        return getattr(self, '_build_%s_settings' % self.docutils_writer, lambda: {})()
 
     def dump_parts(self, source, destination):
         """
@@ -72,10 +76,16 @@ class Render(object):
             destination.write(os.linesep)
 
     @property
-    def writer(self):
-        if self._writer in pseudo_writers:
-            return pseudo_writers[self._writer]
-        return self._writer
+    def docutils_writer(self):
+        """
+        The actual `docutils` writer. In the case of pseudo writers
+        this will be different from the writer name specified to the
+        frontend (for example, the `latex2pdf` writers
+        `docutils_writer` will be 'latex'.
+        """
+        if self.writer in pseudo_writers:
+            return pseudo_writers[self.writer]
+        return self.writer
 
     def publish_parts(self, source):
         # The .read().decode(..) chain below is a little inefficient, but
@@ -83,7 +93,7 @@ class Render(object):
         # it be for now..
         parts = publish_parts(
             source=source.read().decode('utf8'),
-            writer_name=self.writer,
+            writer_name=self.docutils_writer,
             settings_overrides=self._build_settings(),
         )
         parts['lang'] = self.options.lang
