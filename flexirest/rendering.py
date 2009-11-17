@@ -108,7 +108,7 @@ class Render(object):
 
     def render(self, source, destination):
         parts = self.publish_parts(source)
-        getattr(self, '_write_%s' % self._writer,
+        getattr(self, '_write_%s' % self.writer,
                 self.default_writer)(self.template % parts, destination)
         destination.flush()
 
@@ -123,9 +123,9 @@ class Render(object):
     _build_latex2pdf_settings = _build_latex_settings
 
     def _write_latex2pdf(self, latex, destination):
-        # 1. Gather all .sty files from CWD
-        # 2. If --infile option is used, gather all .sty files from --infile 's
-        #    directory too.
+        """
+        Uses the `flexirest.tex` module to render PDF.
+        """
         pdf = tex.latex2pdf(latex)
         destination.write(pdf)
 
