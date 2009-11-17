@@ -10,7 +10,7 @@ from flexirest import tex
 
 __docformat__ = 'reStructuredText'
 
-pseudo_writers = {'latex2pdf': 'latex2e'}
+pseudo_writers = {'latex2pdf': 'latex'}
 
 """
 An iterator of all legal writer names.
