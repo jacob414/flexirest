@@ -7,6 +7,7 @@ from docutils.parsers.rst import roles
 from docutils.core import publish_parts
 
 from flexirest import tex
+from flexirest import world
 
 __docformat__ = 'reStructuredText'
 
@@ -33,6 +34,7 @@ def _register_roles(conf):
                    dir(conf) if role.startswith('role_')):
         if callable(rolecand):
             roles.register_canonical_role(rolename[5:], rolecand)
+
 
 class Render(object):
     """
