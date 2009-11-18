@@ -15,5 +15,5 @@ class NormalWorld(object):
         self._gather_writers()
 
     def _gather_writers(self):
-        self.all_strategies = dict(((name, strategy) for name, strategy
-                                    in strategies.functional_strategies()))
+        self.all_writers = dict(((name, strategy) for name, strategy
+                                 in strategies.functional_strategies()))

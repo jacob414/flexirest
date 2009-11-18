@@ -6,7 +6,7 @@ import optparse
 import imp
 import errno
 
-from flexirest import rendering, defaults, meta
+from flexirest import world, rendering, defaults, meta
 from flexirest.util import StdoutConsole, BufferedFile
 
 _cmdline_options = (
@@ -80,7 +80,7 @@ def commandline(args=None, console=None, source=None, destination=None):
         if options.version:
             console.write("flexirest version %s" % meta.VERSION)
         if options.list_writers:
-            for available_writer in rendering.all_writers():
+            for available_writer in world.all_writers:
                 console.write(available_writer)
 
         return 0
@@ -102,7 +102,7 @@ def commandline(args=None, console=None, source=None, destination=None):
             destination = sys.stdout
 
     writer_name = options.writer or 'html'
-    if writer_name not in rendering.all_writers():
+    if writer_name not in world.all_writers:
         sys.stderr.write("flexirest: '%s' is not a valid writer%s" %
                               (writer_name, os.linesep))
         return errno.EINVAL

@@ -13,16 +13,6 @@ __docformat__ = 'reStructuredText'
 
 pseudo_writers = {'latex2pdf': 'latex'}
 
-"""
-An iterator of all legal writer names.
-
-XXX Beware: the _writer_aliases dict is undocumented and marked as
-private! In theory we should find out a better way to produce this
-list, but right now I don't see any way of doing that.
-"""
-all_writers = lambda: sorted(set(itertools.chain(writers._writer_aliases.keys(),
-                              writers._writer_aliases.values(), pseudo_writers)))
-
 def _register_roles(conf):
     """
     Registers roles to be used in this run.
@@ -47,7 +37,7 @@ class Render(object):
         self.conf = conf
         self.options = options
         self.template = template
-        self.writer = writer_name
+        self.writer_name = writer_name
 
     def _build_settings(self):
         _register_roles(self.conf)
@@ -62,7 +52,7 @@ class Render(object):
         `out` - output stream to write to.
         """
 
-        title = "Parts created by the docutils writer '%s'" % self.writer
+        title = "Parts created by the docutils writer '%s'" % self.writer_name
         destination.write(title + os.linesep)
         destination.write(len(title) * '-')
         destination.write(2 * os.linesep)
@@ -85,9 +75,9 @@ class Render(object):
         frontend (for example, the `latex2pdf` writers
         `docutils_writer` will be 'latex'.
         """
-        if self.writer in pseudo_writers:
-            return pseudo_writers[self.writer]
-        return self.writer
+        if self.writer_name in pseudo_writers:
+            return pseudo_writers[self.writer_name]
+        return self.writer_name
 
     def publish_parts(self, source):
         # The .read().decode(..) chain below is a little inefficient, but
@@ -110,7 +100,7 @@ class Render(object):
 
     def render(self, source, destination):
         parts = self.publish_parts(source)
-        getattr(self, '_write_%s' % self.writer,
+        getattr(self, '_write_%s' % self.writer_name,
                 self.default_writer)(self.template % parts, destination)
         destination.flush()
 
