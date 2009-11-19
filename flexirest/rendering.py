@@ -6,7 +6,6 @@ from docutils import writers
 from docutils.parsers.rst import roles
 from docutils.core import publish_parts
 
-from flexirest import tex
 from flexirest import world
 
 __docformat__ = 'reStructuredText'
@@ -22,7 +21,6 @@ def _register_roles(conf):
                    dir(conf) if role.startswith('role_')):
         if callable(rolecand):
             roles.register_canonical_role(rolename[5:], rolecand)
-
 
 class Render(object):
     """
@@ -98,26 +96,8 @@ class Render(object):
 
     def render(self, source, destination):
         parts = self.publish_parts(source)
-        getattr(self, '_write_%s' % self.writer_name,
-                self.default_writer)(self.template % parts, destination)
+        self.writing_strategy.postprocess(self.template % parts, destination)
         destination.flush()
-
-    def _build_html_settings(self):
-        return {}
-
-    def _build_latex_settings(self):
-        return {'output_encoding': 'utf-8', # XXX should probably support more..
-                'language_code': self.options.lang}
-
-    _build_latex2e_settings = _build_latex_settings
-    _build_latex2pdf_settings = _build_latex_settings
-
-    def _write_latex2pdf(self, latex, destination):
-        """
-        Uses the `flexirest.tex` module to render PDF.
-        """
-        pdf = tex.latex2pdf(latex)
-        destination.write(pdf)
 
 def render(source, destination, conf, options, template, writer_name):
 

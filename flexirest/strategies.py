@@ -2,6 +2,8 @@ from itertools import chain
 
 from docutils import writers
 
+from flexirest import tex
+
 __docformat__ = 'reStructuredText'
 
 class GeneralWriterStrategy(object):
