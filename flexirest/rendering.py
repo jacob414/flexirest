@@ -11,8 +11,6 @@ from flexirest import world
 
 __docformat__ = 'reStructuredText'
 
-pseudo_writers = {'latex2pdf': 'latex'}
-
 def _register_roles(conf):
     """
     Registers roles to be used in this run.
@@ -38,10 +36,9 @@ class Render(object):
         self.options = options
         self.template = template
         self.writer_name = writer_name
-
-    def _build_settings(self):
-        _register_roles(self.conf)
-        return getattr(self, '_build_%s_settings' % self.docutils_writer, lambda: {})()
+        writing_strategy = world.all_writers[writer_name]
+        writing_strategy.options = options
+        self.writing_strategy = writing_strategy
 
     def dump_parts(self, source, destination):
         """
@@ -83,10 +80,11 @@ class Render(object):
         # The .read().decode(..) chain below is a little inefficient, but
         # this is supposed to be a quite modest tool, so I'll just leave
         # it be for now..
+        _register_roles(self.conf)
         parts = publish_parts(
             source=source.read().decode('utf8'),
-            writer_name=self.docutils_writer,
-            settings_overrides=self._build_settings(),
+            writer=self.writing_strategy.writer_object(),
+            settings_overrides=self.writing_strategy.settings,
         )
         parts['lang'] = self.options.lang
         return parts

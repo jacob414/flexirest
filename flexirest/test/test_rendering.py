@@ -17,6 +17,7 @@ def role_two():
     pass
 
 def patched_register_canonical_role(name, func):
+    print( 'REG ROLE ', name)
     roles_registered.add(name)
 
 def monkeypatch_regrole():
@@ -47,7 +48,6 @@ def test_roles():
                      confmod,
                      util.Duck(lang='en', dump_parts=False),
                      defaults.templates['html'], 'html')
-
 
     assert_true(set(('one', 'two', 'three')).issubset(roles_registered))
 

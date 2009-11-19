@@ -9,7 +9,8 @@ class GeneralWriterStrategy(object):
     def __init__(self, name):
         self.name = name
 
-    def build_settings(self):
+    @property
+    def settings(self):
         """
         This method should return a `dict` with additional settings
         for the writer (will be passed on to the appropriate
@@ -43,11 +44,12 @@ class GeneralWriterStrategy(object):
         the `docutils` publisher.
         """
         # Assume this writer is a built-in.
-        return writers.get_writer_class(self.name)
+        return writers.get_writer_class(self.name)()
 
 class LatexStrategy(GeneralWriterStrategy):
 
-    def build_settings(self):
+    @property
+    def settings(self):
         return {'output_encoding': 'utf-8', # XXX should probably support more..
                 'language_code': self.options.lang}
 
@@ -68,7 +70,7 @@ class Latex2PDFStrategy(LatexStrategy):
         """
         Return a LaTeX `docutils` writer object.
         """
-        return super(Latex2PDFStrategy, self).writer_object('latex')
+        return writers.get_writer_class('latex')()
 
 # XXX Beware: the _writer_aliases dict is undocumented and marked as
 # private! In theory we should find out a better way to produce this
