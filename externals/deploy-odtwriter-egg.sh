@@ -13,4 +13,5 @@ tar zxf odtwriter-1.3d.tar.gz
 cd $SANDBOX/OpenDocument/dist/odtwriter-1.3d
 patch -p0 < $FLEXIREST_REPO/externals/odtwriter-eggpatch.diff
 python setup.py bdist_egg
-rsync -r dist/odtwriter-1.3d-py2.6.egg flexisite:~/public_html/flexirest/dist/
+python2.5 setup.py bdist_egg
+rsync -r dist/*.egg flexisite:~/public_html/flexirest/dist/

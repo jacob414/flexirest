@@ -14,9 +14,9 @@ links if you need them:
 * For `python 2.6`_
 * For `python 2.5`_
 
-.. _easy install: http://pypi.python.org/pypi/setuptools
-.. _python 2.6: http://pypi.python.org/packages/2.6/f/flexirest/flexirest-0.8-py2.6.egg
-.. _python 2.5: http://pypi.python.org/packages/2.5/f/flexirest/flexirest-0.8-py2.5.egg
+.. _easy install: http://pypi.python.org/pypi/distribute/
+.. _python 2.6: http://pypi.python.org/packages/2.6/f/flexirest/flexirest-0.8.2-py2.6.egg
+.. _python 2.5: http://pypi.python.org/packages/2.5/f/flexirest/flexirest-0.8.2-py2.5.egg
 
 Sources
 -------
@@ -31,3 +31,11 @@ Sources
 
 .. _Mercurial: http://www.selenic.com/mercurial/wiki/
 
+Dependencies
+------------
+
+* `OdtWriter for Python 2.6`_
+* OdtWriter25_ for Python 2.5
+
+.. _`OdtWriter for Python 2.6`: http://www.aspektratio.net/flexirest/dist/odtwriter-1.3d_eggified-py2.6.egg
+.. _OdtWriter25: http://www.aspektratio.net/flexirest/dist/odtwriter-1.3d_eggified-py2.5.egg

@@ -18,7 +18,7 @@ Index: setup.py
 -    package_data={'docutils.writers.odtwriter': ['styles.odt', ]},
 -    scripts=["tools/rst2odt.py", "tools/rst2odt_prepstyles.py"],
 -    )
-+      version="1.3d",
++      version="1.3d_eggified",
 +      description="convert rst to ODF/odt/odp.",
 +      author="Dave Kuhlman",
 +      author_email="dkuhlman@rexx.com",
