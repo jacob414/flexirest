@@ -24,6 +24,10 @@ the_template %(whole)s
 
 @with_setup(tmpl_basic_creator, support.clean_gc_testfiles)
 def test_template_basic():
+    """
+    Make a minimal template and see that `docutils` content gets
+    correctly applied to it.
+    """
     capture = StringIO()
     main._import = lambda m, r: imp.new_module(m)
     rc = main.commandline(['--template=%s' % BASIC_TMPL, '--writer=pseudoxml'],
@@ -34,6 +38,9 @@ def test_template_basic():
     assert_true('title="A minimal fixture"' in out)
 
 def role_foo(role, rawtext, text, lineno, inliner, options=None, content=[]):
+    """
+    A minimal `docutils` role.
+    """
     if options is None:
         options = {}
     node = nodes.TextElement(text=u'ROLESTART_%s_ROLESTOP' % text)
@@ -49,6 +56,9 @@ the_template %(whole)s
 
 @with_setup(tmpl_full_role_creator, support.clean_gc_testfiles)
 def test_full_role():
+    """
+    Try out a role that actually does something.
+    """
     fullrole_src = StringIO(textwrap.dedent("""
     Some text :foo:`Some test text` after
     """))
@@ -70,6 +80,9 @@ simple_infile_creator = functools.partial(support.create_gc_testfile,
 
 @with_setup(simple_infile_creator, support.clean_gc_testfiles)
 def test_w_infile():
+    """
+    Tests the `--infile` commandline option.
+    """
     capture = StringIO()
     rc = main.commandline(['--infile=%s' % SIMPLE_INFILE_PATH, '--writer=html'],
                           destination=capture)
@@ -80,6 +93,9 @@ SIMPLE_OUTFILE = '/tmp/simple_outfile.html'
 
 @with_setup(lambda: None, functools.partial(os.unlink, SIMPLE_OUTFILE))
 def test_w_outfile():
+    """
+    Tests the `--outfile` commandline option.
+    """
     rc = main.commandline(['--outfile=%s' % SIMPLE_OUTFILE, '--writer=html'],
                           source=support.get_minimal_fixture())
     assert_equals(rc, 0)
@@ -98,15 +114,24 @@ def latex_tmp(name):
     return os.path.join(full_latex_dir[0], name)
 
 def setup_latex_dir():
+    """
+    Creates and populates the temporary directory to run `pdflatex` in.
+    """
     full_latex_dir.append(tempfile.mkdtemp(prefix='fr-latex2pdf-smoketest-'))
     test_tex.write_fake_style(latex_tmp('flexistyle.sty'))
     support.write_test_file(latex_tmp('template.tex'), '%(whole)s')
 
 def teardown_latex_dir():
+    """
+    Cleans up after LaTeX run.
+    """
     shutil.rmtree(full_latex_dir[0])
 
 @with_setup(setup_latex_dir, teardown_latex_dir)
 def test_smoketest_latex2pdf_writing():
+    """
+    Run the `latex2pdf` pseudo-writer from start to finish.
+    """
     capture = StringIO()
     rc = main.commandline(['--writer=latex2pdf',
                            '--template=%s' % latex_tmp('template.tex')],
