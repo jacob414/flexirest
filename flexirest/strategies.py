@@ -20,13 +20,13 @@ class GeneralWriterStrategy(object):
         """
         return {}
 
-    def postprocess(self, text, destination):
+    def postprocess(self, parts, template, destination):
         """
         With this method, a post-processing step can be added to the
         writing strategy (for example, the latex2pdf writer invokes
         `pdflatex` here.
         """
-        destination.write( text.encode("utf-8") )
+        destination.write( (template % parts).encode("utf-8") )
 
     def isfunctional(self):
         """
@@ -57,11 +57,11 @@ class LatexStrategy(GeneralWriterStrategy):
 
 class Latex2PDFStrategy(LatexStrategy):
 
-    def postprocess(self, latex, destination):
+    def postprocess(self, parts, template, destination):
         """
         Invokes `pdflatex` with the help of the `flexirest.tex` module.
         """
-        pdf = tex.latex2pdf(latex)
+        pdf = tex.latex2pdf(template % parts)
         destination.write(pdf)
 
     def isfunctional(self):
@@ -75,6 +75,9 @@ class Latex2PDFStrategy(LatexStrategy):
         return writers.get_writer_class('latex')()
 
 class OdtStrategy(GeneralWriterStrategy):
+
+    def postprocess(self, parts, template, destination):
+        destination.write(parts['whole'])
 
     def writer_object(self):
         from odtwriter import Writer

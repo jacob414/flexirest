@@ -96,7 +96,7 @@ class Render(object):
 
     def render(self, source, destination):
         parts = self.publish_parts(source)
-        self.writing_strategy.postprocess(self.template % parts, destination)
+        self.writing_strategy.postprocess(parts, self.template, destination)
         destination.flush()
 
 def render(source, destination, conf, options, template, writer_name):
