@@ -35,7 +35,7 @@ Dependencies
 ------------
 
 * `OdtWriter for Python 2.6`_
-* OdtWriter25_ for Python 2.5
+* `OdtWriter for Python 2.5`_
 
 .. _`OdtWriter for Python 2.6`: http://www.aspektratio.net/flexirest/dist/odtwriter-1.3d_eggified-py2.6.egg
-.. _OdtWriter25: http://www.aspektratio.net/flexirest/dist/odtwriter-1.3d_eggified-py2.5.egg
+.. _`OdtWriter for Python 2.5`: http://www.aspektratio.net/flexirest/dist/odtwriter-1.3d_eggified-py2.5.egg
