@@ -22,6 +22,7 @@ setup(name=meta.SHORT_NAME,
       classifiers = [
           'Development Status :: 4 - Beta',
           'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+          'License :: OSI Approved :: MIT License',
           'Operating System :: OS Independent',
           'Programming Language :: Python',
           'Environment :: Console',
