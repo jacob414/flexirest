@@ -74,6 +74,12 @@ class Latex2PDFStrategy(LatexStrategy):
         """
         return writers.get_writer_class('latex')()
 
+class OdtStrategy(GeneralWriterStrategy):
+
+    def writer_object(self):
+        from odtwriter import Writer
+        return Writer()
+
 # XXX Beware: the _writer_aliases dict is undocumented and marked as
 # private! In theory we should find out a better way to produce this
 # list, but right now I don't see any way of doing that.
@@ -85,7 +91,7 @@ builtin_writers['latex2e'] = LatexStrategy
 
 pseudo_writers = {'latex2pdf': Latex2PDFStrategy}
 
-external_writers = {} # XXX Future..
+external_writers = {'odt': OdtStrategy}
 
 def functional_strategies():
     for name, Strategy in chain(builtin_writers.items(),
