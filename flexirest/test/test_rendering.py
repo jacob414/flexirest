@@ -61,3 +61,14 @@ def test_dump_parts():
                          defaults.templates['html'], 'html')
     assert_true(out.lines[0].startswith("Parts created by the docutils writer 'html'"))
     assert_true(out.lines[4].startswith('body'))
+
+def test_dump_parts_utf8():
+    out = support.Capturer()
+    rendering.dump_parts(support.get_utf8_fixture(),
+                         out,
+                         imp.new_module('flexiconf'),
+                         util.Duck(lang='sv', dump_parts=True),
+                         defaults.templates['latex'],
+                         'latex')
+    assert_true(out.lines[0].startswith("Parts created by the docutils writer 'latex'"))
+    assert_true(out.lines[4].startswith('abstract'))
