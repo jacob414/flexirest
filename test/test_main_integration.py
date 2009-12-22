@@ -130,10 +130,12 @@ def teardown_latex_dir():
 @with_setup(setup_latex_dir, teardown_latex_dir)
 def test_smoketest_latex2pdf_writing():
     """
-    Run the `latex2pdf` pseudo-writer from start to finish.
+    Smoketest `latex2pdf`: Run the `latex2pdf` pseudo-writer from
+    start to finish.
     """
     capture = StringIO()
     rc = main.commandline(['--writer=latex2pdf',
+                           '--lang=sv',
                            '--template=%s' % latex_tmp('template.tex')],
                           source=support.get_utf8_fixture(),
                           destination=capture)
