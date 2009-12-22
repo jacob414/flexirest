@@ -62,18 +62,6 @@ class Render(object):
             destination.write(80*'-'+os.linesep)
             destination.write(os.linesep)
 
-    @property
-    def docutils_writer(self):
-        """
-        The actual `docutils` writer. In the case of pseudo writers
-        this will be different from the writer name specified to the
-        frontend (for example, the `latex2pdf` writers
-        `docutils_writer` will be 'latex'.
-        """
-        if self.writer_name in pseudo_writers:
-            return pseudo_writers[self.writer_name]
-        return self.writer_name
-
     def publish_parts(self, source):
         # The .read().decode(..) chain below is a little inefficient, but
         # this is supposed to be a quite modest tool, so I'll just leave
@@ -86,13 +74,6 @@ class Render(object):
         )
         parts['lang'] = self.options.lang
         return parts
-
-    def default_writer(self, stage_one, destination):
-        """
-        The default writer just writes out the template applied output
-        from publich_parts().
-        """
-        destination.write( stage_one.encode("utf-8") )
 
     def render(self, source, destination):
         parts = self.publish_parts(source)
