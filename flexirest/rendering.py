@@ -58,7 +58,7 @@ class Render(object):
         destination.write(2 * os.linesep)
         for part in parts:
             destination.write("Value of part '%s':%s" % (part, os.linesep))
-            destination.write(parts[part] + os.linesep)
+            destination.write(parts[part].encode('utf-8') + os.linesep)
             destination.write(80*'-'+os.linesep)
             destination.write(os.linesep)
 
