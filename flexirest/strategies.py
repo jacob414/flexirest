@@ -55,17 +55,17 @@ class LatexStrategy(GeneralWriterStrategy):
         return {'output_encoding': 'utf-8', # XXX should probably support more..
                 'language_code': self.options.lang}
 
-class Latex2PDFStrategy(LatexStrategy):
+class LatexPostProcessingStrategy(LatexStrategy):
 
     def postprocess(self, parts, template, destination):
         """
         Invokes `pdflatex` with the help of the `flexirest.tex` module.
         """
-        pdf = tex.latex2pdf(template % parts)
+        pdf = tex.run_program(self.program, template % parts)
         destination.write(pdf)
 
     def isfunctional(self):
-        # XXX Try to execute `pdflatex -version` (Issue #13)
+        # XXX Try to execute the program with the '-version' switch (Issue #13)
         return True
 
     def writer_object(self):
@@ -73,6 +73,15 @@ class Latex2PDFStrategy(LatexStrategy):
         Return a LaTeX `docutils` writer object.
         """
         return writers.get_writer_class('latex')()
+
+class Latex2PDFStrategy(LatexPostProcessingStrategy):
+
+    program = 'pdflatex'
+
+class XeLaTeXStrategy(LatexPostProcessingStrategy):
+
+    program = 'xelatex'
+
 
 class OdtStrategy(GeneralWriterStrategy):
 
@@ -92,7 +101,8 @@ builtin_writers = dict.fromkeys(set(chain(writers._writer_aliases.keys(),
 builtin_writers['latex'] = LatexStrategy
 builtin_writers['latex2e'] = LatexStrategy
 
-pseudo_writers = {'latex2pdf': Latex2PDFStrategy}
+pseudo_writers = {'latex2pdf': Latex2PDFStrategy,
+                  'xelatex': XeLaTeXStrategy}
 
 external_writers = {'odt': OdtStrategy}
 

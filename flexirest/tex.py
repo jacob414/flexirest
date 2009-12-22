@@ -5,7 +5,7 @@ import tempfile
 import subprocess
 import shutil
 
-def _exec_texprogram(source, program, styles=()):
+def run_program(program, source, styles=()):
     tmpdir = tempfile.mkdtemp(prefix='flexirest-')
     tmpfile = lambda name: os.path.join(tmpdir, name)
 
@@ -43,7 +43,3 @@ def _exec_texprogram(source, program, styles=()):
         raise ValueError("'%s' didn't stabilize" % program)
     finally:
         shutil.rmtree(tmpdir)
-
-def latex2pdf(source, styles=()):
-    return _exec_texprogram(source, 'pdflatex', styles)
-

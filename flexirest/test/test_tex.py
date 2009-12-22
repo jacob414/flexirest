@@ -28,7 +28,7 @@ def extract_pdf_text(pdf):
     return support.pdf_from_data(pdf).getPage(0).extractText()
 
 def test_simplest():
-    pdf = latex2pdf(textwrap.dedent(ur"""
+    pdf = run_program('pdflatex', textwrap.dedent(ur"""
     \documentclass{article}
     \begin{document}
     Simplest
@@ -41,7 +41,7 @@ def test_utf8_encoded():
     # Not using raw unicode string here, see
     # http://bugs.python.org/issue1477
     # ..why does it work in the first test?
-    pdf = latex2pdf(textwrap.dedent(u"""
+    pdf = run_program('pdflatex', textwrap.dedent(u"""
     \\documentclass{article}
     \\usepackage[utf8]{inputenc}
     \\begin{document}
@@ -66,7 +66,7 @@ def teardown_styles_dir():
 
 @with_setup(setup_styles_dir, teardown_styles_dir)
 def test_w_style():
-    pdf = latex2pdf(textwrap.dedent("""
+    pdf = run_program('pdflatex', textwrap.dedent("""
     \\documentclass{article}
     \\usepackage{flexifake}
     \\begin{document}
