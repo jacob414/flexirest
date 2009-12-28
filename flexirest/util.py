@@ -2,13 +2,14 @@ from __future__ import with_statement
 
 import os
 import sys
+import shutil
+import tempfile
 from cStringIO import StringIO
 
 __docformat__ = 'reStructuredText'
 
 class StdoutConsole(object):
-    """
-    Vaguely file-like object that immediately writes it output to
+    """Vaguely file-like object that immediately writes it output to
     `sys.stdout` followed by an os-appropriate `EOL`.
     """
 
@@ -33,8 +34,7 @@ class Duck(object):
                 type(self).__name__, id(self), ': ' if a else '', a)
 
 class BufferedFile(file):
-    """
-    File-like object that writes to an internal buffer. It will only
+    """File-like object that writes to an internal buffer. It will only
     write to the file system when it's `.close()` method is called
     **and** it has actually written something to itself.
 
@@ -60,3 +60,45 @@ class BufferedFile(file):
     def close(self):
         self.flush()
         super(BufferedFile, self).close()
+
+class TempDirectory(object):
+    """A context-manager capable object that keeps an
+    """
+
+    def __init__(self, prefix=None):
+        if prefix is None:
+            prefix = 'tmp'
+        self.prefix = prefix
+
+    def manifest(self):
+        """Actually create the temporary directory.
+        """
+        if hasattr(self, 'tmpdir'):
+            raise RuntimeError('temporary directory already manifested')
+        self.tmpdir = tempfile.mkdtemp(prefix=self.prefix)
+
+    def cleanup(self):
+        """Removes the temporary directory.
+        """
+        shutil.rmtree(self.tmpdir)
+
+    def path(self, name):
+        """Returns a file path inside this temporary directory.
+        """
+        return os.path.join(os.path.join(self.tmpdir, name))
+
+    def put(self, name, content):
+        """Put arbitrary content into a temporary file inside the
+        temporary directory.
+        """
+        with open(self.path(name), 'w') as fp:
+            fp.write(content)
+
+    def __enter__(self):
+        """Make this class context-manager capable."""
+        self.manifest()
+        return self
+
+    def __exit__(self, type_, value, tb):
+        """Make this class context-manager capable."""
+        self.cleanup()

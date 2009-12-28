@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from StringIO import StringIO
 
@@ -32,3 +33,10 @@ class TestBufferedFile(object):
         bf = util.BufferedFile('/tmp/dont.write.this')
         bf.close()
         assert_false(os.path.exists('/tmp/dont.write.this'))
+
+def test_tmpdir_sanity():
+    td = util.TempDirectory()
+    with td:
+        td.put('some-temp.txt', 'Hello')
+        assert_equals(open(td.path('some-temp.txt'), 'r').read(), 'Hello')
+    assert_false(os.path.exists(unicode(td)))
