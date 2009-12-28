@@ -85,14 +85,24 @@ class TempDirectory(object):
     def path(self, name):
         """Returns a file path inside this temporary directory.
         """
-        return os.path.join(os.path.join(self.tmpdir, name))
+        return os.path.join(self.tmpdir, name)
 
     def put(self, name, content):
         """Put arbitrary content into a temporary file inside the
         temporary directory.
         """
-        with open(self.path(name), 'w') as fp:
+        with self.open(name, 'w') as fp:
             fp.write(content)
+
+    def open(self, name, mode):
+        """Open a file in the temporary directory.
+        """
+        return open(self.path(name), mode)
+
+    def copy(self, path):
+        """Copy an existing file into the temporary directory.
+        """
+        shutil.copy(path, self.path(os.path.basename(path)))
 
     def __enter__(self):
         """Make this class context-manager capable."""
