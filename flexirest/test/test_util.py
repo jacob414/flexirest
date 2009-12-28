@@ -38,5 +38,5 @@ def test_tmpdir_sanity():
     td = util.TempDirectory()
     with td:
         td.put('some-temp.txt', 'Hello')
-        assert_equals(open(td.path('some-temp.txt'), 'r').read(), 'Hello')
+        assert_equals(open(td.newpath('some-temp.txt'), 'r').read(), 'Hello')
     assert_false(os.path.exists(unicode(td)))
