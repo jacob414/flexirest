@@ -75,17 +75,18 @@ class TempDirectory(object):
         """
         if hasattr(self, 'tmpdir'):
             raise RuntimeError('temporary directory already manifested')
-        self.tmpdir = tempfile.mkdtemp(prefix=self.prefix)
+        self.path = tempfile.mkdtemp(prefix=self.prefix)
 
     def cleanup(self):
         """Removes the temporary directory.
         """
-        shutil.rmtree(self.tmpdir)
+        shutil.rmtree(self.path)
 
-    def path(self, name):
+    def newpath(self, name):
         """Returns a file path inside this temporary directory.
+        XXX: refactor name as *path, iterable with sub paths.
         """
-        return os.path.join(self.tmpdir, name)
+        return os.path.join(self.path, name)
 
     def put(self, name, content):
         """Put arbitrary content into a temporary file inside the
@@ -97,12 +98,12 @@ class TempDirectory(object):
     def open(self, name, mode):
         """Open a file in the temporary directory.
         """
-        return open(self.path(name), mode)
+        return open(self.newpath(name), mode)
 
     def copy(self, path):
         """Copy an existing file into the temporary directory.
         """
-        shutil.copy(path, self.path(os.path.basename(path)))
+        shutil.copy(path, self.newpath(os.path.basename(path)))
 
     def __enter__(self):
         """Make this class context-manager capable."""
