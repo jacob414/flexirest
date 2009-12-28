@@ -11,7 +11,7 @@ from docutils import nodes
 from nose.tools import (assert_equals, assert_true, assert_false,
                         with_setup, raises)
 
-from flexirest import main
+from flexirest import main, util
 from flexirest.test import support, test_tex
 
 from StringIO import StringIO
@@ -109,25 +109,24 @@ def test_no_empty_outfile():
         assert_false(os.path.exists('out.file'))
 
 full_latex_dir = []
+latex_tmp = lambda n: full_latex_dir[0].newpath(n)
 
-def latex_tmp(name):
-    return os.path.join(full_latex_dir[0], name)
-
-def setup_latex_dir():
+def setup_latex_dir(prefix):
+    """Creates and populates the temporary directory to run `pdflatex` in.
     """
-    Creates and populates the temporary directory to run `pdflatex` in.
-    """
-    full_latex_dir.append(tempfile.mkdtemp(prefix='fr-latex2pdf-smoketest-'))
-    test_tex.write_fake_style(latex_tmp('flexistyle.sty'))
-    support.write_test_file(latex_tmp('template.tex'), '%(whole)s')
+    td = util.TempDirectory(prefix)
+    td.manifest()
+    test_tex.write_fake_style(td.newpath('flexistyle.sty'))
+    td.put('template.tex', '%(whole)s')
+    full_latex_dir.append(td)
 
 def teardown_latex_dir():
+    """Cleans up after LaTeX run.
     """
-    Cleans up after LaTeX run.
-    """
-    shutil.rmtree(full_latex_dir[0])
+    full_latex_dir[0].cleanup()
 
-@with_setup(setup_latex_dir, teardown_latex_dir)
+@with_setup(functools.partial(setup_latex_dir, 'fr-latex2pdf-smoketest-'),
+            teardown_latex_dir)
 def test_smoketest_latex2pdf_writing():
     """
     Smoketest `latex2pdf`: Run the `latex2pdf` pseudo-writer from
