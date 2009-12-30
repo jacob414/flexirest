@@ -117,7 +117,8 @@ full_latex_dir = []
 latex_tmp = lambda n: full_latex_dir[0].newpath(n)
 
 def setup_latex_dir(prefix):
-    """Creates and populates the temporary directory to run `pdflatex` in.
+    """
+    Creates and populates the temporary directory to run `pdflatex` in.
     """
     td = util.TempDirectory(prefix)
     td.manifest()
@@ -126,7 +127,8 @@ def setup_latex_dir(prefix):
     full_latex_dir.append(td)
 
 def teardown_latex_dir():
-    """Cleans up after a LaTeX run.
+    """
+    Cleans up after a LaTeX run.
     """
     full_latex_dir.pop().cleanup()
 
@@ -134,7 +136,8 @@ latex2pdf_setup = partial(setup_latex_dir, 'fr-latex2pdf-full-')
 
 @with_setup(latex2pdf_setup, teardown_latex_dir)
 def test_full_latex2pdf_writing():
-    """Full run of the `latex2pdf` pseudo-writer.
+    """
+    Full run of the `latex2pdf` pseudo-writer.
     """
     capture = StringIO()
     rc, stderr = support.capture_stderr(
@@ -157,7 +160,8 @@ xelatex_setup = partial(setup_latex_dir, 'fr-xelatex-full-')
 
 @with_setup(xelatex_setup, teardown_latex_dir)
 def test_full_xelatex_writing():
-    """Full run of the `xelatex` (XeLaTeX) pseudo-writer.
+    """
+    Full run of the `xelatex` (XeLaTeX) pseudo-writer.
     """
     capture = StringIO()
     rc, stderr = support.capture_stderr(

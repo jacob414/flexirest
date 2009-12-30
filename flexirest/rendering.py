@@ -81,8 +81,8 @@ class Render(object):
         destination.flush()
 
 def render(source, destination, conf, options, template, writer_name):
-
-    """API entry point (helper for the most obvious case).
+    """
+    API entry point (helper for the most obvious case).
 
     A call expected to succed must provide all parameters. See
     flexirest.main.commandline() to find sensible defaults.
@@ -101,8 +101,8 @@ def render(source, destination, conf, options, template, writer_name):
     renderer.render(source, destination)
 
 def dump_parts(source, destination, conf, options, template, writer_name):
-
-    """API entry point for the `dump_parts` option.
+    """
+    API entry point for the `dump_parts` option.
 
     A call expected to succed must provide all parameters. See
     flexirest.main.commandline() to find sensible defaults.

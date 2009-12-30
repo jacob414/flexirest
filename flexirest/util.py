@@ -10,7 +10,8 @@ from cStringIO import StringIO
 __docformat__ = 'reStructuredText'
 
 class StdoutConsole(object):
-    """Vaguely file-like object that immediately writes it output to
+    """
+    Vaguely file-like object that immediately writes it output to
     `sys.stdout` followed by an os-appropriate `EOL`.
     """
 
@@ -35,7 +36,8 @@ class Duck(object):
                 type(self).__name__, id(self), ': ' if a else '', a)
 
 class BufferedFile(file):
-    """File-like object that writes to an internal buffer. It will only
+    """
+    File-like object that writes to an internal buffer. It will only
     write to the file system when it's `.close()` method is called
     **and** it has actually written something to itself.
 
@@ -63,7 +65,8 @@ class BufferedFile(file):
         super(BufferedFile, self).close()
 
 class TempDirectory(object):
-    """A context-manager capable object that keeps an
+    """
+    A context-manager capable object that keeps an
     """
 
     def __init__(self, prefix=None):
@@ -72,52 +75,64 @@ class TempDirectory(object):
         self.prefix = prefix
 
     def manifest(self):
-        """Actually create the temporary directory.
+        """
+        Actually create the temporary directory.
         """
         if hasattr(self, 'tmpdir'):
             raise RuntimeError('temporary directory already manifested')
         self.path = tempfile.mkdtemp(prefix=self.prefix)
 
     def cleanup(self):
-        """Removes the temporary directory.
+        """
+        Removes the temporary directory.
         """
         shutil.rmtree(self.path)
 
     def newpath(self, name):
-        """Returns a file path inside this temporary directory.
+        """
+        Returns a file path inside this temporary directory.
         XXX: refactor name as *path, iterable with sub paths.
         """
         return os.path.join(self.path, name)
 
     def put(self, name, content):
-        """Put arbitrary content into a temporary file inside the
+        """
+        Put arbitrary content into a temporary file inside the
         temporary directory.
         """
         with self.open(name, 'w') as fp:
             fp.write(content)
 
     def open(self, name, mode):
-        """Open a file in the temporary directory.
+        """
+        Open a file in the temporary directory.
         """
         return open(self.newpath(name), mode)
 
     def copy(self, path):
-        """Copy an existing file into the temporary directory.
+        """
+        Copy an existing file into the temporary directory.
         """
         shutil.copy(path, self.newpath(os.path.basename(path)))
 
     def __enter__(self):
-        """Make this class context-manager capable."""
+        """
+        Make this class context-manager capable.
+        """
         self.manifest()
         return self
 
     def __exit__(self, type_, value, tb):
-        """Make this class context-manager capable."""
+        """
+        Make this class context-manager capable.
+        """
         self.cleanup()
 
 def has_program(*cmdline):
-    """Tries to execute a program with optional options (passed as a list with
-    the programs name first."""
+    """
+    Tries to execute a program with optional options (passed as a list with
+    the programs name first.
+    """
     try:
         return subprocess.call(cmdline,
                                stdin=open(os.devnull, 'r'),
