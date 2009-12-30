@@ -3,7 +3,7 @@ import shutil
 
 from StringIO import StringIO
 
-from nose.tools import assert_equals, assert_false, with_setup
+from nose.tools import assert_equals, assert_true, assert_false, with_setup
 
 from flexirest import util
 
@@ -40,3 +40,10 @@ def test_tmpdir_sanity():
         td.put('some-temp.txt', 'Hello')
         assert_equals(open(td.newpath('some-temp.txt'), 'r').read(), 'Hello')
     assert_false(os.path.exists(unicode(td)))
+
+def test_has_program_ok():
+    # XXX Find out a program known to exist on Windows that exists immediately
+    assert_true(util.has_program('ls'))
+
+def test_has_program_no_exist():
+    assert_false(util.has_program('this-is-cleary-bogus'))

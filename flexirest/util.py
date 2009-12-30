@@ -4,6 +4,7 @@ import os
 import sys
 import shutil
 import tempfile
+import subprocess
 from cStringIO import StringIO
 
 __docformat__ = 'reStructuredText'
@@ -114,3 +115,14 @@ class TempDirectory(object):
         """Make this class context-manager capable."""
         self.cleanup()
 
+def has_program(*cmdline):
+    """Tries to execute a program with optional options (passed as a list with
+    the programs name first."""
+    try:
+        return subprocess.call(cmdline,
+                               stdin=open(os.devnull, 'r'),
+                               stdout=open(os.devnull, 'w'),
+                               stderr=open(os.devnull, 'w'),
+                               env=os.environ) == 0
+    except OSError:
+        return False
