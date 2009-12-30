@@ -67,7 +67,7 @@ def test_dump_parts_utf8():
     rendering.dump_parts(support.get_utf8_fixture(),
                          out,
                          imp.new_module('flexiconf'),
-                         util.Duck(lang='sv', dump_parts=True),
+                         util.Duck(lang='sv', dump_parts=True, resources=False),
                          defaults.templates['latex'],
                          'latex')
     assert_true(out.lines[0].startswith("Parts created by the docutils writer 'latex'"))
