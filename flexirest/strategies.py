@@ -26,7 +26,7 @@ class GeneralWriterStrategy(object):
         writing strategy (for example, the latex2pdf writer invokes
         `pdflatex` here.
         """
-        destination.write( (template % parts).encode("utf-8") )
+        destination.write( (template.decode('utf-8') % parts).encode('utf-8') )
 
     def isfunctional(self):
         """
@@ -52,8 +52,11 @@ class LatexStrategy(GeneralWriterStrategy):
 
     @property
     def settings(self):
-        return {'output_encoding': 'utf-8', # XXX should probably support more..
-                'language_code': self.options.lang}
+        settings = {'output_encoding': 'utf-8', # XXX should probably support more..
+                    'language_code': self.options.lang}
+        if self.options.resources:
+            settings['stylesheet'] = self.options.resources
+        return settings
 
 class LatexPostProcessingStrategy(LatexStrategy):
 

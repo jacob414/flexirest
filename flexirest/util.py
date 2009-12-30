@@ -113,3 +113,4 @@ class TempDirectory(object):
     def __exit__(self, type_, value, tb):
         """Make this class context-manager capable."""
         self.cleanup()
+

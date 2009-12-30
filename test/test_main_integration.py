@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
 import textwrap
-import functools
 import imp
 import shutil
 import tempfile
+
+from functools import partial
 
 from docutils import nodes
 
@@ -18,7 +19,7 @@ from StringIO import StringIO
 
 BASIC_TMPL = '/tmp/tmpl_basic.txt'
 
-tmpl_basic_creator = functools.partial(support.create_gc_testfile, BASIC_TMPL, textwrap.dedent("""
+tmpl_basic_creator = partial(support.create_gc_testfile, BASIC_TMPL, textwrap.dedent("""
 the_template %(whole)s
 """))
 
@@ -48,7 +49,7 @@ def role_foo(role, rawtext, text, lineno, inliner, options=None, content=[]):
 
 ROLE_TMPL = '/tmp/tmpl_full_role.txt'
 
-tmpl_full_role_creator = functools.partial(support.create_gc_testfile,
+tmpl_full_role_creator = partial(support.create_gc_testfile,
                                                 ROLE_TMPL,
                                                 textwrap.dedent("""
 the_template %(whole)s
@@ -74,7 +75,7 @@ def test_full_role():
 
 SIMPLE_INFILE_PATH = '/tmp/simple_infile.rst'
 
-simple_infile_creator = functools.partial(support.create_gc_testfile,
+simple_infile_creator = partial(support.create_gc_testfile,
                                           SIMPLE_INFILE_PATH,
                                           support.MINIMAL_FIXTURE)
 
@@ -91,7 +92,7 @@ def test_w_infile():
 
 SIMPLE_OUTFILE = '/tmp/simple_outfile.html'
 
-@with_setup(lambda: None, functools.partial(os.unlink, SIMPLE_OUTFILE))
+@with_setup(lambda: None, partial(os.unlink, SIMPLE_OUTFILE))
 def test_w_outfile():
     """
     Tests the `--outfile` commandline option.
@@ -121,16 +122,15 @@ def setup_latex_dir(prefix):
     full_latex_dir.append(td)
 
 def teardown_latex_dir():
-    """Cleans up after LaTeX run.
+    """Cleans up after a LaTeX run.
     """
-    full_latex_dir[0].cleanup()
+    full_latex_dir.pop().cleanup()
 
-@with_setup(functools.partial(setup_latex_dir, 'fr-latex2pdf-smoketest-'),
-            teardown_latex_dir)
+latex2pdf_setup = partial(setup_latex_dir, 'fr-latex2pdf-smoketest-')
+
+@with_setup(latex2pdf_setup, teardown_latex_dir)
 def test_smoketest_latex2pdf_writing():
-    """
-    Smoketest `latex2pdf`: Run the `latex2pdf` pseudo-writer from
-    start to finish.
+    """Smoketest `latex2pdf`: Full run of the `latex2pdf` pseudo-writer.
     """
     capture = StringIO()
     rc = main.commandline(['--writer=latex2pdf',
@@ -142,3 +142,16 @@ def test_smoketest_latex2pdf_writing():
     pdf = support.pdf_from_file(capture)
     assert_equals(pdf.documentInfo.title, 'Titel')
     assert_true(pdf.getPage(0).extractText().startswith(u'TitelSvensktexthär.'))
+
+xelatex_setup = partial(setup_latex_dir, 'fr-xelatex-smoketest-')
+
+@with_setup(xelatex_setup, teardown_latex_dir)
+def test_smoketest_xelatex_writing():
+    """Smoketest `xelatex`: Full run of the `xelatex` (XeLaTeX) pseudo-writer.
+    """
+    capture = StringIO()
+    rc = main.commandline(['--writer=xelatex',
+                           '--lang=sv',
+                           '--template=%s' % latex_tmp('template.tex')],
+                          source=support.get_utf8_fixture(),
+                          destination=capture)
