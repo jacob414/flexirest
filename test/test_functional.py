@@ -126,11 +126,11 @@ def teardown_latex_dir():
     """
     full_latex_dir.pop().cleanup()
 
-latex2pdf_setup = partial(setup_latex_dir, 'fr-latex2pdf-smoketest-')
+latex2pdf_setup = partial(setup_latex_dir, 'fr-latex2pdf-full-')
 
 @with_setup(latex2pdf_setup, teardown_latex_dir)
-def test_smoketest_latex2pdf_writing():
-    """Smoketest `latex2pdf`: Full run of the `latex2pdf` pseudo-writer.
+def test_full_latex2pdf_writing():
+    """Full run of the `latex2pdf` pseudo-writer.
     """
     capture = StringIO()
     rc = main.commandline(['--writer=latex2pdf',
@@ -143,11 +143,11 @@ def test_smoketest_latex2pdf_writing():
     assert_equals(pdf.documentInfo.title, 'Titel')
     assert_true(pdf.getPage(0).extractText().startswith(u'TitelSvensktexthär.'))
 
-xelatex_setup = partial(setup_latex_dir, 'fr-xelatex-smoketest-')
+xelatex_setup = partial(setup_latex_dir, 'fr-xelatex-full-')
 
 @with_setup(xelatex_setup, teardown_latex_dir)
-def test_smoketest_xelatex_writing():
-    """Smoketest `xelatex`: Full run of the `xelatex` (XeLaTeX) pseudo-writer.
+def test_full_xelatex_writing():
+    """Full run of the `xelatex` (XeLaTeX) pseudo-writer.
     """
     capture = StringIO()
     rc = main.commandline(['--writer=xelatex',
