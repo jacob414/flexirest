@@ -44,6 +44,10 @@ _cmdline_options = (
                              dest='outfile',
                              default=False,
                              help='write output to this file')),
+    ('-s', '--styles', dict(action='store',
+                            dest='resources',
+                            default=False,
+                            help='resource files for this writing task (LaTeX only)')),
 )
 
 _print_and_quit_options = set(('version', 'list_writers'))
