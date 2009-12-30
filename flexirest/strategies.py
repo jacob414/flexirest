@@ -73,7 +73,7 @@ class LatexPostProcessingStrategy(LatexStrategy):
             return util.has_program(self.program, '-version')
         return True
 
-   def writer_object(self):
+    def writer_object(self):
         """
         Return a LaTeX `docutils` writer object.
         """

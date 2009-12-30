@@ -100,10 +100,10 @@ def pdf_from_file(pdf_f):
     now).
     """
 
-    import pyPdf
     stderr = sys.stderr
     try:
         sys.stderr = open(os.devnull, 'w')
+        import pyPdf
         pdf_o = pyPdf.PdfFileReader(pdf_f)
     finally:
         sys.stderr = stderr

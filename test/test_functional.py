@@ -11,6 +11,7 @@ from docutils import nodes
 
 from nose.tools import (assert_equals, assert_true, assert_false,
                         with_setup, raises)
+from nose.plugins.skip import SkipTest
 
 from flexirest import main, util
 from flexirest.test import support, test_tex
@@ -103,6 +104,9 @@ def test_w_outfile():
     assert_true('<title>A minimal fixture</title>' in open(SIMPLE_OUTFILE, 'r').read())
 
 def test_no_empty_outfile():
+    """
+    Tests that empty outfiles are not created after runs with errors.
+    """
     try:
         support.capture_stderr(main.commandline, ['--writer=bad', '--outfile=out.file'])
         assert_true(False)
@@ -133,11 +137,17 @@ def test_full_latex2pdf_writing():
     """Full run of the `latex2pdf` pseudo-writer.
     """
     capture = StringIO()
-    rc = main.commandline(['--writer=latex2pdf',
-                           '--lang=sv',
-                           '--template=%s' % latex_tmp('template.tex')],
-                          source=support.get_utf8_fixture(),
-                          destination=capture)
+    rc, stderr = support.capture_stderr(
+        main.commandline,
+        ['--writer=latex2pdf',
+         '--lang=sv',
+         '--template=%s' % latex_tmp('template.tex')],
+        source=support.get_utf8_fixture(),
+        destination=capture )
+    if rc == os.errno.EINVAL:
+         # This means `pdflatex` wasn't available on this system. It's not an
+         # error condition.
+        raise SkipTest
     assert_equals(rc, 0)
     pdf = support.pdf_from_file(capture)
     assert_equals(pdf.documentInfo.title, 'Titel')
@@ -150,8 +160,14 @@ def test_full_xelatex_writing():
     """Full run of the `xelatex` (XeLaTeX) pseudo-writer.
     """
     capture = StringIO()
-    rc = main.commandline(['--writer=xelatex',
-                           '--lang=sv',
-                           '--template=%s' % latex_tmp('template.tex')],
-                          source=support.get_utf8_fixture(),
-                          destination=capture)
+    rc, stderr = support.capture_stderr(
+        main.commandline,
+        ['--writer=xelatex',
+         '--lang=sv',
+         '--template=%s' % latex_tmp('template.tex')],
+        source=support.get_utf8_fixture(),
+        destination=capture )
+    if rc == os.errno.EINVAL:
+        # This means `xelatex` wasn't available on this system. It's not an
+        # error condition.
+        raise SkipTest
