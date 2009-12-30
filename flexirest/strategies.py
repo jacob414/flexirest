@@ -2,7 +2,7 @@ from itertools import chain
 
 from docutils import writers
 
-from flexirest import tex
+from flexirest import util, tex
 
 __docformat__ = 'reStructuredText'
 
@@ -69,9 +69,11 @@ class LatexPostProcessingStrategy(LatexStrategy):
 
     def isfunctional(self):
         # XXX Try to execute the program with the '-version' switch (Issue #13)
+        if super(LatexPostProcessingStrategy, self).isfunctional():
+            return util.has_program(self.program, '-version')
         return True
 
-    def writer_object(self):
+   def writer_object(self):
         """
         Return a LaTeX `docutils` writer object.
         """
@@ -79,10 +81,13 @@ class LatexPostProcessingStrategy(LatexStrategy):
 
 class Latex2PDFStrategy(LatexPostProcessingStrategy):
 
+    # XXX improvement idea: make this a property that optionally
+    # XXX gets the program path from some configuration.
     program = 'pdflatex'
 
 class XeLaTeXStrategy(LatexPostProcessingStrategy):
 
+    # XXX see XXX in Latex2PDFStrategy
     program = 'xelatex'
 
 
