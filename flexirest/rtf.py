@@ -11,7 +11,6 @@ import PyRTF
 __docformat__ = 'reStructuredText'
 
 class RtfWriter(writers.Writer):
-
     """
     Writer class to write to RFT using `PyRTF`.
     """
@@ -29,7 +28,6 @@ class RtfWriter(writers.Writer):
         self.output = visitor.astext()
 
 class RtfTranslator(nodes.NodeVisitor):
-
     """
     Translate to RTF.
     """
@@ -59,7 +57,7 @@ class RtfTranslator(nodes.NodeVisitor):
         """
         doc = PyRTF.Document()
         for section in self.topsections:
-            doc.Section.append(section)
+            doc.Sections.append(section)
 
         out = StringIO()
         PyRTF.Renderer().Write(doc, out)
@@ -69,7 +67,7 @@ class RtfTranslator(nodes.NodeVisitor):
         pass
 
     def visit_Text(self, node):
-        self.write_at_end(node.astext())
+        self.write_at_end(node.astext().encode('utf-8'))
 
     depart_Text = nop_visit
 

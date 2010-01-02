@@ -174,4 +174,4 @@ def test_full_xelatex_writing():
     if rc == os.errno.EINVAL:
         # This means `xelatex` wasn't available on this system. It's not an
         # error condition.
-        raise SkipTest
+        raise SkipTest("Can't locate `xelatex`")
