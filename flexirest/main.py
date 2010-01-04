@@ -93,7 +93,7 @@ def commandline(args=None, console=None, source=None, destination=None):
     if source is None:
         if options.infile:
             # XXX File not found will just dump traceback to stderr
-            source = open(options.infile, 'r')
+            source = open(os.path.expanduser(options.infile), 'r')
         else:
             source = sys.stdin
 

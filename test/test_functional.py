@@ -77,8 +77,8 @@ def test_full_role():
 SIMPLE_INFILE_PATH = '/tmp/simple_infile.rst'
 
 simple_infile_creator = partial(support.create_gc_testfile,
-                                          SIMPLE_INFILE_PATH,
-                                          support.MINIMAL_FIXTURE)
+                                SIMPLE_INFILE_PATH,
+                                support.MINIMAL_FIXTURE)
 
 @with_setup(simple_infile_creator, support.clean_gc_testfiles)
 def test_w_infile():
@@ -90,6 +90,22 @@ def test_w_infile():
                           destination=capture)
     assert_equals(rc, 0)
     assert_true('<title>A minimal fixture</title>' in capture.getvalue())
+
+INFILE_IN_HOME = '~/infile_inhome.rst'
+
+infile_in_home = partial(support.create_gc_testfile,
+                         INFILE_IN_HOME,
+                         support.MINIMAL_FIXTURE)
+
+@with_setup(infile_in_home, support.clean_gc_testfiles)
+def test_infile_in_home():
+    """
+    Enshures that the `--infile` option property expands home
+    directories (`~`).
+    """
+    rc = main.commandline(['--infile=%s' % INFILE_IN_HOME],
+                          destination=StringIO())
+    assert_equals(rc, 0)
 
 SIMPLE_OUTFILE = '/tmp/simple_outfile.html'
 

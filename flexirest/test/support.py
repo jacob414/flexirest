@@ -79,7 +79,7 @@ def capture_stderr(callable, *args, **kwargs):
 testfiles = []
 
 def write_test_file(path, contents):
-    with open(path, 'w') as fp:
+    with open(os.path.expanduser(path), 'w') as fp:
         fp.write(contents)
 
 def create_gc_testfile(path, contents):
@@ -88,7 +88,7 @@ def create_gc_testfile(path, contents):
 
 def clean_gc_testfiles():
     for path in testfiles:
-        os.unlink(path)
+        os.unlink(os.path.expanduser(path))
         testfiles.remove(path)
 
 def pdf_from_file(pdf_f):
