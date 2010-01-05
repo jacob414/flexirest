@@ -112,7 +112,7 @@ def commandline(args=None, console=None, source=None, destination=None):
         return errno.EINVAL
 
     if options.template:
-        with open(options.template, 'r') as fp:
+        with open(os.path.expanduser(options.template), 'r') as fp:
             template = fp.read()
     else:
         template = defaults.templates[writer_name]

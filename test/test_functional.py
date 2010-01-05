@@ -39,6 +39,22 @@ def test_template_basic():
     assert_true('the_template' in out)
     assert_true('title="A minimal fixture"' in out)
 
+TMPL_IN_HOME = '~/tmpl_in_home.txt'
+
+tmpl_in_home_creator = partial(support.create_gc_testfile, TMPL_IN_HOME,
+                               '%(whole)s')
+
+@with_setup(tmpl_in_home_creator, support.clean_gc_testfiles)
+def test_template_in_home():
+    """
+    Tests that templates in the users home directories are correctly
+    opened.
+    """
+    rc = main.commandline(['--template=%s' % TMPL_IN_HOME],
+                          source=support.get_minimal_fixture(),
+                          destination=StringIO())
+    assert_equals(0, rc)
+
 def role_foo(role, rawtext, text, lineno, inliner, options=None, content=[]):
     """
     A minimal `docutils` role.
