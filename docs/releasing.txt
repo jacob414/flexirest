@@ -1,0 +1,24 @@
+.. -*- mode: rst -*-
+.. -*- Coding: utf-8 -*-
+
+aspektratio-common
+------------------
+
+Release::
+
+    $ cd ~/src/aspektratio-common
+    $ rm -rf dist/
+    $ python setup.py bdist_egg
+    $ python2.5 setup.py bdist_egg
+    $ scp dist/*.egg flexisite:public_html/flexirest/dist
+
+Edit docs/download.txt to reflect the new egg names. Then::
+
+    $ cd ~/src/flexirest/docs
+    $ make deploy
+
+Run `buildout`::
+
+    $ cd ~/src/flexirest
+    $ ./bin/buildout
+
