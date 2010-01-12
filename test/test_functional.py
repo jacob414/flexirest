@@ -201,13 +201,12 @@ def test_full_xelatex_writing():
     """
     raise SkipTest('The XeLaTeX writer still has too many problems.')
     capture = StringIO()
-    rc, stderr = support.capture_stderr(
-        main.commandline,
-        ['--writer=xelatex',
-         '--lang=sv',
-         '--template=%s' % latex_tmp('template.tex')],
-        source=support.get_utf8_fixture(),
-        destination=capture )
+    # XXX Implementation idea: sun XeLaTeX in a shell
+    rc = main.commandline(['--writer=xelatex',
+                           '--lang=sv',
+                           '--template=%s' % latex_tmp('template.tex')],
+                          source=support.get_utf8_fixture(),
+                          destination=capture )
     if rc == os.errno.EINVAL:
         # This means `xelatex` wasn't available on this system. It's not an
         # error condition.
