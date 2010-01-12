@@ -34,15 +34,11 @@ Sources
 Dependencies
 ------------
 
-* `OdtWriter for Python 2.6`_
-* `OdtWriter for Python 2.5`_
-* `aspektratio-common for Python 2.6`_
-* `aspektratio-common for Python 2.5`_
+More recent versions (only the development version as of now) of
+`Flexirest` uses some packages that are not released on PyPI_. Every
+release has a download page for those packages:
 
-No Python 3 support. Yet! But I'm working on that.
+* Development version: 0.8.4dev_
 
-.. _`OdtWriter for Python 2.6`: http://www.aspektratio.net/flexirest/dist/odtwriter-1.3d_eggified-py2.6.egg
-.. _`OdtWriter for Python 2.5`: http://www.aspektratio.net/flexirest/dist/odtwriter-1.3d_eggified-py2.5.egg
-.. _`aspektratio-common for Python 2.6`: http://www.aspektratio.net/flexirest/dist/aspektratio_common-0.1.0_f63527759c3e_dev-py2.6.egg
-.. _`aspektratio-common for Python 2.5`: http://www.aspektratio.net/flexirest/dist/aspektratio_common-0.1.0_f63527759c3e_dev-py2.5.egg
-
+.. _`PyPI`: http://pypi.python.org/pypi
+.. _`0.8.4dev`: deps-0.8.4dev.html
