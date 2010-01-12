@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-from flexirest import util
+from aspektratio.io import TempDirectory
 
 import os
 import tempfile
@@ -8,7 +8,7 @@ import subprocess
 import shutil
 
 def run_program(program, source, styles=()):
-    with util.TempDirectory('flexirest-') as tmpdir:
+    with TempDirectory('flexirest-') as tmpdir:
         for sty in styles:
             tmpdir.copy(sty)
 

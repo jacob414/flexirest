@@ -16,6 +16,7 @@ from nose.tools import (assert_equals, assert_true, assert_false,
                         with_setup, raises)
 from nose.plugins.skip import SkipTest
 
+from aspektratio.io import TempDirectory
 from aspektratio.util import substitute
 
 from flexirest import main, util
@@ -157,7 +158,7 @@ def setup_latex_dir(prefix):
     """
     Creates and populates the temporary directory to run `pdflatex` in.
     """
-    td = util.TempDirectory(prefix)
+    td = TempDirectory(prefix)
     td.manifest()
     test_tex.write_fake_style(td.newpath('flexistyle.sty'))
     td.put('template.tex', '%(whole)s')

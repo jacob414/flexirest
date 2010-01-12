@@ -34,13 +34,6 @@ class TestBufferedFile(object):
         bf.close()
         assert_false(os.path.exists('/tmp/dont.write.this'))
 
-def test_tmpdir_sanity():
-    td = util.TempDirectory()
-    with td:
-        td.put('some-temp.txt', 'Hello')
-        assert_equals(open(td.newpath('some-temp.txt'), 'r').read(), 'Hello')
-    assert_false(os.path.exists(unicode(td)))
-
 def test_has_program_ok():
     # XXX Posix centric, won't work on windows... find known good program
     assert_true(util.has_program('ls'))
