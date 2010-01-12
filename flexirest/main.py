@@ -6,8 +6,10 @@ import optparse
 import imp
 import errno
 
+from aspektratio.io import BufferedFile
+
 from flexirest import world, rendering, defaults, meta
-from flexirest.util import StdoutConsole, BufferedFile
+from flexirest.util import StdoutConsole
 
 _cmdline_options = (
     ('-v', '--version', dict(action='store_true',
