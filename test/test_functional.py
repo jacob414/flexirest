@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+from __future__ import with_statement
+
 import os
 import textwrap
 import imp
@@ -12,6 +15,8 @@ from docutils import nodes
 from nose.tools import (assert_equals, assert_true, assert_false,
                         with_setup, raises)
 from nose.plugins.skip import SkipTest
+
+from aspektratio.util import substitute
 
 from flexirest import main, util
 from flexirest.test import support, test_tex
@@ -172,13 +177,11 @@ def test_full_latex2pdf_writing():
     Full run of the `latex2pdf` pseudo-writer.
     """
     capture = StringIO()
-    rc, stderr = support.capture_stderr(
-        main.commandline,
-        ['--writer=latex2pdf',
-         '--lang=sv',
-         '--template=%s' % latex_tmp('template.tex')],
-        source=support.get_utf8_fixture(),
-        destination=capture )
+    rc = main.commandline(['--writer=latex2pdf',
+                           '--lang=sv',
+                           '--template=%s' % latex_tmp('template.tex')],
+                          source=support.get_utf8_fixture(),
+                          destination=capture)
     if rc == os.errno.EINVAL:
          # This means `pdflatex` wasn't available on this system. It's not an
          # error condition.

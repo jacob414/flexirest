@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 import os
 import sys
 import imp
@@ -7,6 +9,7 @@ from StringIO import StringIO
 
 from nose.tools import assert_equals, assert_true, with_setup, raises
 
+from aspektratio.util import substitute
 from aspektratio.testing import LineCapture
 
 from flexirest import main, meta, rendering
@@ -57,8 +60,10 @@ def test_no_default_confmodule_noraise():
     main.commandline([], source=support.get_minimal_fixture())
 
 def test_bad_writer_nice_error():
-    rval, stderr = support.capture_stderr(main.commandline,
-                                          ['--writer=bad_writer'])
+    capture = LineCapture()
+    with substitute('sys.stderr', capture):
+        rval = main.commandline(['--writer=bad_writer'])
     assert_equals(rval, errno.EINVAL)
-    assert_equals(stderr, "flexirest: 'bad_writer' is not a valid writer%s" % os.linesep)
+    assert_equals(capture.lines,
+                  ["flexirest: 'bad_writer' is not a valid writer%s" % os.linesep])
 

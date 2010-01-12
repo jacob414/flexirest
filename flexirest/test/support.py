@@ -25,21 +25,6 @@ Svensk text här.
 get_minimal_fixture = lambda: StringIO(MINIMAL_FIXTURE)
 get_utf8_fixture = lambda: StringIO(UTF8_FIXTURE)
 
-def capture_stderr(callable, *args, **kwargs):
-    """
-    Calls `callable` with `*args` and `**kwargs` while capturing stderr.
-
-    Returns `<captured stderr>, <return value of fn>`
-    """
-    stderr = sys.stderr
-    capture = StringIO()
-    try:
-        sys.stderr = capture
-        res = callable(*args, **kwargs)
-    finally:
-        sys.stderr = stderr
-    return res, capture.getvalue()
-
 testfiles = []
 
 def write_test_file(path, contents):
