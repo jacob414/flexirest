@@ -1,10 +1,12 @@
 import imp
 from StringIO import StringIO
 
+from nose.tools import assert_equals, assert_true, with_setup, raises
+
+from aspektratio.testing import LineCapture
+
 from flexirest import rendering, defaults, util
 from flexirest.test import support
-
-from nose.tools import assert_equals, assert_true, with_setup, raises
 
 roles_registered = set()
 
@@ -53,7 +55,7 @@ def test_roles():
 
 
 def test_dump_parts():
-    out = support.Capturer()
+    out = LineCapture()
     rendering.dump_parts(support.get_minimal_fixture(),
                          out,
                          imp.new_module('flexiconf'),
@@ -63,7 +65,7 @@ def test_dump_parts():
     assert_true(out.lines[4].startswith('body'))
 
 def test_dump_parts_utf8():
-    out = support.Capturer()
+    out = LineCapture()
     rendering.dump_parts(support.get_utf8_fixture(),
                          out,
                          imp.new_module('flexiconf'),

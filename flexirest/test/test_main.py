@@ -5,13 +5,16 @@ import errno
 
 from StringIO import StringIO
 
-from flexirest import main, meta, rendering
 from nose.tools import assert_equals, assert_true, with_setup, raises
+
+from aspektratio.testing import LineCapture
+
+from flexirest import main, meta, rendering
 
 from flexirest.test import support
 
 def test_help():
-    outp = support.Capturer()
+    outp = LineCapture()
     old_stdout = sys.stdout
     try:
         sys.stdout = outp
@@ -25,13 +28,13 @@ def test_help():
         assert_true(_help[5].endswith('show this help message and exit'))
 
 def test_version():
-    outp = support.Capturer()
+    outp = LineCapture()
     retc = main.commandline(args=['--version',], console=outp)
     assert_equals(retc, 0)
     assert_equals(outp.lines, ["flexirest version %s" % meta.VERSION])
 
 def test_list_writers():
-    outp = support.Capturer()
+    outp = LineCapture()
     retc = main.commandline(args=['--list-writers',], console=outp)
     assert_equals(retc, 0)
     # XXX Sanity check only for now
@@ -39,7 +42,7 @@ def test_list_writers():
         yield assert_true, lambda: expected in outp.lines
 
 def test_dump_parts():
-    capture = support.Capturer()
+    capture = LineCapture()
     rc = main.commandline(['--dump-parts', '--writer=latex'],
                           source=support.get_minimal_fixture(),
                           destination=capture)
