@@ -1,6 +1,31 @@
 .. -*- mode: rst -*-
 .. -*- Coding: utf-8 -*-
 
+flexirest
+---------
+
+* Update flexirest/meta.py: update to pending release version number
+* hg checkin & push version number change
+* hg tag ..
+* hg clone tagged tag
+* cd to tagged tree
+* Edit setup.cfg:
+    * remove tag_build property
+    * change find_links to release dependencies page
+* Edit buildout.cfg:
+    * Change find_links property as above
+* Copy current development dependencies source to dependencies page
+  for the new release (e.g. dependencies-0.8.4-dev.txt
+  dependencies-0.8.4.txt)
+* Add the new dependencies page to the docs Makefile
+* Add link in the download page to the release dependencies file.
+* Check in and push release-prepared tag
+* Final check that the eggs can be built (and possible installed?)
+* Documentation/webpage deploy: in docs/ 'make deploy'
+* run `python setup.py bdist_egg upload` and `python2.5 setup.py
+  bdist_egg upload`
+* twitter, blog ...
+
 aspektratio-common
 ------------------
 
