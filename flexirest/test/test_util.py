@@ -17,23 +17,6 @@ def test_Duck():
     d = util.Duck(ze_attr='ze attr')
     assert_equals(d.ze_attr, 'ze attr')
 
-
-class TestBufferedFile(object):
-
-    # XXX Implementation drawback: platform dependant
-    @with_setup(lambda: None, lambda: os.unlink('/tmp/write.this'))
-    def test_write(self):
-        bf = util.BufferedFile('/tmp/write.this')
-        bf.write('what was written')
-        bf.close()
-        assert_equals(open('/tmp/write.this', 'r').read(), 'what was written')
-
-    # XXX Implementation drawback: platform dependant
-    def test_no_write(self):
-        bf = util.BufferedFile('/tmp/dont.write.this')
-        bf.close()
-        assert_false(os.path.exists('/tmp/dont.write.this'))
-
 def test_has_program_ok():
     # XXX Posix centric, won't work on windows... find known good program
     assert_true(util.has_program('ls'))
