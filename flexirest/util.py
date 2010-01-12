@@ -141,3 +141,4 @@ def has_program(*cmdline):
                                env=os.environ) == 0
     except OSError:
         return False
+
