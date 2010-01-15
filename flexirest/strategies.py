@@ -1,3 +1,4 @@
+import os
 from itertools import chain
 
 from docutils import writers
@@ -52,10 +53,12 @@ class LatexStrategy(GeneralWriterStrategy):
 
     @property
     def settings(self):
-        settings = {'output_encoding': 'utf-8', # XXX should probably support more..
-                    'language_code': self.options.lang}
+        settings = {'language': self.options.lang}
         if self.options.resources:
             settings['stylesheet'] = self.options.resources
+        enc = getattr(self, 'encoding', False)
+        if enc:
+            settings['output_encoding'] = enc
         return settings
 
 class LatexPostProcessingStrategy(LatexStrategy):
@@ -64,6 +67,7 @@ class LatexPostProcessingStrategy(LatexStrategy):
         """
         Invokes `pdflatex` with the help of the `flexirest.tex` module.
         """
+        print(template.encode('utf-8') % util.utf8_dict(parts))
         pdf = tex.run_program(self.program, template % parts)
         destination.write(pdf)
 
@@ -85,11 +89,14 @@ class Latex2PDFStrategy(LatexPostProcessingStrategy):
     # XXX gets the program path from some configuration.
     program = 'pdflatex'
 
+    encoding = 'utf-8' # XXX Hardcoded, think about better way
+
 class XeLaTeXStrategy(LatexPostProcessingStrategy):
 
     # XXX see XXX in Latex2PDFStrategy
     program = 'xelatex'
 
+    # encoding is implicitly unicode in XeLaTeX
 
 class OdtStrategy(GeneralWriterStrategy):
 

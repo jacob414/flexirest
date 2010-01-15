@@ -198,16 +198,16 @@ def test_full_xelatex_writing():
     """
     Full run of the `xelatex` (XeLaTeX) pseudo-writer.
     """
-    raise SkipTest('The XeLaTeX writer still has too many problems.')
     capture = StringIO()
-    rc, stderr = support.capture_stderr(
-        main.commandline,
-        ['--writer=xelatex',
-         '--lang=sv',
-         '--template=%s' % latex_tmp('template.tex')],
-        source=support.get_utf8_fixture(),
-        destination=capture )
+    rc = main.commandline(['--writer=xelatex',
+                      '--lang=sv',
+                      '--template=%s' % latex_tmp('template.tex')],
+                     source=support.get_utf8_fixture(),
+                     destination=capture )
     if rc == os.errno.EINVAL:
         # This means `xelatex` wasn't available on this system. It's not an
         # error condition.
         raise SkipTest("Can't locate `xelatex`")
+    pdf = support.pdf_from_file(capture)
+    assert_equals(pdf.documentInfo.title, 'Titel')
+    assert_true(pdf.getPage(0).extractText().startswith(u'TitelSvensktexthär.'))
