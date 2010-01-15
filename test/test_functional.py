@@ -199,7 +199,6 @@ def test_full_xelatex_writing():
     """
     Full run of the `xelatex` (XeLaTeX) pseudo-writer.
     """
-    raise SkipTest('The XeLaTeX writer still has too many problems.')
     capture = StringIO()
     # XXX Implementation idea: sun XeLaTeX in a shell
     rc = main.commandline(['--writer=xelatex',
