@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-from flexirest import util
+from aspektratio.io import TempDirectory
 
 import os
 import tempfile
@@ -8,7 +8,7 @@ import subprocess
 import shutil
 
 def run_program(program, source, styles=()):
-    with util.TempDirectory('flexirest-') as tmpdir:
+    with TempDirectory('flexirest-') as tmpdir:
         for sty in styles:
             tmpdir.copy(sty)
 
@@ -18,7 +18,6 @@ def run_program(program, source, styles=()):
 
         for run in range(5): # XXX 5 hardcoded
             returncode = subprocess.call([program,
-                                          '-interaction=batchmode',
                                           '-halt-on-error',
                                           '-no-shell-escape',
                                           tmpdir.newpath('texsource.tex')],
