@@ -67,7 +67,6 @@ class LatexPostProcessingStrategy(LatexStrategy):
         """
         Invokes `pdflatex` with the help of the `flexirest.tex` module.
         """
-        print(template.encode('utf-8') % util.utf8_dict(parts))
         pdf = tex.run_program(self.program, template % parts)
         destination.write(pdf)
 
