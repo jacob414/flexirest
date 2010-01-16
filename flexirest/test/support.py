@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 
+from aspektratio.util import substitute
+
 import os
 import sys
 from StringIO import StringIO
@@ -48,16 +50,9 @@ def pdf_from_file(pdf_f):
     are not shown (I really don't have time for a patching round right
     now).
     """
-
-    stderr = sys.stderr
-    try:
-        sys.stderr = open(os.devnull, 'w')
+    with substitute('sys.stderr', open(os.devnull, 'w')):
         import pyPdf
-        pdf_o = pyPdf.PdfFileReader(pdf_f)
-    finally:
-        sys.stderr = stderr
-
-    return pdf_o
+        return pyPdf.PdfFileReader(pdf_f)
 
 def pdf_from_data(pdf):
     return pdf_from_file(StringIO(pdf))
