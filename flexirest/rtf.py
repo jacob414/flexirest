@@ -41,12 +41,14 @@ class RtfTranslator(nodes.NodeVisitor):
         self.language = languages.get_language(lcode)
         self.section_level = 0
 
-        self.topsections = deque()
-        self.topsections.append(PyRTF.Section())
+        self.doc = PyRTF.Document()
+        self.style = self.doc.StyleSheet
+        self.nextParaStyle = self.style.ParagraphStyles.Normal
 
-        # POC
-        self.head = []
-        self.body = []
+        self.head = deque()
+        self.body = deque()
+
+        self.out = self.body
 
     def write_at_end(self, obj):
         self.topsections[-1].append(obj)
@@ -56,7 +58,11 @@ class RtfTranslator(nodes.NodeVisitor):
         'Renders' the contents.
         """
         doc = PyRTF.Document()
-        for section in self.topsections:
+        for section in self.head:
+#            import ipdb; ipdb.set_trace()
+            doc.Sections.append(section)
+
+        for section in self.body:
             doc.Sections.append(section)
 
         out = StringIO()
@@ -67,7 +73,15 @@ class RtfTranslator(nodes.NodeVisitor):
         pass
 
     def visit_Text(self, node):
-        self.write_at_end(node.astext().encode('utf-8'))
+        print('visit_Text: adding text %s' % node.astext().encode('utf-8'))
+        print('            style = %r' % self.nextParaStyle)
+        para = PyRTF.Paragraph(self.nextParaStyle)
+        para.append(node.astext().encode('utf-8'))
+        print('            para: %r' % para)
+        section = PyRTF.Section()
+        section.append(para)
+        self.out.append(section)
+        self.nextParaStyle = self.style.ParagraphStyles.Normal
 
     depart_Text = nop_visit
 
@@ -97,19 +111,19 @@ class RtfTranslator(nodes.NodeVisitor):
         elif self.section_level == 0:
             # Document title
             # raise nodes.SkipNode
-            self.topsections[0].append('== ')
+            self.out = self.head
+            self.nextParaStyle = self.style.ParagraphStyles.Heading1
+            print('visit_tilet, main title')
         elif self.section_level > 0:
             pass
 
-        txt = node.astext().upper()
-        mark = len(txt)*'=' + ' '
-        self.head.extend((mark, txt, mark, '\n'))
+        # txt = node.astext().upper()
+        # mark = len(txt)*'=' + ' '
+        # self.head.extend((mark, txt, mark, '\n'))
 
     def depart_title(self, node):
         if self.section_level == 0:
-            self.topsections[0]
-
-    depart_title = nop_visit
+            self.out = self.body
 
     def visit_paragraph(self, node):
         self.body.append('\nP:')
