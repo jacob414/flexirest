@@ -106,6 +106,12 @@ class OdtStrategy(GeneralWriterStrategy):
         from odtwriter import Writer
         return Writer()
 
+class RtfStrategy(GeneralWriterStrategy):
+
+    def writer_object(self):
+        from flexirest.rtf import RtfWriter
+        return RtfWriter()
+
 # XXX Beware: the _writer_aliases dict is undocumented and marked as
 # private! In theory we should find out a better way to produce this
 # list, but right now I don't see any way of doing that.
@@ -118,7 +124,8 @@ builtin_writers['latex2e'] = LatexStrategy
 pseudo_writers = {'latex2pdf': Latex2PDFStrategy,
                   'xelatex': XeLaTeXStrategy}
 
-external_writers = {'odt': OdtStrategy}
+external_writers = {'odt': OdtStrategy,
+                    'rtf': RtfStrategy}
 
 def functional_strategies():
     for name, Strategy in chain(builtin_writers.items(),
