@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
+# Ref, convert RTF to HTML via AbiWord (verification purpose):
+# $ abiword --to=outfile.html abiword.rtf
+
 import re
 
 from collections import deque
 from cStringIO import StringIO
 
 from docutils import nodes, utils, writers, languages
-import PyRTF
+import PyRTF as rtf
 
 __docformat__ = 'reStructuredText'
 
@@ -41,47 +44,42 @@ class RtfTranslator(nodes.NodeVisitor):
         self.language = languages.get_language(lcode)
         self.section_level = 0
 
-        self.doc = PyRTF.Document()
+        self.doc = rtf.Document()
         self.style = self.doc.StyleSheet
-        self.nextParaStyle = self.style.ParagraphStyles.Normal
-
-        self.head = deque()
-        self.body = deque()
-
-        self.out = self.body
-
-    def write_at_end(self, obj):
-        self.topsections[-1].append(obj)
+        #self.head = rtf.Section()
+        self.body = rtf.Section()
+        #self.doc.Sections.append(self.head)
+        self.doc.Sections.append(self.body)
+        self.next_style = 'Normal'
 
     def astext(self):
         """
         'Renders' the contents.
         """
-        doc = PyRTF.Document()
-        for section in self.head:
-#            import ipdb; ipdb.set_trace()
-            doc.Sections.append(section)
-
-        for section in self.body:
-            doc.Sections.append(section)
-
         out = StringIO()
-        PyRTF.Renderer().Write(doc, out)
+        rtf.Renderer().Write(self.doc, out)
         return out.getvalue()
+
+    def build_paragraph(self, text, style='Normal'):
+        para = rtf.Paragraph(getattr(self.style.ParagraphStyles,
+                                     style))
+        para.append(text)
+        return para
+
+    def add_paragraph(self, section, text, style='Normal'):
+        section.append(self.build_paragraph(text, style))
+
 
     def nop_visit(self, node):
         pass
 
     def visit_Text(self, node):
         print('visit_Text: adding text %s' % node.astext().encode('utf-8'))
-        print('            style = %r' % self.nextParaStyle)
-        para = PyRTF.Paragraph(self.nextParaStyle)
-        para.append(node.astext().encode('utf-8'))
-        print('            para: %r' % para)
-        section = PyRTF.Section()
-        section.append(para)
-        self.out.append(section)
-        self.nextParaStyle = self.style.ParagraphStyles.Normal
+
+        p = self.add_paragraph(self.body,
+                               node.astext().encode('utf-8'),
+                               self.next_style)
+        self.next_style = 'Normal'
 
     depart_Text = nop_visit
 
@@ -111,9 +109,8 @@ class RtfTranslator(nodes.NodeVisitor):
         elif self.section_level == 0:
             # Document title
             # raise nodes.SkipNode
-            self.out = self.head
-            self.nextParaStyle = self.style.ParagraphStyles.Heading1
-            print('visit_tilet, main title')
+            self.next_style = 'Heading1'
+            print('visits main title: %s' % node.astext())
         elif self.section_level > 0:
             pass
 
@@ -125,7 +122,5 @@ class RtfTranslator(nodes.NodeVisitor):
         if self.section_level == 0:
             self.out = self.body
 
-    def visit_paragraph(self, node):
-        self.body.append('\nP:')
-
+    visit_paragraph = nop_visit
     depart_paragraph = nop_visit
