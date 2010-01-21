@@ -6,6 +6,7 @@ import optparse
 import imp
 import errno
 
+from aspektratio.cli import dispatch
 from aspektratio.io import BufferedFile
 
 from flexirest import world, rendering, defaults, meta
@@ -142,3 +143,35 @@ def commandline(args=None, console=None, source=None, destination=None):
 
     # XXX Way to simple way to treat return codes
     return 0
+
+def show_info():
+    print('info..') # XXX
+
+def show_version():
+    print('version..') # XXX
+
+def html_options(args):
+    pass # XXX
+
+def render_html(options, args):
+    pass # XXX
+
+# Actions should map every possible writer
+actions = {
+    'html': (render_html, html_options),
+}
+
+def alt_commandline(args=None, console=None, source=None, destination=None):
+    if console is None:
+        console = StdoutConsole()
+    if args is None:
+        args = sys.argv[1:]
+
+    try:
+        dispatch(actions, args)
+    except DefaultAction:
+        show_info()
+    except ShowVersion:
+        show_version()
+    except SilentExit:
+        return 0
