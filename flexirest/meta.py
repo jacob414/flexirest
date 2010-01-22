@@ -6,11 +6,22 @@ AUTHOR = 'Jacob Oscarson'
 EMAIL = 'jacob@aspektratio.net'
 SHORT_DESC = CMDLINE_DESC
 CMDLINE_USAGE = 'flexirest <options>'
-INTRO = """Flexirest, the friendly reStructuredText renderer
+INFO = """Flexirest
+Flexible and friendly reStructuredText renderer
+Version %s
 
 Usage: flexirest <writer name> [options] [infile] [outfile]
 
-The following writers seems functional in your installation:
-
 %s
+"""
+STATUS = """
+The following writers is functional in your installation:
+{{for line in functional}}
+  {{line}}
+{{endfor}}
+
+The following writers is not functional in your installation:
+{{for line in nonfunctional}}
+  {{line}}
+{{endfor}}
 """

@@ -6,10 +6,12 @@ import optparse
 import imp
 import errno
 
-from aspektratio.cli import dispatch
+from functools import partial
+
+from aspektratio.cli import dispatch, DefaultAction, ShowVersion, SilentExit
 from aspektratio.io import BufferedFile
 
-from flexirest import world, rendering, defaults, meta
+from flexirest import world, rendering, defaults, meta, strategies
 from flexirest.util import StdoutConsole
 
 _cmdline_options = (
@@ -144,11 +146,28 @@ def commandline(args=None, console=None, source=None, destination=None):
     # XXX Way to simple way to treat return codes
     return 0
 
-def show_info():
-    print('info..') # XXX
+def show_status(console, args):
+    functional, nonfunctional = strategies.check_writers()
 
-def show_version():
-    print('version..') # XXX
+    linefn = lambda n, desc: '  %s%s%s' % (n, (16 - len(n)) * ' ', desc)
+
+    def lines(strategies):
+        for name, Strategy in strategies.iteritems():
+            yield linefn(name, Strategy.description)
+
+    import tempita
+    tmpl = tempita.Template(meta.STATUS,
+                            namespace={'functional': lines(functional),
+                                       'nonfunctional': lines(nonfunctional)})
+    console.write(tmpl.substitute())
+
+
+def show_info(console):
+    console.write(meta.INFO % (meta.VERSION,
+                               'gunk'))
+
+def show_version(console):
+    console.write(meta.VERSION)
 
 def html_options(args):
     pass # XXX
@@ -156,22 +175,28 @@ def html_options(args):
 def render_html(options, args):
     pass # XXX
 
-# Actions should map every possible writer
-actions = {
-    'html': (render_html, html_options),
-}
 
-def alt_commandline(args=None, console=None, source=None, destination=None):
+def commandline_new(args=None, console=None, source=None, destination=None):
     if console is None:
         console = StdoutConsole()
     if args is None:
         args = sys.argv[1:]
 
+
+    actions = {
+        'st': partial(show_status, console),
+        'status': partial(show_status, console)
+    }
+
+    # XXX Fill in actions with strategies.possible_writers using partial's
+
     try:
         dispatch(actions, args)
     except DefaultAction:
-        show_info()
+        show_info(console)
+        return 0
     except ShowVersion:
-        show_version()
+        show_version(console)
+        return 0
     except SilentExit:
         return 0

@@ -13,28 +13,23 @@ from aspektratio.util import substitute
 from aspektratio.testing import LineCapture
 
 from flexirest import main, meta, rendering
-
 from flexirest.test import support
 
-def test_help():
-    outp = LineCapture()
-    old_stdout = sys.stdout
-    try:
-        sys.stdout = outp
-        retc = main.commandline(args=['--help'])
-    except SystemExit, e:
-        assert_equals(e.code, 0)
-    finally:
-        sys.stdout = old_stdout
-        _help = outp.lines[0].split(os.linesep)
-        assert_equals(_help[0], 'Usage: flexirest <options>')
-        assert_true(_help[5].endswith('show this help message and exit'))
+def test_info():
+    out = StringIO()
+    rc = main.commandline_new(args=(), console=out)
+    assert_equals(rc, 0)
+    assert_true(out.getvalue().startswith('Flexirest'))
 
 def test_version():
     outp = LineCapture()
-    retc = main.commandline(args=['--version',], console=outp)
+    retc = main.commandline_new(args=['version',], console=outp)
     assert_equals(retc, 0)
-    assert_equals(outp.lines, ["flexirest version %s" % meta.VERSION])
+    assert_equals(outp.lines, [meta.VERSION])
+
+def test_show_status():
+    out = LineCapture()
+    rc = main.commandline_new(args=['status'], console=out)
 
 def test_list_writers():
     outp = LineCapture()
@@ -54,6 +49,7 @@ def test_dump_parts():
 
 @raises(ImportError)
 def test_explicit_confmodule_not_found_raises():
+    #import ipdb; ipdb.set_trace()
     main.commandline(['--config=notamodule'])
 
 def test_no_default_confmodule_noraise():
