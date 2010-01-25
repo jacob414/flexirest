@@ -55,7 +55,7 @@ class GeneralWriterStrategy(object):
 class HtmlStrategy(GeneralWriterStrategy):
 
     description = 'HTML (docutils builtin)'
-    writer_name = 'html4css'
+    writer_name = 'html4css1'
 
 class PseudoXmlStrategy(GeneralWriterStrategy):
 
@@ -167,7 +167,7 @@ def functional_strategies():
 
 possible_writers = {
     'latex': LatexStrategy,
-    'docutils_xml': DocutilsXmlStrategy,
+    'xml': DocutilsXmlStrategy,
     'pdflatex': Latex2PDFStrategy,
     'xelatex': XeLaTeXStrategy,
     'odt': OdtStrategy,
@@ -177,19 +177,13 @@ possible_writers = {
     'rtf': RtfStrategy,
 }
 
-def check_writers():
-    functional = nonfunctional = {}
-    for name, Strategy in possible_writers.iteritems():
-        print('NAME: %s' % name)
+def check_writers(writers=possible_writers):
+    functional = {}
+    nonfunctional = {}
+    for name, Strategy in writers.iteritems():
         if Strategy.isfunctional():
             functional[name] = Strategy
         else:
             nonfunctional[name] = Strategy
 
     return functional, nonfunctional
-
-# def functional_strategies():
-#     for name, Strategy in possible_writers.iteritems():
-#         strategy = Strategy()
-#         if strategy.isfunctional():
-#             yield name, strategy
