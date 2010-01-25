@@ -6,6 +6,7 @@ syntax: glob
 *.orig
 *.coverage
 *.elc
+*.diff
 \.installed\.cfg
 parts
 develop-eggs
