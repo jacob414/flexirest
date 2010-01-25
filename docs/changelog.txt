@@ -4,7 +4,15 @@
 0.8.4
 +++++
 
-
+* Optional rendering to OpenDocument with the help of XXX's Odtwriter
+  for Docutils (XXX: link)
+* The previously named `latex2pdf` writer has changed name to `pdflatex`
+* A new writer `xelatex`, works similarly to the `pdflatex`, but is
+  aware that XeLaTeX handles unicode slightly different.
+* A newly written writer for Microsoft Rich Text format ('RTF'),
+  implemented using XXX's `PyRTF` library.
+* New command line syntax
+* Many small bugfixes and stability improvements
 
 0.8.2
 +++++
