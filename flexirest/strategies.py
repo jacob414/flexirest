@@ -29,7 +29,6 @@ class GeneralWriterStrategy(object):
         """
         destination.write( (template.decode('utf-8') % parts).encode('utf-8') )
 
-
     @classmethod
     def isfunctional(cls):
         """
@@ -51,6 +50,12 @@ class GeneralWriterStrategy(object):
         """
         # Assume this writer is a built-in.
         return writers.get_writer_class(cls.writer_name)()
+
+    @classmethod
+    def add_options(cls, parser):
+        """
+        Add options specific to this writer.
+        """
 
 class HtmlStrategy(GeneralWriterStrategy):
 
@@ -86,6 +91,17 @@ class LatexStrategy(GeneralWriterStrategy):
         if enc:
             settings['output_encoding'] = enc
         return settings
+
+    @classmethod
+    def add_options(cls, parser):
+        """
+        Add options specific to this writer.
+        """
+        parser.add_option('--styles',
+                          action='store',
+                          dest='styles',
+                          default=False,
+                          help='Styles used in the output')
 
 class LatexPostProcessingStrategy(LatexStrategy):
 
