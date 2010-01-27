@@ -56,6 +56,8 @@ class GeneralWriterStrategy(object):
         """
         Add options specific to this writer.
         """
+        add_bool_opt, add_str_opt = util.default_option_adders(parser)
+        add_str_opt('-c', '--config', help='XXX config help text..')
 
 class HtmlStrategy(GeneralWriterStrategy):
 
@@ -97,6 +99,11 @@ class LatexStrategy(GeneralWriterStrategy):
         """
         Add options specific to this writer.
         """
+        super(LatexStrategy, cls).add_options(parser)
+        add_bool_opt, add_str_opt = util.default_option_adders(parser)
+
+        add_bool_opt('-p', '--dump-parts', help='dump parts help..')
+
         parser.add_option('--styles',
                           action='store',
                           dest='styles',

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 
+import os, sys
+
+from StringIO import StringIO
+
 from aspektratio.util import substitute
 
-import os
-import sys
-from StringIO import StringIO
+from flexirest.main import Io
 
 __docformat__ = 'reStructuredText'
 
@@ -26,6 +28,29 @@ Svensk text här.
 
 get_minimal_fixture = lambda: StringIO(MINIMAL_FIXTURE)
 get_utf8_fixture = lambda: StringIO(UTF8_FIXTURE)
+
+class CapturingIO(Io):
+
+    def __init__(self):
+        super(CapturingIO, self).__init__(stderr=StringIO())
+        self.destination = StringIO()
+        self.console = StringIO()
+
+    @property
+    def message(self):
+        return self.console.getvalue()
+
+    @property
+    def msglines(self):
+        return self.message.split(os.linesep)
+
+    @property
+    def result(self):
+        return self.destination.getvalue()
+
+    @property
+    def lines(self):
+        return self.result.split(os.linesep)
 
 testfiles = []
 

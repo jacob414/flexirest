@@ -1,9 +1,6 @@
 from __future__ import with_statement
 
-import os
-import sys
-import imp
-import errno
+import os, sys, imp, errno
 
 from StringIO import StringIO
 
@@ -16,44 +13,58 @@ from flexirest import main, meta, rendering
 from flexirest.test import support
 
 def test_info():
-    out = StringIO()
-    rc = main.commandline_new(args=(), console=out)
+    """
+    Tests output of running without parameters
+    """
+    io = support.CapturingIO()
+    rc = main.commandline_new(args=(), io=io)
     assert_equals(rc, 0)
-    assert_true(out.getvalue().startswith('Flexirest'))
+    assert_true(io.message.startswith('Flexirest'))
 
 def test_version():
-    outp = LineCapture()
-    retc = main.commandline_new(args=['version',], console=outp)
-    assert_equals(retc, 0)
-    assert_equals(outp.lines, [meta.VERSION])
+    """
+    Tests the output of the 'version' command
+    """
+    def check_version(variant):
+        io = support.CapturingIO()
+        retc = main.commandline_new(args=[variant,], io=io)
+        assert_equals(retc, 0)
+        assert_equals(io.msglines, [meta.VERSION, ''])
+
+    for variant in ('-v', '--version', 'version'):
+        yield check_version, variant
+
+expected_status_start = (
+"""The following writers are functional in your installation:
+    html          HTML (docutils builtin)
+    latex         LaTeX (docutils built in)""")
 
 def test_show_status():
-    out = LineCapture()
-    rc = main.commandline_new(args=['status'], console=out)
+    """
+    Tests the output of the 'status' command
+    """
+    def check_status(variant):
+        io = support.CapturingIO()
+        rc = main.commandline_new(args=[variant], io=io)
+        assert_equals(rc, 0)
+        assert_true(io.message.startswith(expected_status_start))
 
-def test_list_writers():
-    outp = LineCapture()
-    retc = main.commandline(args=['--list-writers',], console=outp)
-    assert_equals(retc, 0)
-    # XXX Sanity check only for now
-    for expected in ('html', 'latex', 'latex2e'):
-        yield assert_true, lambda: expected in outp.lines
+    for variant in ('status', 'st'):
+        yield check_status, variant
 
 def test_dump_parts():
-    capture = LineCapture()
-    rc = main.commandline(['--dump-parts', '--writer=latex'],
-                          source=support.get_minimal_fixture(),
-                          destination=capture)
-    # XXX Sanity check only
-    assert_true(capture.lines[0].startswith("Parts created by the docutils"))
+    io = support.CapturingIO()
+    io.source = support.get_minimal_fixture()
+    rc = main.commandline_new(['latex', '--dump-parts'], io=io)
+    # XXX sanity check only
+    assert_true(io.lines[0].startswith("Parts created by the docutils"))
 
 @raises(ImportError)
 def test_explicit_confmodule_not_found_raises():
-    #import ipdb; ipdb.set_trace()
-    main.commandline(['--config=notamodule'])
+    main.commandline_new(['latex', '--config=notamodule'])
 
 def test_no_default_confmodule_noraise():
-    main.commandline([], source=support.get_minimal_fixture())
+    main.commandline_new([], source=support.get_minimal_fixture())
 
 def test_bad_writer_nice_error():
     capture = LineCapture()

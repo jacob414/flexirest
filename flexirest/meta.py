@@ -11,16 +11,13 @@ Flexible and friendly reStructuredText renderer
 Version %s
 
 Usage: flexirest <writer name> [options] [infile] [outfile]
-
-%s
 """
-STATUS = """
-The following writers is functional in your installation:
+STATUS = """The following writers are functional in your installation:
 {{for line in functional}}
   {{line}}
 {{endfor}}
 
-The following writers is not functional in your installation:
+The following writers are not functional in your installation:
 {{for line in nonfunctional}}
   {{line}}
 {{endfor}}
