@@ -3,6 +3,7 @@ from __future__ import with_statement
 
 import os, sys
 
+from functools import partial
 from StringIO import StringIO
 
 from aspektratio.util import substitute
@@ -29,10 +30,10 @@ Svensk text här.
 get_minimal_fixture = lambda: StringIO(MINIMAL_FIXTURE)
 get_utf8_fixture = lambda: StringIO(UTF8_FIXTURE)
 
-class CapturingIO(Io):
+class CapturingIo(Io):
 
     def __init__(self):
-        super(CapturingIO, self).__init__(stderr=StringIO())
+        super(CapturingIo, self).__init__(stderr=StringIO())
         self.destination = StringIO()
         self.console = StringIO()
 
@@ -51,6 +52,19 @@ class CapturingIO(Io):
     @property
     def lines(self):
         return self.result.split(os.linesep)
+
+    @property
+    def errlines(self):
+        return self.stderr.getvalue().split(os.linesep)
+
+nullfile = partial(open, os.devnull)
+
+class NullIo(Io):
+
+    def __init__(self):
+        super(NullIo, self).__init__(stderr=nullfile('w'))
+        self.destination = nullfile('w')
+        self.console = nullfile('w')
 
 testfiles = []
 
