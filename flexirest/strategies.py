@@ -7,6 +7,11 @@ from flexirest import util, tex
 
 __docformat__ = 'reStructuredText'
 
+template_option = ('template', (str, '-t', '--template',
+                             'apply source into this template'))
+stylesheets_option = ('stylesheets', (str, '-s', '--styles',
+                                      'stylesheet(s) to use in this rendering'))
+
 class GeneralWriterStrategy(object):
 
     description = 'Not shure what this does'
@@ -58,11 +63,20 @@ class GeneralWriterStrategy(object):
         """
         add_bool_opt, add_str_opt = util.default_option_adders(parser)
         add_str_opt('-c', '--config', help='XXX config help text..')
+        add_bool_opt('-d', '--dump-parts', help='XXX dump parts help text..')
+        if hasattr(cls, 'options'):
+            for name, (typ, shortn, longn, hlp) in cls.options:
+                if typ is str:
+                    add_str_opt(shortn, longn, help=hlp)
+                elif typ is bool:
+                    add_bool_opt(shortn, longn, help=hlp)
 
 class HtmlStrategy(GeneralWriterStrategy):
 
     description = 'HTML (docutils builtin)'
     writer_name = 'html4css1'
+
+    options = (template_option, stylesheets_option)
 
 class PseudoXmlStrategy(GeneralWriterStrategy):
 
@@ -84,31 +98,17 @@ class LatexStrategy(GeneralWriterStrategy):
     description = 'LaTeX (docutils built in)'
     writer_name = 'latex2e'
 
+    options = (template_option, stylesheets_option)
+
     @property
     def settings(self):
         settings = {'language': self.options.lang}
-        if self.options.resources:
+        if hasattr(self.options, 'stylesheets'):
             settings['stylesheet'] = self.options.resources
         enc = getattr(self, 'encoding', False)
         if enc:
             settings['output_encoding'] = enc
         return settings
-
-    @classmethod
-    def add_options(cls, parser):
-        """
-        Add options specific to this writer.
-        """
-        super(LatexStrategy, cls).add_options(parser)
-        add_bool_opt, add_str_opt = util.default_option_adders(parser)
-
-        add_bool_opt('-p', '--dump-parts', help='dump parts help..')
-
-        parser.add_option('--styles',
-                          action='store',
-                          dest='styles',
-                          default=False,
-                          help='Styles used in the output')
 
 class LatexPostProcessingStrategy(LatexStrategy):
 

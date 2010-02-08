@@ -34,7 +34,7 @@ class Render(object):
         self.options = options
         self.template = template
         self.writer_name = writer_name
-        writing_strategy = world.all_writers[writer_name]
+        writing_strategy = world.all_writers[writer_name]()
         writing_strategy.options = options
         self.writing_strategy = writing_strategy
 

@@ -8,7 +8,8 @@ import errno
 
 from functools import partial
 
-from aspektratio.cli import dispatch, DefaultAction, ShowVersion, SilentExit
+from aspektratio.cli import (dispatch, DefaultAction, ShowVersion, SilentExit,
+                             UnknownSubcommand)
 from aspektratio.io import BufferedFile
 
 from flexirest import world, rendering, defaults, meta, strategies
@@ -250,7 +251,7 @@ def writer_action(io, name, Strategy, options, args):
         with open(os.path.expanduser(options.template), 'r') as fp:
             template = fp.read()
     else:
-        template = defaults.templates[writer_name]
+        template = defaults.templates[name]
 
     if options.dump_parts:
         rendering.dump_parts(io.source,
@@ -277,6 +278,8 @@ def options(console, name, Strategy, args):
     parser = optparse.OptionParser(usage='usage',
                                    description='description')
     Strategy.add_options(parser)
+    parser.add_option('-l', '--lang', action='store', dest='lang', default='en',
+                      help='specify language (both input and output)')
     return parser
 
 def commandline_new(args=None, io=None):
@@ -302,6 +305,9 @@ def commandline_new(args=None, io=None):
     except DefaultAction:
         show_info(io)
         return 0
+    except UnknownSubcommand, e:
+        io.complain("flexirest: '%s' is not a valid writer" % e.subcmd)
+        return errno.EINVAL
     except ShowVersion:
         show_version(io)
         return 0
