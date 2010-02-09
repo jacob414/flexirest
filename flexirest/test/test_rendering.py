@@ -5,7 +5,7 @@ from nose.tools import assert_equals, assert_true, with_setup, raises
 
 from aspektratio.testing import LineCapture
 
-from flexirest import rendering, defaults, util
+from flexirest import rendering, strategies, defaults, util
 from flexirest.test import support
 
 roles_registered = set()
@@ -44,33 +44,32 @@ def test_roles():
     confmod.role_three = i_am_callable
     confmod.role_four = "but I'm not callable!"
 
-    out = StringIO()
-    rendering.render(support.get_minimal_fixture(),
-                     out,
+    rendering.render(strategies.HtmlStrategy(),
+                     support.CapturingIo(),
                      confmod,
                      util.Duck(lang='en', dump_parts=False),
-                     defaults.templates['html'], 'html')
+                     defaults.templates['html'])
 
     assert_true(set(('one', 'two', 'three')).issubset(roles_registered))
 
 
 def test_dump_parts():
-    out = LineCapture()
-    rendering.dump_parts(support.get_minimal_fixture(),
-                         out,
+    io = support.CapturingIo()
+    rendering.dump_parts(strategies.HtmlStrategy(),
+                         io,
                          imp.new_module('flexiconf'),
                          util.Duck(lang='en', dump_parts=True),
-                         defaults.templates['html'], 'html')
-    assert_true(out.lines[0].startswith("Parts created by the docutils writer 'html'"))
-    assert_true(out.lines[4].startswith('body'))
+                         defaults.templates['html'])
+    assert_true(io.msglines[0].startswith("Parts created by the docutils writer 'html4css1'"))
+    assert_true(io.msglines[9].startswith('body'))
 
 def test_dump_parts_utf8():
     out = LineCapture()
-    rendering.dump_parts(support.get_utf8_fixture(),
-                         out,
+    io = support.CapturingIo()
+    rendering.dump_parts(strategies.LatexStrategy(),
+                         io,
                          imp.new_module('flexiconf'),
                          util.Duck(lang='sv', dump_parts=True, resources=False),
-                         defaults.templates['latex'],
-                         'latex')
-    assert_true(out.lines[0].startswith("Parts created by the docutils writer 'latex'"))
-    assert_true(out.lines[4].startswith('abstract'))
+                         defaults.templates['latex'])
+    assert_true(io.msglines[0].startswith("Parts created by the docutils writer 'latex2e'"))
+    assert_true(io.msglines[9].startswith('abstract'))

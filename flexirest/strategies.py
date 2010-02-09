@@ -12,10 +12,23 @@ template_option = ('template', (str, '-t', '--template',
 stylesheets_option = ('stylesheets', (str, '-s', '--styles',
                                       'stylesheet(s) to use in this rendering'))
 
+class NonFunctionalStrategy(StandardError):
+    """
+    This strategy don't work on this system.
+    """
+
+    def __init__(self, name, hint):
+        self.name = name
+        self.hint = hint
+
 class GeneralWriterStrategy(object):
 
     description = 'Not shure what this does'
-    writer_name = None
+    name = None
+
+    options = (template_option,)
+
+    hint = 'Something is wrong. This writer is not supposed to fail.'
 
     @property
     def settings(self):
@@ -54,7 +67,7 @@ class GeneralWriterStrategy(object):
         the `docutils` publisher.
         """
         # Assume this writer is a built-in.
-        return writers.get_writer_class(cls.writer_name)()
+        return writers.get_writer_class(cls.name)()
 
     @classmethod
     def add_options(cls, parser):
@@ -74,29 +87,29 @@ class GeneralWriterStrategy(object):
 class HtmlStrategy(GeneralWriterStrategy):
 
     description = 'HTML (docutils builtin)'
-    writer_name = 'html4css1'
+    name = 'html4css1'
 
     options = (template_option, stylesheets_option)
 
 class PseudoXmlStrategy(GeneralWriterStrategy):
 
     description = "'pseudo xml' (docutils builtin)"
-    writer_name = 'pseudoxml'
+    name = 'pseudoxml'
 
 class DocutilsXmlStrategy(GeneralWriterStrategy):
 
     description = 'docutils own XML (docutils built in)'
-    writer_name = 'docutils_xml'
+    name = 'docutils_xml'
 
 class S5HtmlStrategy(GeneralWriterStrategy):
 
     description = 'Renders S5 HTML (docutils built in)'
-    writer_name = 's5_html'
+    name = 's5_html'
 
 class LatexStrategy(GeneralWriterStrategy):
 
     description = 'LaTeX (docutils built in)'
-    writer_name = 'latex2e'
+    name = 'latex2e'
 
     options = (template_option, stylesheets_option)
 
@@ -136,6 +149,8 @@ class Latex2PDFStrategy(LatexPostProcessingStrategy):
 
     encoding = 'utf-8' # XXX Hardcoded, think about better way
 
+    hint = 'Install TeX Live/MikTex or similar on your system'
+
 class XeLaTeXStrategy(LatexPostProcessingStrategy):
 
     description = 'PDF via LaTeX and `xelatex`'
@@ -145,9 +160,14 @@ class XeLaTeXStrategy(LatexPostProcessingStrategy):
 
     # encoding is implicitly unicode in XeLaTeX
 
+    hint = 'Install XeTeX on your system (http://scripts.sil.org/XeTeX)'
+
 class OdtStrategy(GeneralWriterStrategy):
 
     description = 'OpenDocument'
+    options = (stylesheets_option,)
+
+    hint = 'Install OdtWriter for Docutils in your python installation.'
 
     def postprocess(self, parts, template, destination):
         destination.write(parts['whole'])
@@ -160,6 +180,7 @@ class OdtStrategy(GeneralWriterStrategy):
 class RtfStrategy(GeneralWriterStrategy):
 
     description = "Microsoft's Rich Text Format ('RTF')"
+    options = (stylesheets_option,)
 
     @classmethod
     def writer_object(cls):
@@ -210,3 +231,16 @@ def check_writers(writers=possible_writers):
             nonfunctional[name] = Strategy
 
     return functional, nonfunctional
+
+def from_name(name):
+    """
+    Create strategy object corresponding to `name`. Returns strategy
+    object or raises a `NonFunctionalStrategy` exception with the
+    strategy name and a hint on how to fix it.
+    """
+    Strategy = possible_writers[name]
+    if Strategy.isfunctional():
+        strategy = Strategy()
+        strategy.name = name
+        return strategy
+    raise NonFunctionalStrategy(name, Strategy.hint)

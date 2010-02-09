@@ -13,50 +13,7 @@ from aspektratio.cli import (dispatch, DefaultAction, ShowVersion, SilentExit,
 from aspektratio.io import BufferedFile
 
 from flexirest import world, rendering, defaults, meta, strategies
-from flexirest.util import StdoutConsole
-
-_cmdline_options = (
-    ('-v', '--version', dict(action='store_true',
-                             dest= 'version',
-                             default=False,
-                             help='print version and exit')),
-    ('-t', '--template', dict(action='store',
-                              dest='template',
-                              default=False,
-                              help='apply source into this template')),
-    ('-l', '--lang', dict(action='store',
-                          dest='lang',
-                          default='en',
-                          help='specify language (both input and output)')),
-    ('-c', '--config', dict(dest='config',
-                            default=False,
-                            help='apply source into this template')),
-    ('-w', '--writer', dict(dest='writer',
-                            default=False,
-                            help='use docutils writer named "writer"')),
-    ('-r', '--list-writers', dict(action='store_true',
-                                  dest='list_writers',
-                                  default=False,
-                                  help='print a list of all writers and quit')),
-    ('-d', '--dump-parts', dict(action='store_true',
-                                dest='dump_parts',
-                                default=False,
-                                help='Dump docutils parts produced by specified writer')),
-    ('-i', '--infile', dict(action='store',
-                            dest='infile',
-                            default=False,
-                            help='read input from this file')),
-    ('-o', '--outfile', dict(action='store',
-                             dest='outfile',
-                             default=False,
-                             help='write output to this file')),
-    ('-s', '--styles', dict(action='store',
-                            dest='resources',
-                            default=False,
-                            help='resource files for this writing task (LaTeX only)')),
-)
-
-_print_and_quit_options = set(('version', 'list_writers'))
+from flexirest.util import shellopen, StdoutConsole
 
 def _import(modname, onFailRaise=True):
     try:
@@ -65,87 +22,6 @@ def _import(modname, onFailRaise=True):
         if onFailRaise:
             raise
         return imp.new_module(modname)
-
-def parse_commandline(args):
-    parser = optparse.OptionParser(usage = meta.CMDLINE_USAGE,
-                                   description = meta.CMDLINE_DESC)
-
-    for opt in _cmdline_options:
-        parser.add_option(opt[0], opt[1], **opt[2])
-
-    return parser.parse_args(args)
-
-def commandline(args=None, console=None, source=None, destination=None):
-    if console is None:
-        console = StdoutConsole()
-    if args is None:
-        args = sys.argv[1:]
-
-    options, args = parse_commandline(args)
-
-    # XXX or maybe we shouldn't quit, just continue after we answered
-    # out simple question?
-    opts_w_vals = set( (opt for opt, val in options.__dict__.iteritems() if val) )
-    if opts_w_vals & _print_and_quit_options:
-        if options.version:
-            console.write("flexirest version %s" % meta.VERSION)
-        if options.list_writers:
-            for available_writer in world.all_writers:
-                console.write(available_writer)
-
-        return 0
-
-    # source parameter of `commandline()` always wins
-    if source is None:
-        if options.infile:
-            # XXX File not found will just dump traceback to stderr
-            source = open(os.path.expanduser(options.infile), 'r')
-        else:
-            source = sys.stdin
-
-    # destination parameter of `commandline()` always wins
-    if destination is None:
-        if options.outfile:
-            # XXX Create error will just dump traceback to stderr
-            destination = BufferedFile(options.outfile)
-        else:
-            destination = sys.stdout
-
-    writer_name = options.writer or 'html'
-    if writer_name not in world.all_writers:
-        sys.stderr.write("flexirest: '%s' is not a valid writer%s" %
-                              (writer_name, os.linesep))
-        return errno.EINVAL
-
-    if options.template:
-        with open(os.path.expanduser(options.template), 'r') as fp:
-            template = fp.read()
-    else:
-        template = defaults.templates[writer_name]
-
-    sys.path.append(os.getcwd())
-    if options.config:
-        confmod = _import(options.config)
-    else:
-        confmod = _import('flexiconf', False)
-
-    if options.dump_parts:
-        rendering.dump_parts(source,
-                             destination,
-                             confmod,
-                             options,
-                             template,
-                             writer_name,)
-    else:
-        rendering.render(source,
-                         destination,
-                         confmod,
-                         options,
-                         template,
-                         writer_name,)
-
-    # XXX Way to simple way to treat return codes
-    return 0
 
 class Io(object):
     """
@@ -232,14 +108,21 @@ def writer_action(io, name, Strategy, options, args):
     The return value of this function will be the command line's
     return value.
     """
-    inopen = lambda n: open(os.path.expanduser(n), 'r')
-    if len(args) == 1:
-        # Only infile
-        io.source = inopen(args[0])
-        io.destination = sys.stdout
-    elif len(args) > 1:
-        io.source = inopen(args[0])
-        io.destination = BufferedFile(os.path.expanduser(args[1]))
+    dest = None
+    if options.outfile:
+        dest = shellopen(options.outfile, 'w')
+        if len(args) == 1:
+            io.source = shellopen(args[0], 'r')
+    else:
+        if len(args) == 1:
+            # Only infile
+            io.source = shellopen(args[0], 'r')
+        elif len(args) > 1:
+            io.source = inopen(args[0], 'r')
+            dest = BufferedFile(os.path.expanduser(args[1]))
+
+    if dest:
+        io.destination = dest
 
     sys.path.append(os.getcwd())
     if options.config:
@@ -253,20 +136,20 @@ def writer_action(io, name, Strategy, options, args):
     else:
         template = defaults.templates[name]
 
+    strategy = strategies.from_name(name)
+
     if options.dump_parts:
-        rendering.dump_parts(io.source,
-                             io.destination,
+        rendering.dump_parts(strategy,
+                             io,
                              confmod,
                              options,
-                             template,
-                             name)
+                             template)
     else:
-        rendering.render(io.source,
-                         io.destination,
+        rendering.render(strategy,
+                         io,
                          confmod,
                          options,
-                         template,
-                         name)
+                         template)
 
     # XXX Way to simple way to treat return codes
     return 0
@@ -280,9 +163,11 @@ def options(console, name, Strategy, args):
     Strategy.add_options(parser)
     parser.add_option('-l', '--lang', action='store', dest='lang', default='en',
                       help='specify language (both input and output)')
+    parser.add_option('-o', '--outfile', action='store', dest='outfile',
+                      help='write output to this file')
     return parser
 
-def commandline_new(args=None, io=None):
+def commandline(args=None, io=None):
     """
     Entry point for the command line script.
     """
@@ -308,6 +193,11 @@ def commandline_new(args=None, io=None):
     except UnknownSubcommand, e:
         io.complain("flexirest: '%s' is not a valid writer" % e.subcmd)
         return errno.EINVAL
+    except strategies.NonFunctionalStrategy, e:
+        io.complain("flexirest: the '%s' writer is not functional on "
+                    "your system" % e.name)
+        io.complain("    (hint: %s)" % e.hint)
+        return errno.ENOSYS
     except ShowVersion:
         show_version(io)
         return 0

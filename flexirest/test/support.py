@@ -32,10 +32,14 @@ get_utf8_fixture = lambda: StringIO(UTF8_FIXTURE)
 
 class CapturingIo(Io):
 
-    def __init__(self):
+    def __init__(self, source=None):
         super(CapturingIo, self).__init__(stderr=StringIO())
         self.destination = StringIO()
         self.console = StringIO()
+        if source is None:
+            self.source = get_minimal_fixture()
+        else:
+            self.source = source
 
     @property
     def message(self):

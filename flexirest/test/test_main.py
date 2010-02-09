@@ -17,7 +17,7 @@ def test_info():
     Tests output of running without parameters
     """
     io = support.CapturingIo()
-    rc = main.commandline_new(args=(), io=io)
+    rc = main.commandline(args=(), io=io)
     assert_equals(rc, 0)
     assert_true(io.message.startswith('Flexirest'))
 
@@ -27,7 +27,7 @@ def test_version():
     """
     def check_version(variant):
         io = support.CapturingIo()
-        retc = main.commandline_new(args=[variant,], io=io)
+        retc = main.commandline(args=[variant,], io=io)
         assert_equals(retc, 0)
         assert_equals(io.msglines, [meta.VERSION, ''])
 
@@ -45,7 +45,7 @@ def test_show_status():
     """
     def check_status(variant):
         io = support.CapturingIo()
-        rc = main.commandline_new(args=[variant], io=io)
+        rc = main.commandline(args=[variant], io=io)
         assert_equals(rc, 0)
         assert_true(io.message.startswith(expected_status_start))
 
@@ -55,22 +55,22 @@ def test_show_status():
 def test_dump_parts():
     io = support.CapturingIo()
     io.source = support.get_minimal_fixture()
-    rc = main.commandline_new(['latex', '--dump-parts'], io=io)
+    rc = main.commandline(['latex', '--dump-parts'], io=io)
     # XXX sanity check only
-    assert_true(io.lines[0].startswith("Parts created by the docutils"))
+    assert_true(io.msglines[0].startswith("Parts created by the docutils"))
 
 @raises(ImportError)
 def test_explicit_confmodule_not_found_raises():
-    main.commandline_new(['latex', '--config=notamodule'], io=support.NullIo())
+    main.commandline(['latex', '--config=notamodule'], io=support.NullIo())
 
 def test_no_default_confmodule_noraise():
     io = support.CapturingIo()
     io.source = support.get_minimal_fixture()
-    main.commandline_new([], io=io)
+    main.commandline([], io=io)
 
 def test_bad_writer_nice_error():
     io = support.CapturingIo()
-    rc = main.commandline_new(['bad_writer'], io=io)
+    rc = main.commandline(['bad_writer'], io=io)
     assert_equals(rc, errno.EINVAL)
     assert_equals(io.errlines,
                   ["flexirest: 'bad_writer' is not a valid writer", ''])

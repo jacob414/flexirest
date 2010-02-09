@@ -36,14 +36,12 @@ def test_template_basic():
     Make a minimal template and see that `docutils` content gets
     correctly applied to it.
     """
-    capture = StringIO()
+    io = support.CapturingIo()
     main._import = lambda m, r: imp.new_module(m)
-    rc = main.commandline(['--template=%s' % BASIC_TMPL, '--writer=pseudoxml'],
-                          source=support.get_minimal_fixture(),
-                          destination=capture)
-    out = capture.getvalue()
-    assert_true('the_template' in out)
-    assert_true('title="A minimal fixture"' in out)
+    rc = main.commandline(['pseudoxml', '--template=%s' % BASIC_TMPL],
+                              io=io)
+    assert_true('the_template' in io.result)
+    assert_true('title="A minimal fixture"' in io.result)
 
 TMPL_IN_HOME = '~/tmpl_in_home.txt'
 
@@ -56,9 +54,9 @@ def test_template_in_home():
     Tests that templates in the users home directories are correctly
     opened.
     """
-    rc = main.commandline(['--template=%s' % TMPL_IN_HOME],
-                          source=support.get_minimal_fixture(),
-                          destination=StringIO())
+    io = support.CapturingIo()
+    rc = main.commandline(['html', '--template=%s' % TMPL_IN_HOME],
+                              io=io)
     assert_equals(0, rc)
 
 def role_foo(role, rawtext, text, lineno, inliner, options=None, content=[]):
@@ -83,18 +81,19 @@ def test_full_role():
     """
     Try out a role that actually does something.
     """
-    fullrole_src = StringIO(textwrap.dedent("""
-    Some text :foo:`Some test text` after
-    """))
+    io = support.CapturingIo(
+        source = StringIO(textwrap.dedent("""
+        Some text :foo:`Some test text` after
+        """))
+    )
 
     rolesmod = imp.new_module('roles')
     rolesmod.role_foo = role_foo
     main._import = lambda m, r: rolesmod
-    capture = StringIO()
-    rc = main.commandline(['--template=%s' % ROLE_TMPL, '--writer=pseudoxml'],
-                          source=fullrole_src, destination=capture)
-    out = capture.getvalue()
-    assert_true('ROLESTART_Some test text_ROLESTOP' in out)
+    rc = main.commandline(['pseudoxml',
+                               '--template=%s' % ROLE_TMPL],
+                              io=io)
+    assert_true('ROLESTART_Some test text_ROLESTOP' in io.result)
 
 SIMPLE_INFILE_PATH = '/tmp/simple_infile.rst'
 
@@ -105,13 +104,12 @@ simple_infile_creator = partial(support.create_gc_testfile,
 @with_setup(simple_infile_creator, support.clean_gc_testfiles)
 def test_w_infile():
     """
-    Tests the `--infile` commandline option.
+    Tests using a named infile.
     """
-    capture = StringIO()
-    rc = main.commandline(['--infile=%s' % SIMPLE_INFILE_PATH, '--writer=html'],
-                          destination=capture)
+    io = support.CapturingIo()
+    rc = main.commandline(['html', SIMPLE_INFILE_PATH], io)
     assert_equals(rc, 0)
-    assert_true('<title>A minimal fixture</title>' in capture.getvalue())
+    assert_true('<title>A minimal fixture</title>' in io.result)
 
 INFILE_IN_HOME = '~/infile_inhome.rst'
 
@@ -125,8 +123,8 @@ def test_infile_in_home():
     Enshures that the `--infile` option property expands home
     directories (`~`).
     """
-    rc = main.commandline(['--infile=%s' % INFILE_IN_HOME],
-                          destination=StringIO())
+    io = support.CapturingIo()
+    rc = main.commandline(['html', INFILE_IN_HOME], io)
     assert_equals(rc, 0)
 
 SIMPLE_OUTFILE = '/tmp/simple_outfile.html'
@@ -136,8 +134,9 @@ def test_w_outfile():
     """
     Tests the `--outfile` commandline option.
     """
-    rc = main.commandline(['--outfile=%s' % SIMPLE_OUTFILE, '--writer=html'],
-                          source=support.get_minimal_fixture())
+    io = support.CapturingIo()
+    rc = main.commandline(['html', '--outfile=%s' % SIMPLE_OUTFILE],
+                          io=support.CapturingIo())
     assert_equals(rc, 0)
     assert_true('<title>A minimal fixture</title>' in open(SIMPLE_OUTFILE, 'r').read())
 
@@ -146,7 +145,7 @@ def test_no_empty_outfile():
     Tests that empty outfiles are not created after runs with errors.
     """
     try:
-        support.capture_stderr(main.commandline, ['--writer=bad', '--outfile=out.file'])
+        support.capture_stderr(main.commandline, ['bad-writer', '--outfile=out.file'])
         assert_true(False)
     except:
         assert_false(os.path.exists('out.file'))
@@ -177,18 +176,18 @@ def test_full_latex2pdf_writing():
     """
     Full run of the `latex2pdf` pseudo-writer.
     """
-    capture = StringIO()
-    rc = main.commandline(['--writer=latex2pdf',
+    io = support.CapturingIo()
+    io.source = support.get_utf8_fixture()
+    rc = main.commandline(['latex2pdf',
                            '--lang=sv',
                            '--template=%s' % latex_tmp('template.tex')],
-                          source=support.get_utf8_fixture(),
-                          destination=capture)
+                          io=io)
     if rc == os.errno.EINVAL:
          # This means `pdflatex` wasn't available on this system. It's not an
          # error condition.
         raise SkipTest
     assert_equals(rc, 0)
-    pdf = support.pdf_from_file(capture)
+    pdf = support.pdf_from_file(io.destination)
     assert_equals(pdf.documentInfo.title, 'Titel')
     assert_true(pdf.getPage(0).extractText().startswith(u'TitelSvensktexthär.'))
 
@@ -199,13 +198,13 @@ def test_full_xelatex_writing():
     """
     Full run of the `xelatex` (XeLaTeX) pseudo-writer.
     """
-    capture = StringIO()
+    io = support.CapturingIo()
+    io.source = support.get_utf8_fixture()
     # XXX Implementation idea: sun XeLaTeX in a shell
-    rc = main.commandline(['--writer=xelatex',
+    rc = main.commandline(['xelatex',
                            '--lang=sv',
                            '--template=%s' % latex_tmp('template.tex')],
-                          source=support.get_utf8_fixture(),
-                          destination=capture )
+                          io=io)
     if rc == os.errno.EINVAL:
         # This means `xelatex` wasn't available on this system. It's not an
         # error condition.
