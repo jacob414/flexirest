@@ -190,24 +190,24 @@ class RtfStrategy(GeneralWriterStrategy):
 # XXX Beware: the _writer_aliases dict is undocumented and marked as
 # private! In theory we should find out a better way to produce this
 # list, but right now I don't see any way of doing that.
-builtin_writers = dict.fromkeys(set(chain(writers._writer_aliases.keys(),
-                                          writers._writer_aliases.values())),
-                                GeneralWriterStrategy)
-builtin_writers['latex'] = LatexStrategy
-builtin_writers['latex2e'] = LatexStrategy
+# builtin_writers = dict.fromkeys(set(chain(writers._writer_aliases.keys(),
+#                                           writers._writer_aliases.values())),
+#                                 GeneralWriterStrategy)
+# builtin_writers['latex'] = LatexStrategy
+# builtin_writers['latex2e'] = LatexStrategy
 
-pseudo_writers = {'latex2pdf': Latex2PDFStrategy,
-                  'xelatex': XeLaTeXStrategy}
+# pseudo_writers = {'latex2pdf': Latex2PDFStrategy,
+#                   'xelatex': XeLaTeXStrategy}
 
-external_writers = {'odt': OdtStrategy,
-                    'rtf': RtfStrategy}
+# external_writers = {'odt': OdtStrategy,
+#                     'rtf': RtfStrategy}
 
-def functional_strategies():
-    for name, Strategy in chain(builtin_writers.items(),
-                                pseudo_writers.items(),
-                                external_writers.items()):
-        strategy = Strategy()
-        yield name, Strategy
+# def functional_strategies():
+#     for name, Strategy in chain(builtin_writers.items(),
+#                                 pseudo_writers.items(),
+#                                 external_writers.items()):
+#         strategy = Strategy()
+#         yield name, Strategy
 
 possible_writers = {
     'latex': LatexStrategy,

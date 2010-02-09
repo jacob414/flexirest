@@ -6,8 +6,6 @@ from docutils import writers
 from docutils.parsers.rst import roles
 from docutils.core import publish_parts
 
-from flexirest import world
-
 __docformat__ = 'reStructuredText'
 
 def _register_roles(conf):

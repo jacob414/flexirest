@@ -12,7 +12,7 @@ from aspektratio.cli import (dispatch, DefaultAction, ShowVersion, SilentExit,
                              UnknownSubcommand)
 from aspektratio.io import BufferedFile
 
-from flexirest import world, rendering, defaults, meta, strategies
+from flexirest import rendering, defaults, meta, strategies
 from flexirest.util import shellopen, StdoutConsole
 
 def _import(modname, onFailRaise=True):
