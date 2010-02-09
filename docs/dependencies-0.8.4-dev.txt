@@ -9,10 +9,6 @@ Additional dependencies not publicized on PyPI.
 
 * `OdtWriter for Python 2.6`_
 * `OdtWriter for Python 2.5`_
-* `aspektratio-common for Python 2.6`_
-* `aspektratio-common for Python 2.5`_
 
 .. _`OdtWriter for Python 2.6`: http://www.aspektratio.net/flexirest/dist/odtwriter-1.3d_eggified-py2.6.egg
 .. _`OdtWriter for Python 2.5`: http://www.aspektratio.net/flexirest/dist/odtwriter-1.3d_eggified-py2.5.egg
-.. _`aspektratio-common for Python 2.6`: http://www.aspektratio.net/flexirest/dist/aspektratio_common-0.1.0_3e3e0967a397dev-py2.6.egg
-.. _`aspektratio-common for Python 2.5`: http://www.aspektratio.net/flexirest/dist/aspektratio_common-0.1.0_3e3e0967a397dev-py2.5.egg
