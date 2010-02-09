@@ -63,3 +63,16 @@ def has_program(*cmdline):
     except OSError:
         return False
 
+def shellopen(path, mode):
+    """
+    Opens a file according to shell conventions: '-' means `stdin`
+    when opening `path` for reading, `stdout` when opening `path` for
+    writing, otherwise open the path as a file with '~' meaing the
+    users home directory (which would probably work so-so on Windows?).
+    """
+    if path == '-' and mode.startswith('r'):
+        return sys.stdin
+    elif path == '-' and mode.startswith('w'):
+        return sys.stdout
+    else:
+        return open(os.path.expanduser(path), mode)
