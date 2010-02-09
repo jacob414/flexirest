@@ -7,6 +7,7 @@ import textwrap
 import imp
 import shutil
 import tempfile
+import errno
 
 from functools import partial
 
@@ -171,6 +172,12 @@ def teardown_latex_dir():
 
 latex2pdf_setup = partial(setup_latex_dir, 'fr-latex2pdf-full-')
 
+def check_pdf_result(rc, io):
+    assert_equals(rc, 0)
+    pdf = support.pdf_from_file(io.destination)
+    assert_equals(pdf.documentInfo.title, 'Titel')
+    assert_true(pdf.getPage(0).extractText().startswith(u'TitelSvensktexthär.'))
+
 @with_setup(latex2pdf_setup, teardown_latex_dir)
 def test_full_latex2pdf_writing():
     """
@@ -178,18 +185,16 @@ def test_full_latex2pdf_writing():
     """
     io = support.CapturingIo()
     io.source = support.get_utf8_fixture()
-    rc = main.commandline(['latex2pdf',
+    rc = main.commandline(['pdflatex',
                            '--lang=sv',
                            '--template=%s' % latex_tmp('template.tex')],
                           io=io)
-    if rc == os.errno.EINVAL:
+    if rc == errno.ENOSYS:
          # This means `pdflatex` wasn't available on this system. It's not an
          # error condition.
         raise SkipTest
-    assert_equals(rc, 0)
-    pdf = support.pdf_from_file(io.destination)
-    assert_equals(pdf.documentInfo.title, 'Titel')
-    assert_true(pdf.getPage(0).extractText().startswith(u'TitelSvensktexthär.'))
+
+    check_pdf_result(rc, io)
 
 xelatex_setup = partial(setup_latex_dir, 'fr-xelatex-full-')
 
@@ -200,12 +205,13 @@ def test_full_xelatex_writing():
     """
     io = support.CapturingIo()
     io.source = support.get_utf8_fixture()
-    # XXX Implementation idea: sun XeLaTeX in a shell
     rc = main.commandline(['xelatex',
                            '--lang=sv',
                            '--template=%s' % latex_tmp('template.tex')],
                           io=io)
-    if rc == os.errno.EINVAL:
+    if rc == errno.ENOSYS:
         # This means `xelatex` wasn't available on this system. It's not an
         # error condition.
         raise SkipTest("Can't locate `xelatex`")
+
+    check_pdf_result(rc, io)
