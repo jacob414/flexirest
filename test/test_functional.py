@@ -139,7 +139,21 @@ def test_w_outfile():
     rc = main.commandline(['html', '--outfile=%s' % SIMPLE_OUTFILE],
                           io=support.CapturingIo())
     assert_equals(rc, 0)
-    assert_true('<title>A minimal fixture</title>' in open(SIMPLE_OUTFILE, 'r').read())
+    assert_true('<title>A minimal fixture</title>'
+                in open(SIMPLE_OUTFILE, 'r').read())
+
+def test_infile_and_outfile():
+    """
+    Tests the <infile> <outfile> syntax.
+    """
+    with TempDirectory('fr-in-out') as td:
+        td.put('infile.rst', support.MINIMAL_FIXTURE)
+        rc = main.commandline(['html', td.newpath('infile.rst'),
+                               td.newpath('outfile.html')],
+                              io=support.NullIo())
+        assert_equals(rc, 0)
+        assert_true('<title>A minimal fixture</title>'
+                    in td.open('outfile.html', 'r').read() )
 
 def test_no_empty_outfile():
     """
@@ -173,6 +187,9 @@ def teardown_latex_dir():
 latex2pdf_setup = partial(setup_latex_dir, 'fr-latex2pdf-full-')
 
 def check_pdf_result(rc, io):
+    """
+    Sanity checks on results of `pdflatex` and `xelatex` runs.
+    """
     assert_equals(rc, 0)
     pdf = support.pdf_from_file(io.destination)
     assert_equals(pdf.documentInfo.title, 'Titel')

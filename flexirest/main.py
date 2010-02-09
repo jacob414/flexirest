@@ -118,7 +118,7 @@ def writer_action(io, name, Strategy, options, args):
             # Only infile
             io.source = shellopen(args[0], 'r')
         elif len(args) > 1:
-            io.source = inopen(args[0], 'r')
+            io.source = shellopen(args[0], 'r')
             dest = BufferedFile(os.path.expanduser(args[1]))
 
     if dest:
