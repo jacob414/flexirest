@@ -21,6 +21,9 @@ class NonFunctionalStrategy(StandardError):
         self.name = name
         self.hint = hint
 
+def decodict(d):
+    return dict((k, v.decode('utf-8')) for k, v in d.iteritems())
+
 class GeneralWriterStrategy(object):
 
     description = 'Not shure what this does'
@@ -45,7 +48,8 @@ class GeneralWriterStrategy(object):
         writing strategy (for example, the latex2pdf writer invokes
         `pdflatex` here.
         """
-        destination.write( (template.decode('utf-8') % parts).encode('utf-8') )
+        destination.write( (template.decode('utf-8') %
+                            decodict(parts)).encode('utf-8') )
 
     @classmethod
     def isfunctional(cls):
