@@ -130,9 +130,9 @@ def writer_action(io, name, Strategy, options, args):
     else:
         confmod = _import('flexiconf', False)
 
-    if options.template:
-        with open(os.path.expanduser(options.template), 'r') as fp:
-            template = fp.read()
+    tpath = getattr(options, 'template', False)
+    if tpath:
+        template = shellopen(tpath, 'r').read()
     else:
         template = defaults.templates[name]
 

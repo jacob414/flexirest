@@ -232,3 +232,13 @@ def test_full_xelatex_writing():
         raise SkipTest("Can't locate `xelatex`")
 
     check_pdf_result(rc, io)
+
+def test_full_rtf_writing():
+    """
+    Full run of the `rtf` (Microsoft Rich Text) writer.
+    """
+    io = support.CapturingIo()
+    io.source = support.get_utf8_fixture()
+    rc = main.commandline(['rtf', '--lang=sv'], io)
+    # XXX Only sanity check yet.
+    assert_equals(rc, 0)
