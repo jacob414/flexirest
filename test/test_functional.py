@@ -175,7 +175,7 @@ def setup_latex_dir(prefix):
     td = TempDirectory(prefix)
     td.manifest()
     test_tex.write_fake_style(td.newpath('flexistyle.sty'))
-    td.put('template.tex', '%(whole)s')
+    td.put('template.tex', '{{whole}}')
     full_latex_dir.append(td)
 
 def teardown_latex_dir():

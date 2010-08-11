@@ -133,7 +133,9 @@ class LatexPostProcessingStrategy(LatexStrategy):
         """
         Invokes `pdflatex` with the help of the `flexirest.tex` module.
         """
-        pdf = tex.run_program(self.program, template % parts)
+        import tempita
+        tmpl = tempita.Template(template)
+        pdf = tex.run_program(self.program, tmpl.substitute(parts))
         destination.write(pdf)
 
     @classmethod
