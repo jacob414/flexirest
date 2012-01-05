@@ -28,6 +28,8 @@ setup(
 @task
 def readme():
     "Builds top-level README.rst"
+    with open('README.rst', 'w') as fp:
+        fp.write(open('docs/introduction.txt').read())
 
 @task
 def virtualenv():
