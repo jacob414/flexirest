@@ -9,7 +9,11 @@ import sys
 from paver.easy import *
 from paver.setuputils import setup
 
-import flexirest
+try:
+    import flexirest
+except ImportError:
+    sys.path.append('.')
+    import flexirest
 
 setup(
     name=flexirest.SHORT_NAME,
