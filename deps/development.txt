@@ -1,0 +1,5 @@
+pytest
+IPython==0.11
+ipdb
+paver
+mock
