@@ -5,6 +5,12 @@ import sys
 import optparse
 import imp
 import errno
+import platform
+
+# XXX horrendous OS X invalid locale hack
+if (platform.system() == 'Darwin' and
+    os.environ.get('LC_CTYPE', False) == 'UTF-8'):
+    os.environ['LC_CTYPE'] = 'en_US.UTF-8'
 
 from functools import partial
 
