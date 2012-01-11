@@ -41,7 +41,10 @@ class RtfTranslator(nodes.NodeVisitor):
         nodes.NodeVisitor.__init__(self, document)
         self.settings = settings = document.settings
         lcode = settings.language_code
-        self.language = languages.get_language(lcode)
+        class Reporter(object):
+            def warning(self, msg):
+                print('docutils warning: %s' % msg)
+        self.language = languages.get_language(lcode, Reporter())
         self.section_level = 0
 
         self.doc = rtf.Document()
