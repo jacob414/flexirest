@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-from aspektratio.io import TempDirectory
+from flexirest.io import TempDirectory
 
 import os
 import tempfile

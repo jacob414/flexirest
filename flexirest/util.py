@@ -76,3 +76,49 @@ def shellopen(path, mode):
         return sys.stdout
     else:
         return open(os.path.expanduser(path), mode)
+
+class substitute(object):
+    """
+    A context manager that takes the name of a globally reachable
+    object (in the form of 'module.object', e.g. `sys.stdout`) and
+    substitutes it with another object while the context manager is in
+    effect.
+
+    Example::
+
+        >>> from StringIO import StringIO
+        >>> capture = StringIO()
+        >>> with substitute('sys.stdout', capture):
+        ...     print('foo')
+        >>> capture.getvalue()
+        'foo\\n'
+
+    or::
+
+        >>> import os
+        >>> with substitute('os.path.exists', lambda p: 'Yes indeedy!'):
+        ...     assert os.path.exists('/no/such/path') == 'Yes indeedy!'
+        >>> assert os.path.exists('/no/such/path') == False
+
+    Exceptions are propagated after the value is restored::
+
+        >>> import os
+        >>> with substitute('os.environ', {}):
+        ...    os.environ['PATH']
+        Traceback (most recent call last):
+        KeyError
+    """
+
+    def __init__(self, name, substitution):
+        self.name = name
+        self.substitution = substitution
+
+    def __enter__(self):
+        self.oldvalue, self._set = find_in_module(self.name)
+        self._set(self.substitution)
+        return self
+
+    def __exit__(self, exc, value, tb):
+        self._set(self.oldvalue)
+        if tb is not None:
+            raise(exc, value, tb)

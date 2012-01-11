@@ -1,16 +1,15 @@
-from __future__ import with_statement
+import pytest
 
 import os, sys, imp, errno
 
 from StringIO import StringIO
 
-from nose.tools import assert_equals, assert_true, with_setup, raises
+from flexirest.util import substitute
 
-from aspektratio.util import substitute
-from aspektratio.testing import LineCapture
-
-from flexirest import main, meta, rendering
+import flexirest
+from flexirest import main, rendering
 from flexirest.test import support
+from flexirest.test.support import LineCapture
 
 def test_info():
     """
@@ -18,8 +17,8 @@ def test_info():
     """
     io = support.CapturingIo()
     rc = main.commandline(args=(), io=io)
-    assert_equals(rc, 0)
-    assert_true(io.message.startswith('Flexirest'))
+    assert rc == 0
+    assert io.message.startswith('Flexirest')
 
 def test_version():
     """
@@ -28,8 +27,8 @@ def test_version():
     def check_version(variant):
         io = support.CapturingIo()
         retc = main.commandline(args=[variant,], io=io)
-        assert_equals(retc, 0)
-        assert_equals(io.msglines, [meta.VERSION, ''])
+        assert retc == 0
+        assert io.msglines == [flexirest.VERSION, '']
 
     for variant in ('-v', '--version', 'version'):
         yield check_version, variant
@@ -46,8 +45,8 @@ def test_show_status():
     def check_status(variant):
         io = support.CapturingIo()
         rc = main.commandline(args=[variant], io=io)
-        assert_equals(rc, 0)
-        assert_true(io.message.startswith(expected_status_start))
+        assert rc == 0
+        assert io.message.startswith(expected_status_start)
 
     for variant in ('status', 'st'):
         yield check_status, variant
@@ -57,11 +56,11 @@ def test_dump_parts():
     io.source = support.get_minimal_fixture()
     rc = main.commandline(['latex', '--dump-parts'], io=io)
     # XXX sanity check only
-    assert_true(io.msglines[0].startswith("Parts created by the docutils"))
+    assert io.msglines[0].startswith("Parts created by the docutils")
 
-@raises(ImportError)
 def test_explicit_confmodule_not_found_raises():
-    main.commandline(['latex', '--config=notamodule'], io=support.NullIo())
+    with pytest.raises(ImportError):
+        main.commandline(['latex', '--config=notamodule'], io=support.NullIo())
 
 def test_no_default_confmodule_noraise():
     io = support.CapturingIo()
@@ -71,7 +70,7 @@ def test_no_default_confmodule_noraise():
 def test_bad_writer_nice_error():
     io = support.CapturingIo()
     rc = main.commandline(['bad_writer'], io=io)
-    assert_equals(rc, errno.EINVAL)
-    assert_equals(io.errlines,
+    assert rc, errno.EINVAL
+    assert (io.errlines ==
                   ["flexirest: 'bad_writer' is not a valid writer", ''])
 

@@ -14,11 +14,13 @@ if (platform.system() == 'Darwin' and
 
 from functools import partial
 
-from aspektratio.cli import (dispatch, DefaultAction, ShowVersion, SilentExit,
-                             UnknownSubcommand)
-from aspektratio.io import BufferedFile
+import flexirest
 
-from flexirest import rendering, defaults, meta, strategies
+from flexirest.cli import (dispatch, DefaultAction, ShowVersion, SilentExit,
+                           UnknownSubcommand)
+from flexirest.io import BufferedFile
+
+from flexirest import rendering, defaults, strategies
 from flexirest.util import shellopen, StdoutConsole
 
 def _import(modname, onFailRaise=True):
@@ -85,7 +87,7 @@ def show_status(io, args):
             yield linefn(name, strategies[name].description)
 
     import tempita
-    tmpl = tempita.Template(meta.STATUS,
+    tmpl = tempita.Template(flexirest.STATUS,
                             namespace={'functional': lines(functional),
                                        'nonfunctional': lines(nonfunctional)})
     io.say(tmpl.substitute())
@@ -96,12 +98,12 @@ def show_info(io):
     Writes brief information about the program when it's run with no
     parameters.
     """
-    io.say(meta.INFO % meta.VERSION)
+    io.say(flexirest.INFO % flexirest.VERSION)
     show_status(io, ())
     return 0
 
 def show_version(io):
-    io.say(meta.VERSION)
+    io.say(flexirest.VERSION)
     return 0
 
 def writer_action(io, name, Strategy, options, args):

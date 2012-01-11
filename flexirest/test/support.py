@@ -6,7 +6,7 @@ import os, sys
 from functools import partial
 from StringIO import StringIO
 
-from aspektratio.util import substitute
+from flexirest.util import substitute
 
 from flexirest.main import Io
 
@@ -99,6 +99,23 @@ def pdf_from_file(pdf_f):
 
 def pdf_from_data(pdf):
     return pdf_from_file(StringIO(pdf))
+
+class LineCapture(object):
+    """
+    Used to capture output in tests. The capturer is any object that
+    supports a `.write()` method (`sys.stdout` would be used in
+    production code).
+    """
+    def __init__(self):
+        self.lines = []
+
+    def write(self, msg):
+        if msg == os.linesep:
+            return
+        self.lines.append(msg)
+
+    def flush(self):
+        pass
 
 if __name__ == '__main__':
     import doctest
