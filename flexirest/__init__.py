@@ -1,3 +1,5 @@
+import platform
+
 __docformat__ = 'reStructuredText'
 
 SHORT_NAME='flexirest'
@@ -24,3 +26,9 @@ The following writers are not functional in your installation:
   {{line}}
 {{endfor}}
 """
+
+# XXX horrendous OS X invalid locale hack
+if platform.system() == 'Darwin':
+    import locale
+    if locale.getlocale()[0] is None:
+        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
