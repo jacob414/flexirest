@@ -1,6 +1,10 @@
 .. -*- mode: rst -*-
 .. -*- Coding: utf-8 -*-
 
+**NOTE: This is now officially abandonware. Pandoc has now completely caught up with the purpose of this.**
+**It's also using a very out of date programming style. This makes it impossible for me to take it up again.**
+**Sorry, past me ;-)**
+
 `Flexirest` is a project that was born out of the authors long-running
 interest for reStructuredText_, and the idea of writing everyday
 documents like letters, invoices and other simple documents in this
